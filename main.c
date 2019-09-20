@@ -12,7 +12,7 @@ struct person
 	char name[MAX_NAME_LEN + 1];
 	int age;
 	char password[MAX_PASS_LEN + 1]; /* Gonna see if we can use other libraries besides those for limits.h */
-	char wishlist[MAX_WISHES + 1]; /* write to text file */
+	char wishlist[MAX_WISHES + 1]; /* will be written to text file */
 };
 typedef struct person person_t;
 
@@ -20,6 +20,9 @@ void addMember();
 void removeMember();
 void assignMembers();
 void viewWishes();
+void passEncrypt();
+void sortByAlphabet();
+void printList();
 
 int main(void) {
 	person_t persons[MAX_NUM][MAX_NUM];
@@ -47,6 +50,18 @@ void assignMembers() {
 }
 
 void viewWishes() {
+
+}
+
+void passEncrypt() {
+
+}
+
+void sortByAlphabet() {
+
+}
+
+void printList() {
 
 }
 
