@@ -32,35 +32,50 @@ int main(void) {
 }
 
 /*
-Add people to array persons
+Add people to the persons array
 */
 void addMember() {
 	
 }
 
 /*
-Remove people to array persons
+Remove people from persons array
 */
 void removeMember() {
 
 }
 
+/*
+Assign a wishlist to each person
+*/
 void assignMembers() {
 
 }
 
+/*
+Print wishlist to view
+*/
 void viewWishes() {
 
 }
 
+/*
+Encrypt the password of the person
+*/
 void passEncrypt() {
 
 }
 
+/*
+Sort names alphabetically
+*/
 void sortByAlphabet() {
 
 }
 
+/*
+???
+*/
 void printList() {
 
 }
