@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #define MAX_NAME_LEN 10
 #define MAX_PASS_LEN 99
 #define MAX_WISHES 5
@@ -31,51 +32,52 @@ int main(void) {
 	return 0;
 }
 
-/*
-Add people to the persons array
-*/
+/*******************************************************************************
+*	This function adds a new member inputted by the user to the member list.
+*******************************************************************************/
 void addMember() {
 	
 }
 
-/*
-Remove people from persons array
-*/
+/*******************************************************************************
+*	This function removes an existing member inputted by the user from the 
+*	member list.
+*******************************************************************************/
 void removeMember() {
 
 }
 
-/*
-Assign a wishlist to each person
-*/
+/*******************************************************************************
+*	This function assigns a random member's wishlist to another member.
+*******************************************************************************/
 void assignMembers() {
 
 }
 
-/*
-Print wishlist to view
-*/
+/*******************************************************************************
+*	This function handles the displaying of a member's wishlist.
+*******************************************************************************/
 void viewWishes() {
 
 }
 
-/*
-Encrypt the password of the person
-*/
+/*******************************************************************************
+*	This function encrypts a given password.
+*******************************************************************************/
 void passEncrypt() {
 
 }
 
-/*
-Sort names alphabetically
-*/
+/*******************************************************************************
+*	This function sorts the member list by their names in alphabetical order.
+*******************************************************************************/
 void sortByAlphabet() {
 
 }
 
-/*
-???
-*/
+/*******************************************************************************
+*	This function prints a given wishlist.
+*******************************************************************************/
 void printList() {
 
 }
