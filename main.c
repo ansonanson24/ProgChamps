@@ -1,22 +1,53 @@
+/*******************************************************************************
+ * 48430 Fundamentals of C Programming - Assignment 3
+ * Names:
+ * Bilal Ali
+ * Anson Kwok
+ * Danielle Alota
+ * Jessie Wu
+ * Yuekai Sun
+ *
+ * Student ID:
+ * 13205657
+ * 
+ * 
+ * 
+ * 
+ * 
+ * Date of submission:
+*******************************************************************************/
+
+/*******************************************************************************
+ * List header files
+*******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+/*******************************************************************************
+ * List preprocessing directives.
+*******************************************************************************/
 #define MAX_NAME_LEN 10
 #define MAX_PASS_LEN 99
 #define MAX_WISHES 5
 #define MAX_NUM 50
 
-
+/*******************************************************************************
+ * List structs.
+*******************************************************************************/
 struct person
 {
 	char name[MAX_NAME_LEN + 1];
 	int age;
-	char password[MAX_PASS_LEN + 1]; /* Gonna see if we can use other libraries besides those for limits.h */
+	char password[MAX_PASS_LEN + 1]; /* Gonna see if we can use other
+					libraries besides those for limits.h */
 	char wishlist[MAX_WISHES + 1]; /* will be written to text file */
 };
 typedef struct person person_t;
 
+/*******************************************************************************
+ * Function prototypes.
+*******************************************************************************/
 void addMember();
 void removeMember();
 void assignMembers();
@@ -25,6 +56,9 @@ void passEncrypt();
 void sortByAlphabet();
 void printList();
 
+/*******************************************************************************
+ * Main
+*******************************************************************************/
 int main(void) {
 	person_t persons[MAX_NUM][MAX_NUM];
 	/* subject to change, 2d array was discussed as a possibility*/
@@ -81,6 +115,5 @@ void sortByAlphabet() {
 void printList() {
 
 }
-
 
 
