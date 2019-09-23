@@ -178,6 +178,7 @@ void selectionAdmin() {
 		break;
 
 		case 4:
+		printf("Logged out\n");
 		main();
 		return;
 		break;		
@@ -250,6 +251,7 @@ void selectionUser() {
 		break;
 
 		case 4:
+		printf("Logged out\n");
 		main();
 		return;
 		break;		
