@@ -55,6 +55,9 @@ void adminMenu();
 void printAdmin();
 void selectionAdmin();
 void userLogin();
+void userMenu();
+void printUser();
+void selectionUser();
 void userRegister();
 void addMember();
 void removeMember();
@@ -190,9 +193,76 @@ void selectionAdmin() {
 }
 
 void userLogin() {
+	char username[MAX_NAME_LEN];
+	char password[MAX_PASS_LEN];
 
+	printf("Enter username>\n");
+	scanf("%s", username);
+
+	printf("Enter password>\n");
+	scanf("%s", password);
+	
+	if(strcmp(username, "user") == 0 && strcmp(password, "user") == 0) {
+		printf("Login success\n");
+		userMenu();
+	} else {
+	printf("Login failed\n");
+	return;
+	}
 }
 
+void userMenu() {
+	while(1) {
+	printUser();
+	selectionUser();
+	}
+}
+
+void printUser() {
+	printf("\n"
+    "1. Edit wishlist\n"
+    "2. Change password\n"
+    "3. View assigned\n"
+    "4. Log out\n"
+    "5. Exit the program\n"
+    "Enter choice (number between 1-4)>\n");
+}
+
+void selectionUser() {
+	int number;
+	scanf("%d", &number);
+	
+	switch(number)
+	{
+		case 1:
+		printf("Editing...\n");
+		return;
+		break;
+		
+		case 2:
+		printf("password cant be changed atm...\n");
+		return;
+		break;
+		
+		case 3:
+		printf("nothing assigned yet...\n");
+		return;
+		break;
+
+		case 4:
+		main();
+		return;
+		break;		
+
+		case 5:
+		exit(0);
+		break;
+		
+		default:
+		printf("Invalid choice\n");
+		break;
+	}
+}
 
 void userRegister() {
 	
