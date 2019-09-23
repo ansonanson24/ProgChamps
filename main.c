@@ -4,7 +4,7 @@
  * Bilal Ali
  * Anson Kwok
  * Danielle Alota
- * Jessie Wu
+ * Zhongzhuo Wu
  * Yuekai Sun
  *
  * Student ID:
