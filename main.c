@@ -322,6 +322,11 @@ int userRegister(person_t users[MAX_NUM][MAX_NUM], int size) {
 	return size;
 }
 
+/*
+This function checks if the inputted name already exists in the array of members
+
+Main author: Danielle Alota
+*/
 int userExists(person_t users[MAX_NUM][MAX_NUM], char name[], int size) {
 	int i, j, valid = 0;
 	for (i = 0; i < size + 1; i++) {
