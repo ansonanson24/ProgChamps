@@ -9,6 +9,7 @@
  *
  * Student ID:
  * 13205657
+ * 12954121
  * 
  * 
  * 
@@ -92,6 +93,9 @@ void printMain() {
     "Enter choice (number between 1-4)>\n");
 }
 
+/*
+Main author: Bilal
+*/
 void selectionMain() {
 	int number;
 	scanf("%d", &number);
@@ -120,6 +124,9 @@ void selectionMain() {
 	}
 }
 
+/*
+Main author: Bilal
+*/
 void adminLogin() {
 	char username[MAX_NAME_LEN];
 	char password[MAX_PASS_LEN];
@@ -139,6 +146,9 @@ void adminLogin() {
 	}
 }
 
+/*
+Main author: Bilal
+*/
 void adminMenu() {
 	while(1) {
 	printAdmin();
@@ -155,6 +165,10 @@ void printAdmin() {
     "5. Exit the program\n"
     "Enter choice (number between 1-4)>\n");
 }
+
+/*
+Main author: Bilal
+*/
 
 void selectionAdmin() {
 	int number;
@@ -193,6 +207,9 @@ void selectionAdmin() {
 	}
 }
 
+/*
+Main author: Bilal
+*/
 void userLogin() {
 	char username[MAX_NAME_LEN];
 	char password[MAX_PASS_LEN];
@@ -211,7 +228,9 @@ void userLogin() {
 	return;
 	}
 }
-
+/*
+Main author: Bilal
+*/
 void userMenu() {
 	while(1) {
 	printUser();
@@ -229,6 +248,9 @@ void printUser() {
     "Enter choice (number between 1-4)>\n");
 }
 
+/*
+Main author: Bilal
+*/
 void selectionUser() {
 	int number;
 	scanf("%d", &number);
