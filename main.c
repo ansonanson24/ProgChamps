@@ -39,7 +39,7 @@
 struct person
 {
 	char name[MAX_NAME_LEN + 1];
-	int age;
+	int  age;
 	char password[MAX_PASS_LEN + 1]; /* Gonna see if we can use other
 					libraries besides those for limits.h */
 	char wishlist[MAX_WISHES + 1]; /* will be written to text file */
@@ -54,7 +54,7 @@ void selectionMain(person_t users[MAX_NUM][MAX_NUM], int size);
 void adminLogin(person_t users[MAX_NUM][MAX_NUM], int size);
 void selectionAdmin(person_t users[MAX_NUM][MAX_NUM], int size);
 void userLogin(person_t users[MAX_NUM][MAX_NUM], int size);
-void selectionUser(person_t users[MAX_NUM][MAX_NUM], int size);
+void selectionUser(person_t users[MAX_NUM][MAX_NUM], int size, person_t user);
 int userRegister(person_t users[MAX_NUM][MAX_NUM], int size);
 int nameTaken(person_t users[MAX_NUM][MAX_NUM], char name[], int size);
 void removeMember();
@@ -127,7 +127,7 @@ Contributors:  Danielle Alota
 *******************************************************************************/
 int userRegister(person_t users[MAX_NUM][MAX_NUM], int size) {
 	char name[MAX_NAME_LEN + 1];
-	char password[MAX_PASS_LEN + 1]; /* for future encryption*/
+	/* char password[MAX_PASS_LEN + 1];  for future encryption*/
 	int valid;
 
 	printf("Enter your name (without spaces): ");
@@ -157,16 +157,15 @@ This function checks if the inputted name already exists in the array of members
 Contributors: Danielle Alota
 */
 int nameTaken(person_t users[MAX_NUM][MAX_NUM], char name[], int size) {
-	int i, j, valid = 0;
+	int i, j;
 	for (i = 0; i < size + 1; i++) {
 		for (j = 0; j < size + 1; j++) {
 			if (strcmp(users[i][j].name, name) == 0) {
-				valid = 1;
-				break;
+				return 1;
 			}
 		}
 	}
-	return valid;
+	return 0;
 }
 
 /*
@@ -233,39 +232,55 @@ void userLogin(person_t users[MAX_NUM][MAX_NUM], int size) {
 	char username[MAX_NAME_LEN];
 	char password[MAX_PASS_LEN];
 	int i, j, valid = 0;
+	person_t foundUser;
+
 	printf("Enter username>\n");
 	scanf("%s", username);
 
 	printf("Enter password>\n");
 	scanf("%s", password);
 
+	/* change into function*/
 	for (i = 0; i < size + 1; i++) {
 		for (j = 0; j < size + 1; j++) {
 			if (strcmp(username, users[i][j].name) == 0 && strcmp(password, users[i][j].password) == 0) {
 				valid = 1;
+				foundUser = users[i][j];
 				break;
 			}
 		}
 	}
-	if (valid == 1) {
+	
+
+	/* pass logged in user */
+	if (valid) {
 		printf("Successful login! Redirecting to user menu.\n"); /* Maybe add a hello <name>?*/
-		selectionUser(users, size);
-	}
-	else if (valid == 0) {
+		selectionUser(users, size, foundUser);
+	} else {
 		printf("Login failed. Returning to main menu."); /* to be changed to while*/
 		selectionMain(users, size);
-
 	}
-
-
 }
+
+
 /*
 Contributor: Danielle Alota
 */
-
-void selectionUser(person_t users[MAX_NUM][MAX_NUM], int size) {
+void selectionUser(person_t users[MAX_NUM][MAX_NUM], int size, person_t user) {
 	int number; /* For the purpose of testing, let's stick with scanning int */
-	 /* Then change to char to deal with inputs not of same data type */
+	/* Then change to char to deal with inputs not of same data type */
+	int i, j, userX, userY;
+	
+	for (i = 0; i < size + 1; i++) {
+		for (j = 0; j < size + 1; j++) {
+			if (strcmp(username, users[i][j].name) == 0 && strcmp(password, users[i][j].password) == 0) {
+				userX = i;
+				userY = j;
+				break;
+			}
+		}
+	}
+
 	while (1) {
 		printUser();
 		scanf("%d", &number);
@@ -276,9 +291,9 @@ void selectionUser(person_t users[MAX_NUM][MAX_NUM], int size) {
 			break;
 
 		case 2:
-			printf("password cant be changed atm...\n");
+			printf("changing password...\n");
+			changePassword(users, size);
 			break;
-
 		case 3:
 			printf("nothing assigned yet...\n");
 			break;
@@ -299,6 +314,8 @@ void selectionUser(person_t users[MAX_NUM][MAX_NUM], int size) {
 	}
 
 }
+
+void changePassword()
 
 void editWishlist(person_t person) {
 
