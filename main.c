@@ -288,15 +288,46 @@ void selectionUser() {
 	}
 }
 
+//author: Jack
 void userRegister() {
+	char temp[20];
+	printf("User register\n");
+	printf("Username: \n");
+	scanf("%s", person_t.username, "r");
+	 
+	/*Determine if the username is duplicated*/
 	
 }
 
 /*******************************************************************************
 *	This function adds a new member inputted by the user to the member list.
 *******************************************************************************/
+//author: Jack
 void addMember() {
 	printf("add\n");
+	while(1) {
+		//enter username
+		printf("enter username(less than 20 character)\n");
+		scanf("%s", username);
+		//judge username
+		if(strlen(username) <= 10) {
+			while(1) {
+				//enter password
+				printf("enter password(10 digits)\n");
+				scanf("%s", password);
+				//judge password
+				if(strlen(password) == 10) {
+					printf("registration success\n");
+					break;
+				} else {
+					printf("The length of the password is %d, please enter again", strlen(password));
+				}
+			}
+			break;
+		} else {
+			printf("The length of the username is %d, please enter again",strlen(username));
+		}
+	}
 }
 
 /*******************************************************************************
