@@ -84,19 +84,19 @@ int main(int argc, char* argv[])
 	return 0;
 											/*Change back to zero*/
 
-	// if (!strcmp(argv[1], "admin"))
-	// {
-	// 	adminLogin();
-	// } else if (!strcmp(argv[1], "login"))	
-	// {
-	// 	userLogin(persons, size);
-	// } else if (!strcmp(argv[1], "register"))
-	// {
-	// 	userRegister();
-	// }
+// 	if (!strcmp(argv[1], "admin"))
+// 	{
+// 		adminLogin();
+// 	} else if (!strcmp(argv[1], "login"))	
+// 	{
+// 		userLogin(persons, size);
+// 	} else if (!strcmp(argv[1], "register"))
+// 	{
+// 		userRegister();
+// 	}
 	
 
- //    return 0;
+//     return 0;
 }
 
 /*
@@ -274,13 +274,13 @@ int userRegister() {
 	// printf("%ld\n", strlen(username));
 	/*printf*/
 	if (strlen(username) > 20) {
-		printf("re-entner username(less than 20 character)\n");
-		return -1;
+		printf("re-entner username(less than 20 characters)\n");
+		return -1; /*username is more than 20 characters*/
 	} 	
 	for (int i = 0; i < MAX_NUM; i++) {
 		if (strcmp(username, persons[i].name) == 0) {
 			printf("this username is already exist, please enter another username\n");
-			return -2;
+			return -2; /*username is already exist*/
 		}
 	}
 
@@ -297,12 +297,12 @@ int userRegister() {
 	scanf("%s", password2);
 	// check password
 	if (strlen(password1) > 10 || strlen(password2) > 10) {
-		printf("re-entner username(less than 10 character)\n");
-		return -3;
+		printf("re-entner username(less than 10 characters)\n");
+		return -3; /*password is more than 10 characters*/
 	} 
 	if (strcmp(password1, password2) != 0) {
-		printf("two passwords are not same, please re-enter");
-		return -4;
+		printf("two passwords are not same, please re-enter\n");
+		return -4; /*two passwords are not same*/
 	}
 
 	//find position
