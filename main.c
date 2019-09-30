@@ -273,7 +273,7 @@ void selectionUser(person_t users[MAX_NUM][MAX_NUM], int size, person_t user) {
 	
 	for (i = 0; i < size + 1; i++) {
 		for (j = 0; j < size + 1; j++) {
-			if (strcmp(username, users[i][j].name) == 0 && strcmp(password, users[i][j].password) == 0) {
+			if (strcmp(user.name, users[i][j].name) == 0 && strcmp(user.name, users[i][j].password) == 0) {
 				userX = i;
 				userY = j;
 				break;
@@ -315,19 +315,7 @@ void selectionUser(person_t users[MAX_NUM][MAX_NUM], int size, person_t user) {
 
 }
 
-void changePassword()
 
-void editWishlist(person_t person) {
-
-
-}
-
-/*
-Checks if item exists in wishlist
-*/
-int itemExists() {
-	return 1;
-}
 
 
 
