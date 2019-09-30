@@ -313,7 +313,7 @@ void addMember() {
 		if(strlen(username) <= 10) {
 			while(1) {
 				//enter password
-				printf("enter password(10 digits)\n");
+				printf("enter password(10 character)\n");
 				scanf("%s", password);
 				//judge password
 				if(strlen(password) == 10) {
