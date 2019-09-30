@@ -43,6 +43,7 @@ struct person
 	char password[MAX_PASS_LEN + 1]; /* Gonna see if we can use other
 					libraries besides those for limits.h */
 	char wishlist[MAX_WISHES + 1]; /* will be written to text file */
+	int santa; /* assigned santa */
 };
 typedef struct person person_t;
 
@@ -50,12 +51,12 @@ typedef struct person person_t;
  * Function prototypes.
 *******************************************************************************/
 void printMain();
-void selectionMain();
+void selectionMain(person_t users[], int size);
 void adminLogin();
 void adminMenu();
 void printAdmin();
 void selectionAdmin();
-void userLogin();
+void userLogin(person_t users[], int size);
 void userMenu();
 void printUser();
 void selectionUser();
@@ -67,20 +68,21 @@ void viewWishes();
 void passEncrypt();
 void sortByAlphabet();
 void printList();
+int checkUser(person_t users[], int size, char username[], char password[]);
 
 /*******************************************************************************
  * Main
 *******************************************************************************/
 int main(void) {
 	
-	person_t persons[MAX_NUM][MAX_NUM];
-	/*subject to change, 2d array was discussed as a possibility*/
-	
-	while(1) {
-	printMain();
-	selectionMain();
-	}
+	person_t persons[MAX_NUM];
+	/* 1d */
+	int size = 0;
 
+	while(1) {
+		printMain();
+		selectionMain(persons, size);
+	}
 	return 0;
 }
 
@@ -96,7 +98,7 @@ void printMain() {
 /*
 Main author: Bilal
 */
-void selectionMain() {
+void selectionMain(person_t users[], int size) {
 	int number;
 	scanf("%d", &number);
 	
@@ -107,7 +109,7 @@ void selectionMain() {
 		break;
 		
 		case 2:
-		userLogin();
+		userLogin(users, size);
 		break;
 		
 		case 3:
@@ -210,9 +212,10 @@ void selectionAdmin() {
 /*
 Main author: Bilal
 */
-void userLogin() {
+void userLogin(person_t users[], int size) {
 	char username[MAX_NAME_LEN];
 	char password[MAX_PASS_LEN];
+	int i, userIsValid;
 
 	printf("Enter username>\n");
 	scanf("%s", username);
@@ -220,13 +223,22 @@ void userLogin() {
 	printf("Enter password>\n");
 	scanf("%s", password);
 	
-	if(strcmp(username, "user") == 0 && strcmp(password, "user") == 0) {
+	userIsValid = checkUser(users, size, username, password);
+
+	if (userIsValid) {
 		printf("Login success\n");
 		userMenu();
-	} else {
-	printf("Login failed\n");
-	return;
+	} else printf("Login failed.\n");
+}
+
+int checkUser(person_t users[], int size, char username[], char password[]) {
+	int i;
+
+	for (i = 0; i < size; i++) {
+		if (strcmp(username, users[i].name) == 0 && strcmp(password, users[i].password) == 0)
+			return 1;
 	}
+	return 0;
 }
 /*
 Main author: Bilal
@@ -289,7 +301,6 @@ void selectionUser() {
 }
 
 //author: Jack
-FILE *fp//file pointer
 void userRegister() {
 	char temp[20];
 	printf("User register\n");
@@ -338,15 +349,6 @@ void userRegister() {
 			printf("The length of the username is %d, please enter again",strlen(username));
 		}
 	}	
-}
-
-/*******************************************************************************
-*	This function adds a new member inputted by the user to the member list.
-*******************************************************************************/
-//author: Jack
-void addMember() {
-	printf("add\n");
-	
 }
 
 /*******************************************************************************
