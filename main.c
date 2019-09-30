@@ -178,7 +178,7 @@ Main author: Bilal
 void userLogin(person_t users[], int size) {
 	char username[MAX_NAME_LEN];
 	char password[MAX_PASS_LEN];
-	int i, userIndex;
+	int userIndex;
 	person_t user;
 
 	printf("Enter username>\n");
