@@ -50,14 +50,12 @@ typedef struct person person_t;
 /*******************************************************************************
  * Function prototypes.
 *******************************************************************************/
-void printMain();
-void selectionMain(person_t users[], int size);
 void adminLogin();
 void adminMenu();
 void printAdmin();
 void selectionAdmin();
 void userLogin(person_t users[], int size);
-void userMenu();
+void userMenu(person_t user);
 void printUser();
 void selectionUser();
 void userRegister();
@@ -73,57 +71,29 @@ int checkUser(person_t users[], int size, char username[], char password[]);
 /*******************************************************************************
  * Main
 *******************************************************************************/
-int main(void) {
-	
+int main(int argc, char* argv[])
+{
 	person_t persons[MAX_NUM];
-	/* 1d */
-	int size = 0;
+	strcpy(persons[0].name, "Santa"); 					/*Dummy data*/
+	persons[0].age = 7;								 	/*Dummy data*/
+	strcpy(persons[0].password, "Rudolph");				/*Dummy data*/
+	strcpy(persons[0].wishlist, "High Distinction");	/*Dummy data*/
+	persons[0].santa = 2;								/*Dummy data*/
+	int size = 1;										/*Change back to zero*/
 
-	while(1) {
-		printMain();
-		selectionMain(persons, size);
-	}
-	return 0;
-}
-
-void printMain() {
-	printf("\n"
-    "1. Login as Admin\n"
-    "2. Login as User\n"
-    "3. Register\n"
-    "4. Exit the program\n"
-    "Enter choice (number between 1-4)>\n");
-}
-
-/*
-Main author: Bilal
-*/
-void selectionMain(person_t users[], int size) {
-	int number;
-	scanf("%d", &number);
-	
-	switch(number)
+	if (!strcmp(argv[1], "admin"))
 	{
-		case 1:
 		adminLogin();
-		break;
-		
-		case 2:
-		userLogin(users, size);
-		break;
-		
-		case 3:
+	} else if (!strcmp(argv[1], "login"))	
+	{
+		userLogin(persons, size);
+	} else if (!strcmp(argv[1], "register"))
+	{
 		userRegister();
-		break;
-		
-		case 4:
-		exit(0);
-		break;
-		
-		default:
-		printf("Invalid choice\n");
-		break;
 	}
+	
+
+    return 0;
 }
 
 /*
@@ -140,10 +110,10 @@ void adminLogin() {
 	scanf("%s", password);
 	
 	if(strcmp(username, "admin") == 0 && strcmp(password, "admin") == 0) {
-		printf("Login success\n");
+		printf("Login success!\n");
 		adminMenu();
 	} else {
-	printf("Login failed\n");
+	printf("Login failed.\n");
 	return;
 	}
 }
@@ -152,6 +122,7 @@ void adminLogin() {
 Main author: Bilal
 */
 void adminMenu() {
+	printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome Admin ·._.·´¯)·._.·´¯)\n");
 	while(1) {
 	printAdmin();
 	selectionAdmin();
@@ -163,15 +134,13 @@ void printAdmin() {
     "1. Display users\n"
     "2. Remove users\n"
     "3. Assign users\n"
-    "4. Log out\n"
-    "5. Exit the program\n"
+    "4. Exit the program\n"
     "Enter choice (number between 1-4)>\n");
 }
 
 /*
 Main author: Bilal
 */
-
 void selectionAdmin() {
 	int number;
 	scanf("%d", &number);
@@ -191,15 +160,9 @@ void selectionAdmin() {
 		case 3:
 		printf("assigning...\n");
 		return;
-		break;
+		break;	
 
 		case 4:
-		printf("Logged out\n");
-		main();
-		return;
-		break;		
-
-		case 5:
 		exit(0);
 		break;
 		
@@ -227,10 +190,10 @@ void userLogin(person_t users[], int size) {
 	/* checks array for login, returns index of user is found, returns 0 otherwise. */
 	userIndex= checkUser(users, size, username, password);
 	
-	if (userIndex) {
+	if (userIndex != -1) {
 		user = users[userIndex];
-		printf("Login success\n");
-		userMenu();
+		printf("Login success!\n");
+		userMenu(user);
 	} else printf("Login failed.\n");
 }
 
@@ -241,12 +204,13 @@ int checkUser(person_t users[], int size, char username[], char password[]) {
 		if (strcmp(username, users[i].name) == 0 && strcmp(password, users[i].password) == 0)
 			return i;
 	}
-	return 0;
+	return -1;
 }
 /*
 Main author: Bilal
 */
-void userMenu() {
+void userMenu(person_t user) {
+	printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome %s ·._.·´¯)·._.·´¯)\n", user.name);
 	while(1) {
 	printUser();
 	selectionUser();
@@ -258,8 +222,7 @@ void printUser() {
     "1. Edit wishlist\n"
     "2. Change password\n"
     "3. View assigned\n"
-    "4. Log out\n"
-    "5. Exit the program\n"
+    "4. Exit the program\n"
     "Enter choice (number between 1-4)>\n");
 }
 
@@ -285,15 +248,9 @@ void selectionUser() {
 		case 3:
 		printf("nothing assigned yet...\n");
 		return;
-		break;
+		break;	
 
 		case 4:
-		printf("Logged out\n");
-		main();
-		return;
-		break;		
-
-		case 5:
 		exit(0);
 		break;
 		
@@ -303,9 +260,9 @@ void selectionUser() {
 	}
 }
 
-//author: Jack
+/*author: Jack*/
 void userRegister() {
-	char temp[20];
+	/*char temp[20];
 	printf("User register\n");
 	printf("enter username\n");
 	scanf("%s", person_t.username, "r");
@@ -351,7 +308,7 @@ void userRegister() {
 		else {
 			printf("The length of the username is %d, please enter again",strlen(username));
 		}
-	}	
+	}	*/
 }
 
 /*******************************************************************************
