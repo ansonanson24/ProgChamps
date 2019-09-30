@@ -58,7 +58,7 @@ void userLogin(person_t users[], int size);
 void userMenu(person_t user);
 void printUser();
 void selectionUser();
-void userRegister();
+int userRegister();
 void addMember();
 void removeMember();
 void assignMembers();
@@ -67,33 +67,36 @@ void passEncrypt();
 void sortByAlphabet();
 void printList();
 int checkUser(person_t users[], int size, char username[], char password[]);
+void personsDataInit();
+
+person_t persons[MAX_NUM];
+
+
 
 /*******************************************************************************
  * Main
 *******************************************************************************/
 int main(int argc, char* argv[])
 {
-	person_t persons[MAX_NUM];
-	strcpy(persons[0].name, "Santa"); 					/*Dummy data*/
-	persons[0].age = 7;								 	/*Dummy data*/
-	strcpy(persons[0].password, "Rudolph");				/*Dummy data*/
-	strcpy(persons[0].wishlist, "High Distinction");	/*Dummy data*/
-	persons[0].santa = 2;								/*Dummy data*/
-	int size = 1;										/*Change back to zero*/
+	personsDataInit();
+	int test_result = userRegister();
+	printf("test_result = %d", test_result);
+	return 0;
+											/*Change back to zero*/
 
-	if (!strcmp(argv[1], "admin"))
-	{
-		adminLogin();
-	} else if (!strcmp(argv[1], "login"))	
-	{
-		userLogin(persons, size);
-	} else if (!strcmp(argv[1], "register"))
-	{
-		userRegister();
-	}
+	// if (!strcmp(argv[1], "admin"))
+	// {
+	// 	adminLogin();
+	// } else if (!strcmp(argv[1], "login"))	
+	// {
+	// 	userLogin(persons, size);
+	// } else if (!strcmp(argv[1], "register"))
+	// {
+	// 	userRegister();
+	// }
 	
 
-    return 0;
+ //    return 0;
 }
 
 /*
@@ -261,54 +264,74 @@ void selectionUser() {
 }
 
 /*author: Jack*/
-void userRegister() {
-	/*char temp[20];
-	printf("User register\n");
-	printf("enter username\n");
-	scanf("%s", person_t.username, "r");
-	
-	//check if name is already exist in array
-	if (fp != NULL) {
-		printf("this username is already exist\n");
-		fclose(fp);
-		printf("continue?(Y/N)\n");
-		if(getch() == 'Y') {
-			return userRegister();
-		} else {
-			return userLogin();
+int userRegister() {
+	char username[200]; 
+	//username
+	printf("entner username(less than 20 character)\n");
+	/*scanf*/
+	scanf("%s", username);
+	//check username
+	// printf("%ld\n", strlen(username));
+	/*printf*/
+	if (strlen(username) > 20) {
+		printf("re-entner username(less than 20 character)\n");
+		return -1;
+	} 	
+	for (int i = 0; i < MAX_NUM; i++) {
+		if (strcmp(username, persons[i].name) == 0) {
+			printf("this username is already exist, please enter another username\n");
+			return -2;
 		}
-	}	
-	
-	while(1) {
-		//check username lengh
-		if(strlen(username) <= 10) {
-			while(1) {
-				//enter password
-				printf("enter password(10 character)\n");
-				scanf("%s", person_t.password);
-				printf("enter password again\n");
-				scanf("%s", temp);
-				//check if both given passwords match
-				//check password lengh
-				if(strcmp(person_t.password, temp) != 0) {
-					printf("Two passwords are inconsistent, please re-enter\n");
-				} 
-				else {
-					if(strlen(password) == 10) {
-						printf("registration success\n");
-						break;
-					} 
-					else {
-						printf("The length of the password is %d, please enter again", strlen(password));
-					}
-				}
-			}
-			break;
-		} 
-		else {
-			printf("The length of the username is %d, please enter again",strlen(username));
+	}
+
+
+
+
+	// password
+	char password1[200];
+	char password2[200];
+	// scanf
+	printf("enter password(less than 10 character)\n");
+	scanf("%s", password1);
+	printf("enter password again\n");
+	scanf("%s", password2);
+	// check password
+	if (strlen(password1) > 10 || strlen(password2) > 10) {
+		printf("re-entner username(less than 10 character)\n");
+		return -3;
+	} 
+	if (strcmp(password1, password2) != 0) {
+		printf("two passwords are not same, please re-enter");
+		return -4;
+	}
+
+	//find position
+	for (int i = 0; i < MAX_NUM; i++) {
+		if (strcmp(persons[i].name, " ") == 0) {
+			strcpy(persons[i].name, username);
+			strcpy(persons[i].password, password1);
+			return 0;
 		}
-	}	*/
+	}
+	/*reach the maximum user number*/
+	return -5;
+
+}
+
+void personsDataInit() {
+
+	for (int i = 0; i < MAX_NUM; i++) {
+		persons[i].age == 0;
+		persons[i].santa == 0;
+		strcpy(persons[0].name, " ");
+		strcpy(persons[0].password, " ");
+		strcpy(persons[0].wishlist, " ");
+	}
+
+	strcpy(persons[0].name, "Santa"); 					/*Dummy data*/
+	persons[0].age = 7;								 	/*Dummy data*/
+	strcpy(persons[0].password, "Rudolph");				/*Dummy data*/
+	strcpy(persons[0].wishlist, "High Distinction");
 }
 
 /*******************************************************************************
