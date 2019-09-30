@@ -289,14 +289,55 @@ void selectionUser() {
 }
 
 //author: Jack
+FILE *fp//file pointer
 void userRegister() {
 	char temp[20];
 	printf("User register\n");
-	printf("Username: \n");
+	printf("enter username\n");
 	scanf("%s", person_t.username, "r");
-	 
-	/*Determine if the username is duplicated*/
 	
+	//check if name is already exist in array
+	if (fp != NULL) {
+		printf("this username is already exist\n");
+		fclose(fp);
+		printf("continue?(Y/N)\n");
+		if(getch() == 'Y') {
+			return userRegister();
+		} else {
+			return userLogin();
+		}
+	}	
+	
+	while(1) {
+		//check username lengh
+		if(strlen(username) <= 10) {
+			while(1) {
+				//enter password
+				printf("enter password(10 character)\n");
+				scanf("%s", person_t.password);
+				printf("enter password again\n");
+				scanf("%s", temp);
+				//check if both given passwords match
+				//check password lengh
+				if(strcmp(person_t.password, temp) != 0) {
+					printf("Two passwords are inconsistent, please re-enter\n");
+				} 
+				else {
+					if(strlen(password) == 10) {
+						printf("registration success\n");
+						break;
+					} 
+					else {
+						printf("The length of the password is %d, please enter again", strlen(password));
+					}
+				}
+			}
+			break;
+		} 
+		else {
+			printf("The length of the username is %d, please enter again",strlen(username));
+		}
+	}	
 }
 
 /*******************************************************************************
@@ -305,29 +346,7 @@ void userRegister() {
 //author: Jack
 void addMember() {
 	printf("add\n");
-	while(1) {
-		//enter username
-		printf("enter username(less than 20 character)\n");
-		scanf("%s", username);
-		//judge username
-		if(strlen(username) <= 10) {
-			while(1) {
-				//enter password
-				printf("enter password(10 character)\n");
-				scanf("%s", password);
-				//judge password
-				if(strlen(password) == 10) {
-					printf("registration success\n");
-					break;
-				} else {
-					printf("The length of the password is %d, please enter again", strlen(password));
-				}
-			}
-			break;
-		} else {
-			printf("The length of the username is %d, please enter again",strlen(username));
-		}
-	}
+	
 }
 
 /*******************************************************************************
@@ -342,7 +361,7 @@ void removeMember() {
 *	This function assigns a random member's wishlist to another member.
 *******************************************************************************/
 void assignMembers() {
-	printf("assign\n");
+	printf("Members assigned\n");
 }
 
 /*******************************************************************************
