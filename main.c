@@ -215,7 +215,8 @@ Main author: Bilal
 void userLogin(person_t users[], int size) {
 	char username[MAX_NAME_LEN];
 	char password[MAX_PASS_LEN];
-	int i, userIsValid;
+	int i, userIndex;
+	person_t user;
 
 	printf("Enter username>\n");
 	scanf("%s", username);
@@ -223,9 +224,11 @@ void userLogin(person_t users[], int size) {
 	printf("Enter password>\n");
 	scanf("%s", password);
 	
-	userIsValid = checkUser(users, size, username, password);
-
-	if (userIsValid) {
+	/* checks array for login, returns index of user is found, returns 0 otherwise. */
+	userIndex= checkUser(users, size, username, password);
+	
+	if (userIndex) {
+		user = users[userIndex];
 		printf("Login success\n");
 		userMenu();
 	} else printf("Login failed.\n");
@@ -236,7 +239,7 @@ int checkUser(person_t users[], int size, char username[], char password[]) {
 
 	for (i = 0; i < size; i++) {
 		if (strcmp(username, users[i].name) == 0 && strcmp(password, users[i].password) == 0)
-			return 1;
+			return i;
 	}
 	return 0;
 }
