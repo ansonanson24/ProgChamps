@@ -81,22 +81,22 @@ int main(int argc, char* argv[])
 	personsDataInit();
 	int test_result = userRegister();
 	printf("test_result = %d", test_result);
-	return 0;
-											/*Change back to zero*/
 
-// 	if (!strcmp(argv[1], "admin"))
-// 	{
-// 		adminLogin();
-// 	} else if (!strcmp(argv[1], "login"))	
-// 	{
-// 		userLogin(persons, size);
-// 	} else if (!strcmp(argv[1], "register"))
-// 	{
-// 		userRegister();
-// 	}
+						             /*Change back to zero*/
+
+	if (!strcmp(argv[1], "admin"))
+	{
+		adminLogin();
+	} else if (!strcmp(argv[1], "login"))	
+	{
+		userLogin(persons, size);
+	} else if (!strcmp(argv[1], "register"))
+	{
+		userRegister();
+	}
 	
 
-//     return 0;
+    return 0;
 }
 
 /*
@@ -284,9 +284,7 @@ int userRegister() {
 		}
 	}
 
-
-
-
+	
 	// password
 	char password1[200];
 	char password2[200];
@@ -305,6 +303,7 @@ int userRegister() {
 		return -4; /*two passwords are not same*/
 	}
 
+	
 	//find position
 	for (int i = 0; i < MAX_NUM; i++) {
 		if (strcmp(persons[i].name, " ") == 0) {
@@ -318,6 +317,7 @@ int userRegister() {
 
 }
 
+/*author: Jack*/
 void personsDataInit() {
 
 	for (int i = 0; i < MAX_NUM; i++) {
@@ -328,8 +328,8 @@ void personsDataInit() {
 		strcpy(persons[0].wishlist, " ");
 	}
 
-	strcpy(persons[0].name, "Santa"); 					/*Dummy data*/
-	persons[0].age = 7;								 	/*Dummy data*/
+	strcpy(persons[0].name, "Santa"); 				/*Dummy data*/
+	persons[0].age = 7;					 	/*Dummy data*/
 	strcpy(persons[0].password, "Rudolph");				/*Dummy data*/
 	strcpy(persons[0].wishlist, "High Distinction");
 }
