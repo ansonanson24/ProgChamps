@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 	personsDataInit();
 	int test_result = userRegister();
 	printf("test_result = %d", test_result);
-
+	int size = 0;
 	/*Change back to zero*/
 
 	if (!strcmp(argv[1], "admin"))
@@ -270,19 +270,20 @@ void selectionUser() {
 
 /*author: Jack*/
 int userRegister() {
+	int i = 0;
 	char username[200];
-	//username
+	
 	printf("entner username(less than 20 character)\n");
 	/*scanf*/
 	scanf("%s", username);
-	//check username
-	// printf("%ld\n", strlen(username));
+	/*check username*/
+	/* printf("%ld\n", strlen(username));*/
 	/*printf*/
 	if (strlen(username) > MAX_NAME_LEN) {
 		printf("re-entner username(less than 21 characters)\n");
 		return -1; /*username is more than 20 characters*/
 	}
-	for (int i = 0; i < MAX_NUM; i++) {
+	for (i = 0; i < MAX_NUM; i++) {
 		if (strcmp(username, persons[i].name) == 0) {
 			printf("this username is already exist, please enter another username\n");
 			return -2; /*username is already exist*/
@@ -290,15 +291,15 @@ int userRegister() {
 	}
 
 
-	// password
+	/* password */
 	char password1[200];
 	char password2[200];
-	// scanf
+	/* scanf */
 	printf("enter password(less than 10 character)\n");
 	scanf("%s", password1);
 	printf("enter password again\n");
 	scanf("%s", password2);
-	// check password
+	/* check password */
 	if (strlen(password1) > 10 || strlen(password2) > 10) {
 		printf("re-entner username(less than 10 characters)\n");
 		return -3; /*password is more than 10 characters*/
@@ -309,8 +310,8 @@ int userRegister() {
 	}
 
 
-	//find position
-	for (int i = 0; i < MAX_NUM; i++) {
+	/*find position*/
+	for ( i = 0; i < MAX_NUM; i++) {
 		if (strcmp(persons[i].name, " ") == 0) {
 			strcpy(persons[i].name, username);
 			strcpy(persons[i].password, password1);
@@ -324,10 +325,10 @@ int userRegister() {
 
 /*author: Jack*/
 void personsDataInit() {
-
-	for (int i = 0; i < MAX_NUM; i++) {
-		persons[i].age == 0;
-		persons[i].santa == 0;
+	int i = 0;
+	for ( i = 0; i < MAX_NUM; i++) {
+		persons[i].age = 0;
+		persons[i].santa = 0;
 		strcpy(persons[0].name, " ");
 		strcpy(persons[0].password, " ");
 		strcpy(persons[0].wishlist, " ");
