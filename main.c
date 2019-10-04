@@ -277,7 +277,7 @@ int userRegister() {
 	/*scanf*/
 	scanf("%s", username);
 	/*check username*/
-	/* printf("%ld\n", strlen(username));*/
+	printf("%ld\n", strlen(username));
 	/*printf*/
 	if (strlen(username) > MAX_NAME_LEN) {
 		printf("re-entner username(less than 21 characters)\n");
