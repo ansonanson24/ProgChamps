@@ -72,6 +72,7 @@ void printAdmin();
 void changePassword(person_t users[MAX_NUM], person_t user, int size);
 int checkPass(person_t user, char password[MAX_PASS_LEN]);
 int passMatch(char pass1[MAX_PASS_LEN], char pass2[MAX_PASS_LEN]);
+void editWishlist(person_t users[MAX_NUM], person_t user);
 
 /*******************************************************************************
  * Main
@@ -286,7 +287,7 @@ void selectionUser(person_t users[MAX_NUM], int size, person_t user) {
 		switch (number)
 		{
 		case 1:
-			printf("Editing...\n");
+			editWishlist();
 			break;
 
 		case 2:
@@ -298,7 +299,7 @@ void selectionUser(person_t users[MAX_NUM], int size, person_t user) {
 			break;
 
 		case 4:
-			printf("Logged out\n");
+			printf("Successfully logged out. Returning to main menu.\n");
 			selectionMain(users, size);
 			break;
 
@@ -312,6 +313,14 @@ void selectionUser(person_t users[MAX_NUM], int size, person_t user) {
 		}
 	}
 
+}
+
+void editWishlist(person_t users[MAX_NUM], person_t user) {
+	
+}
+
+int itemExists() {
+	return 0;
 }
 
 /*
@@ -368,6 +377,9 @@ void changePassword(person_t users[MAX_NUM], person_t user, int size) {
 	}
 }
 
+/*
+Contributor: Danielle Alota
+*/
 int passMatch(char pass1[MAX_PASS_LEN], char pass2[MAX_PASS_LEN]) {
 	if (strcmp(pass1, pass2) == 0) {
 		return 0;
@@ -378,6 +390,9 @@ int passMatch(char pass1[MAX_PASS_LEN], char pass2[MAX_PASS_LEN]) {
 
 }
 
+/*
+Contributor: Danielle Alota
+*/
 int checkPass(person_t user, char password[MAX_PASS_LEN]) {
 	if (strcmp(user.password, password) == 0) {
 		return 0;
@@ -404,13 +419,6 @@ void assignMembers() {
 }
 
 /*******************************************************************************
-*	This function handles the displaying of a member's wishlist.
-*******************************************************************************/
-void viewWishes() {
-	printf("view\n");
-}
-
-/*******************************************************************************
 *	This function encrypts a given password.
 *******************************************************************************/
 void passEncrypt() {
@@ -422,13 +430,6 @@ void passEncrypt() {
 *******************************************************************************/
 void sortByAlphabet() {
 	printf("sort\n");
-}
-
-/*******************************************************************************
-*	This function prints a given wishlist.
-*******************************************************************************/
-void printList() {
-	printf("print\n");
 }
 
 void printMain() {
