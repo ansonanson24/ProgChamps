@@ -58,13 +58,13 @@ void userLogin(person_t users[MAX_NUM], int size);
 void selectionUser(person_t users[MAX_NUM], int size, person_t user);
 int userRegister(person_t users[MAX_NUM], int size);
 int nameTaken(person_t users[MAX_NUM], char name[], int size);
-void removeMember();
+int removeMember(person_t users[MAX_NUM], int size);
 void assignMembers();
-void viewWishes();
+int viewWishes(person_t users[MAX_NUM], int size);
 void passEncrypt();
 void sortByAlphabet();
-void printList();
-void editWishlist(person_t person);
+int printList(person_t users[MAX_NUM], int size);
+void editWishlist(person_t users[MAX_NUM], person_t user);
 int itemExists();
 void printMain();
 void printUser();
@@ -200,25 +200,31 @@ Contributor: Danielle Alota
 */
 void selectionAdmin(person_t users[MAX_NUM], int size) {
 	char c;
-	scanf("%c", &c);
+	int rem;
+	printAdmin();
+	scanf(" %c", &c);
 	while (1) {
-		printMain();
 		switch (c)
 		{
-		case 1:
+		case '1':
 			printf("displaying...\n");
 			break;
-		case 2:
-			printf("removing...\n");
+		case '2':
+			if (removeMember(users, size) == 0) {
+				printf("Member removed successfully. Returning to admin menu.\n");
+			}
+			else { /* loops back for some reason */
+				printf("This member does not exist. Returning to admin menu.\n");
+			}
 			break;
-		case 3:
+		case '3':
 			printf("assigning...\n");
 			break;
-		case 4:
+		case '4':
 			printf("Logged out\n");
 			selectionMain(users, size);
 			break;
-		case 5:
+		case '5':
 			exit(0);
 			break;
 		default:
@@ -270,7 +276,7 @@ void userLogin(person_t users[MAX_NUM], int size) {
 Contributor: Danielle Alota
 */
 void selectionUser(person_t users[MAX_NUM], int size, person_t user) {
-	int number; /* For the purpose of testing, let's stick with scanning int */
+	char choice; /* For the purpose of testing, let's stick with scanning int */
 	/* Then change to char to deal with inputs not of same data type */
 	int i, userX;
 
@@ -283,27 +289,27 @@ void selectionUser(person_t users[MAX_NUM], int size, person_t user) {
 
 	while (1) {
 		printUser();
-		scanf("%d", &number);
-		switch (number)
+		scanf(" %c", &choice);
+		switch (choice)
 		{
-		case 1:
-			editWishlist();
+		case '1':
+			editWishlist(users, user);
 			break;
 
-		case 2:
+		case '2':
 			changePassword(users, user, size);
 			break;
 
-		case 3:
+		case '3':
 			printf("nothing assigned yet...\n");
 			break;
 
-		case 4:
+		case '4':
 			printf("Successfully logged out. Returning to main menu.\n");
 			selectionMain(users, size);
 			break;
 
-		case 5:
+		case '5':
 			exit(0);
 			break;
 
@@ -316,7 +322,7 @@ void selectionUser(person_t users[MAX_NUM], int size, person_t user) {
 }
 
 void editWishlist(person_t users[MAX_NUM], person_t user) {
-	
+
 }
 
 int itemExists() {
@@ -406,9 +412,31 @@ int checkPass(person_t user, char password[MAX_PASS_LEN]) {
 /*******************************************************************************
 *	This function removes an existing member inputted by the user from the
 *	member list.
+
+Contributors:
+Jack
+Danielle
 *******************************************************************************/
-void removeMember() {
-	printf("remove\n");
+int removeMember(person_t users[MAX_NUM], int size) {
+	int i;
+	char name[MAX_NAME_LEN];
+	printf("Removing member. Please enter the name of the member you wish to delete: ");
+	scanf(" %s", name);
+
+	/*if exist delete*/
+	for (i = 0; i < size + 1; i++) {
+		if (strcmp(name, users[i].name) == 0) { /* this needs to be checked, im just quickly*/
+			users[i].age = users[size - 1].age; /* changing some things -dani*/
+			strcpy(users[i].name, users[size - 1].name);
+			strcpy(users[i].password, users[size - 1].password);
+			users[i].santa = users[size - 1].santa;
+			strcpy(users[i].wishlist, users[size - 1].wishlist);
+			size--;
+			return 0;
+		}
+	}
+	/*not exist return -1*/
+	return -1;
 }
 
 /*******************************************************************************
@@ -426,10 +454,49 @@ void passEncrypt() {
 }
 
 /*******************************************************************************
+*	This function handles the displaying of a member's wishlist.
+*******************************************************************************/
+/*contributors: Jack
+Danielle */
+int viewWishes(person_t users[MAX_NUM], int size) {
+	int i;
+	char username[MAX_NAME_LEN];
+	printf("\nview\n");
+	/*enter username then show the wishlist*/
+	printf("Please enter the username you want to check\n");
+	scanf("%s", username);
+	for (i = 0; i < size; i++) {
+		if (strcmp(username, users[i].name) == 0) {
+			printf("The following shows the wish list of %s\n%s\n", username, users[i].wishlist);
+			return 0;
+		}
+	}
+	/*username not exist*/
+	return -1;
+}
+
+/*******************************************************************************
 *	This function sorts the member list by their names in alphabetical order.
 *******************************************************************************/
 void sortByAlphabet() {
 	printf("sort\n");
+}
+
+/*******************************************************************************
+*	This function prints a given wishlist.
+*******************************************************************************/
+/*author: Jack*/
+int printList(person_t users[MAX_NUM], int size) {
+	printf("\nprint\n");
+	int i = 0;
+	printf("all of the wishlist is below\n");
+	/*show all wishlist*/
+	for (i = 0; i < MAX_NUM; i++) {
+		if (users[i].name != " ") {
+			printf("%s\n", users[i].wishlist);
+		}
+	}
+	return 0;
 }
 
 void printMain() {
