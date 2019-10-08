@@ -80,6 +80,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size);
 int checkPass(person_t* user, char password[MAX_LEN]);
 int passMatch(char pass1[MAX_LEN], char pass2[MAX_LEN]);
 void printEditMenu();
+void personsDataInit();
 
 /*******************************************************************************
  * Main
@@ -568,8 +569,50 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 /*******************************************************************************
 *	This function assigns a random member's wishlist to another member.
 *******************************************************************************/
-void assignMembers() {
-	printf("assign\n");
+
+/*contributor: Jack */
+int assignMembers(person_t users[MAX_NUM], int size, int person_index) {
+
+	/* person_index validate*/
+	if(person_index >= MAX_NUM) {
+		printf("person_index >= MAX_NUM\n");
+		return -1;
+	}
+	if(strcmp(" ", users[person_index].name) == 0) {
+		printf("users[person_index].name = 0\n");
+		return -2;
+	}
+
+	/* check how many pp, if less than 2, then return -1*/
+	int i = 0;
+	int vaild_user_number = 0
+	for (i = 0; i < MAX_NUM; i++) {
+		if(strcmp(" ", users[person_index].name) != 0) {
+			vaild_user_number++;
+		}
+	}
+
+	if(vaild_user_number < 2) {
+		printf("not enough people\n");
+		return -3;
+	}
+	/* while get random num*/
+	while(1) {
+		int random_user = rand() % 19;
+		if(strcmp(" ", users[random_user].name) != 0) && (strcmp(random_user, person_index) != 0){
+			/* assign wishlist*/
+			for(int i = 0; i < MAX_WISHES; i++) {
+				users[random_user].wishlist[i].priority = users[person_index].wishlist[i].priority;
+				strcpy(users[random_user].wishlist[i].name, users[person_index].wishlist[i].name);
+			}
+		}
+		break;
+	}
+	/* success*/
+	return 0;
+
+	/* fail*/
+
 }
 
 /*******************************************************************************
@@ -660,4 +703,21 @@ void printEditMenu() {
 		"1. Add an item.\n"
 		"2. Remove an item.\n"
 		"Enter choice: ");
+}
+
+/*author: Jack*/
+void personsDataInit() {
+	int i = 0;
+	for ( i = 0; i < MAX_NUM; i++) {
+		persons[i].age = 0;
+		persons[i].santa = 0;
+		strcpy(persons[i].name, " ");
+		strcpy(persons[i].password, " ");
+		strcpy(persons[i].wishlist, " ");
+	}
+
+	strcpy(persons[0].name, "Santa"); 				/*Dummy data*/
+	persons[0].age = 7;					 	/*Dummy data*/
+	strcpy(persons[0].password, "Rudolph");				/*Dummy data*/
+	strcpy(persons[0].wishlist, "High Distinction");
 }
