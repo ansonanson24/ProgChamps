@@ -31,7 +31,7 @@
 #define MAX_NAME_LEN 10
 #define MAX_PASS_LEN 99
 #define MAX_WISHES 5
-#define MAX_NUM 50
+#define MAX_NUM 3
 
 /*******************************************************************************
  * List structs.
@@ -39,7 +39,6 @@
 struct person
 {
 	char name[MAX_NAME_LEN + 1];
-	int  age;
 	char password[MAX_PASS_LEN + 1]; /* Gonna see if we can use other
 					libraries besides those for limits.h */
 	char wishlist[MAX_WISHES + 1]; /* will be written to text file */
@@ -99,7 +98,7 @@ int main(int argc, char* argv[]) {
 		adminLogin(users, size_p);
 	}
 
-	
+
 	return 0;
 }
 
@@ -128,11 +127,10 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 			}
 			else {
 				*size = userRegister(users, size);
-				*size = *size+1;
+				*size = *size + 1;
 				puts("User has been registered successfully! Returning to main menu.");
 			}
 			break;
-
 		case '4':
 			exit(0);
 			break;
@@ -219,20 +217,18 @@ Contributor: Danielle Alota
 */
 void selectionAdmin(person_t users[MAX_NUM], int* size) {
 	char c;
-	int rem;
-	printAdmin();
-	scanf(" %c", &c);
 	while (1) {
-		switch (c)
-		{
+		printAdmin();
+		scanf(" %c", &c);
+		switch (c) {
 		case '1':
 			printf("displaying...\n");
 			break;
 		case '2':
-			if (removeMember(users, size) == 0) {
+			if (removeMember(users, size) != -1) {
 				printf("Member removed successfully. Returning to admin menu.\n");
 			}
-			else { /* loops back for some reason */
+			else {
 				printf("This member does not exist. Returning to admin menu.\n");
 			}
 			break;
@@ -278,7 +274,6 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 		}
 	}
 
-
 	/* pass logged in user */
 	if (valid) {
 		printf("Successful login! Redirecting to user menu.\n"); /* Maybe add a hello <name>?*/
@@ -319,7 +314,7 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t user) {
 			changePassword(users, user, size);
 			break;
 
-		case '3':
+		case '3': /* view santa's wishlist*/
 			printf("nothing assigned yet...\n");
 			break;
 
@@ -444,14 +439,13 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 
 	/*if exist delete*/
 	for (i = 0; i < *size + 1; i++) {
-		if (strcmp(name, users[i].name) == 0) { /* this needs to be checked, im just quickly*/
-			users[i].age = users[*size - 1].age; /* changing some things -dani*/
+		if (strcmp(name, users[i].name) == 0) { /* further testing required*/
 			strcpy(users[i].name, users[*size - 1].name);
 			strcpy(users[i].password, users[*size - 1].password);
 			users[i].index = users[*size - 1].index;
 			strcpy(users[i].wishlist, users[*size - 1].wishlist);
-			*size= *size-1;
-			return 0;
+			*size = *size - 1;
+			return *size;
 		}
 	}
 	/*not exist return -1*/
@@ -511,7 +505,7 @@ int printList(person_t users[MAX_NUM], int* size) {
 	printf("all of the wishlist is below\n");
 	/*show all wishlist*/
 	for (i = 0; i < MAX_NUM; i++) {
-		if (strcmp(users[i].name," ") == 1) {
+		if (strcmp(users[i].name, " ") == 1) {
 			printf("%s\n", users[i].wishlist);
 		}
 	}
