@@ -120,12 +120,12 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 			break;
 
 		case '3':
-			if (size == MAX_NUM) {
+			if (*size == MAX_NUM) {
 				puts("Max users reached. Returning to main menu.");
 			}
 			else {
-				size = userRegister(users, size);
-				size++;
+				*size = userRegister(users, size);
+				*size++;
 				puts("User has been registered successfully! Returning to main menu.");
 			}
 			break;
@@ -169,7 +169,7 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 	printf("Enter your password: ");
 	scanf("%s", users[size].password);
 
-	return size;
+	return *size;
 }
 
 /*
@@ -267,7 +267,7 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 	scanf("%s", password);
 
 	/* change into function*/
-	for (i = 0; i < size + 1; i++) {
+	for (i = 0; i < *size + 1; i++) {
 		if (strcmp(username, users[i].name) == 0 && strcmp(password, users[i].password) == 0) {
 			valid = 1;
 			foundUser = users[i];
