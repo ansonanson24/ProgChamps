@@ -43,7 +43,7 @@ struct person
 	char password[MAX_PASS_LEN + 1]; /* Gonna see if we can use other
 					libraries besides those for limits.h */
 	char wishlist[MAX_WISHES + 1]; /* will be written to text file */
-	int santa;
+	int index;
 };
 typedef struct person person_t;
 
