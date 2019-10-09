@@ -77,24 +77,26 @@ void editWishlist(person_t users[MAX_NUM], person_t user);
 /*******************************************************************************
  * Main
 *******************************************************************************/
-int main(void) {
+int main(int argc, char* argv[]) {
 	int size = 0;
 	int* size_p = &size;
 	person_t users[MAX_NUM];
 
-	if (!strcmp(argv[1], "admin"))
+	if (argc == 1)
 	{
-		adminLogin();
+		selectionMain(users, size_p);
 	}
 	else if (!strcmp(argv[1], "login"))
 	{
-		userLogin(persons, size); /* size undefined*/
+		userLogin(users, size_p); /* size undefined*/
 	}
 	else if (!strcmp(argv[1], "register"))
 	{
-		userRegister();
-	} else {
-		selectionMain(users, size_p);
+		userRegister(users, size_p);
+	}
+	else if (!strcmp(argv[1], "admin"))
+	{
+		adminLogin(users, size_p);
 	}
 
 	
@@ -108,6 +110,7 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 	char c;
 	while (1) {
 		printMain();
+		printf("size is %d", *size);
 		scanf(" %c", &c); /* This is so it takes inputs that aren't numbers*/
 		switch (c)
 		{
@@ -125,7 +128,7 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 			}
 			else {
 				*size = userRegister(users, size);
-				*size++;
+				*size = *size+1;
 				puts("User has been registered successfully! Returning to main menu.");
 			}
 			break;
@@ -163,11 +166,11 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 	}
 
 	if (valid == 0) {
-		strcpy(users[size].name, name);
+		strcpy(users[*size].name, name);
 	}
 
 	printf("Enter your password: ");
-	scanf("%s", users[size].password);
+	scanf("%s", users[*size].password);
 
 	return *size;
 }
@@ -178,7 +181,7 @@ Contributors: Danielle Alota
 */
 int nameTaken(person_t users[MAX_NUM], char name[], int* size) {
 	int i;
-	for (i = 0; i < size + 1; i++) {
+	for (i = 0; i < *size + 1; i++) {
 		if (strcmp(users[i].name, name) == 0) {
 			return 1;
 		}
@@ -296,7 +299,7 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t user) {
 	/* Then change to char to deal with inputs not of same data type */
 	int i, userX;
 
-	for (i = 0; i < size + 1; i++) {
+	for (i = 0; i < *size + 1; i++) {
 		if (strcmp(user.name, users[i].name) == 0 && strcmp(user.name, users[i].password) == 0) {
 			userX = i;
 			break;
@@ -447,7 +450,7 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 			strcpy(users[i].password, users[*size - 1].password);
 			users[i].santa = users[*size - 1].santa;
 			strcpy(users[i].wishlist, users[*size - 1].wishlist);
-			*size--;
+			*size= *size-1;
 			return 0;
 		}
 	}
