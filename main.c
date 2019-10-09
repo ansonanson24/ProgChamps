@@ -448,7 +448,7 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 			users[i].age = users[*size - 1].age; /* changing some things -dani*/
 			strcpy(users[i].name, users[*size - 1].name);
 			strcpy(users[i].password, users[*size - 1].password);
-			users[i].santa = users[*size - 1].santa;
+			users[i].index = users[*size - 1].index;
 			strcpy(users[i].wishlist, users[*size - 1].wishlist);
 			*size= *size-1;
 			return 0;
