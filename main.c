@@ -440,14 +440,14 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 	scanf(" %s", name);
 
 	/*if exist delete*/
-	for (i = 0; i < size + 1; i++) {
+	for (i = 0; i < *size + 1; i++) {
 		if (strcmp(name, users[i].name) == 0) { /* this needs to be checked, im just quickly*/
-			users[i].age = users[size - 1].age; /* changing some things -dani*/
-			strcpy(users[i].name, users[size - 1].name);
-			strcpy(users[i].password, users[size - 1].password);
-			users[i].santa = users[size - 1].santa;
-			strcpy(users[i].wishlist, users[size - 1].wishlist);
-			size--;
+			users[i].age = users[*size - 1].age; /* changing some things -dani*/
+			strcpy(users[i].name, users[*size - 1].name);
+			strcpy(users[i].password, users[*size - 1].password);
+			users[i].santa = users[*size - 1].santa;
+			strcpy(users[i].wishlist, users[*size - 1].wishlist);
+			*size--;
 			return 0;
 		}
 	}
@@ -481,7 +481,7 @@ int viewWishes(person_t users[MAX_NUM], int* size) {
 	/*enter username then show the wishlist*/
 	printf("Please enter the username you want to check\n");
 	scanf("%s", username);
-	for (i = 0; i < size; i++) {
+	for (i = 0; i < *size; i++) {
 		if (strcmp(username, users[i].name) == 0) {
 			printf("The following shows the wish list of %s\n%s\n", username, users[i].wishlist);
 			return 0;
@@ -508,7 +508,7 @@ int printList(person_t users[MAX_NUM], int* size) {
 	printf("all of the wishlist is below\n");
 	/*show all wishlist*/
 	for (i = 0; i < MAX_NUM; i++) {
-		if (users[i].name != " ") {
+		if (strcmp(users[i].name," ") == 1) {
 			printf("%s\n", users[i].wishlist);
 		}
 	}
