@@ -376,7 +376,6 @@ int addItem(person_t* user) {
 	int itemCheck;
 
 	while (1) { /* addresses the "add more items" option*/
-		printf("list size is %d", user->listSize);
 		if (user->listSize == MAX_WISHES) {
 			printf("Your wishlist is currently full! Redirecting to user menu.\n");
 			break;
