@@ -66,8 +66,8 @@ int userRegister(person_t users[MAX_NUM], int* size);
 int nameTaken(person_t users[MAX_NUM], char name[], int* size);
 int removeMember(person_t users[MAX_NUM], int* size);
 void assignMembers();
+void passEncrypt(person_t users[MAX_NUM], int* size, char c, char password[MAX_LEN]);
 int viewWishes(person_t users[MAX_NUM], int* size);
-void passEncrypt();
 void sortByAlphabet();
 int printList(person_t users[MAX_NUM], int* size, person_t* user);
 int addItem(person_t* user);
@@ -133,7 +133,6 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 			}
 			else {
 				*size = userRegister(users, size);
-				*size = *size + 1;
 				puts("User has been registered successfully! Returning to main menu.");
 			}
 			break;
@@ -155,6 +154,7 @@ Contributors:  Danielle Alota
 *******************************************************************************/
 int userRegister(person_t users[MAX_NUM], int* size) {
 	char name[MAX_NAME_LEN + 1];
+	char password[MAX_LEN];
 	/* char password[MAX_PASS_LEN + 1];  for future encryption*/
 	int valid;
 
@@ -173,7 +173,13 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 		strcpy(users[*size].name, name);
 		users[*size].listSize = 0;
 		printf("Enter your password: ");
-		scanf("%s", users[*size].password);
+		scanf("%s", password);
+
+		passEncrypt(users, size, 'e', password);
+		*size = *size + 1;
+		printf("Register Success! Returning to main menu.\n");
+		printf("Username: %s - Password: %s\n", name, users[*size-1].password);
+		selectionMain(users, size);
 	}
 
 
@@ -210,7 +216,7 @@ void adminLogin(person_t users[MAX_NUM], int* size) {
 
 	if (strcmp(username, "admin") == 0 && strcmp(password, "admin") == 0) {
 		printf("Login success\n");
-		printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome Admin ·._.·´¯)·._.·´¯)\n");
+		printf("\n(Â¯`Â·._.Â·(Â¯`Â·._.Â· Ho Ho Ho, Welcome Admin Â·._.Â·Â´Â¯)Â·._.Â·Â´Â¯)\n");
 		selectionAdmin(users, size);
 	}
 	else {
@@ -285,7 +291,7 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 	/* pass logged in user */
 	if (valid) {
 		printf("Successful login! Redirecting to user menu.\n\n");
-		printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome %s ·._.·´¯)·._.·´¯)\n", foundUser_p->name);
+		printf("\n(Â¯`Â·._.Â·(Â¯`Â·._.Â· Ho Ho Ho, Welcome %s Â·._.Â·Â´Â¯)Â·._.Â·Â´Â¯)\n", foundUser_p->name);
 		selectionUser(users, size, foundUser_p);
 	}
 	else {
@@ -584,8 +590,29 @@ void assignMembers() {
 /*******************************************************************************
 *	This function encrypts a given password.
 *******************************************************************************/
-void passEncrypt() {
-	printf("encrypt\n");
+void passEncrypt(person_t users[MAX_NUM], int* size, char c, char password[MAX_LEN]) {
+	char username[MAX_NAME_LEN];
+	char encrypt = 'e';
+	char decrypt = 'd';
+	int i, j, key;
+
+	i = *size;
+	strcpy(username, users[i].name);
+	key = strlen(username);
+
+	if(c == encrypt)
+	{
+		for (j = 0; j < strlen(password); j++)
+		{
+			users[i].password[j] = password[j] + key;
+		}
+	} else if(c == decrypt)
+	{
+		for (j = 0; j < strlen(password); j++)
+		{
+			password[j] = users[i].password[j] - key;
+		}
+	}
 }
 
 /*******************************************************************************
