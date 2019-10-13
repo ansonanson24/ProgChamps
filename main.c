@@ -65,7 +65,7 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user_p);
 int userRegister(person_t users[MAX_NUM], int* size);
 int nameTaken(person_t users[MAX_NUM], char name[], int* size);
 int removeMember(person_t users[MAX_NUM], int* size);
-void assignMembers();
+int assignMembers();
 int viewWishes(person_t users[MAX_NUM], int* size);
 void passEncrypt();
 void sortByAlphabet();
