@@ -2,17 +2,17 @@
  * 48430 Fundamentals of C Programming - Assignment 3
  * Names:
  * Bilal Ali
- * Anson Kwok
- * Danielle Alota -12954121
+ * Yat Ho Kwok
+ * Danielle Alota
  * Zhongzhuo Wu
- * Yuekai Sun -13001589
+ * Yuekai Sun
  *
  * Student ID:
  * 13205657
+ * 12879779
+ * 12954121
  *
- *
- *
- *13001589
+ * 13001589
  *
  * Date of submission:
 *******************************************************************************/
