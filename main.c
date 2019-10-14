@@ -33,6 +33,7 @@
 #define MAX_LEN 50
 #define MAX_WISHES 5
 #define MAX_NUM 3
+#define KEY 3
 
 /*******************************************************************************
  * List structs.
@@ -583,25 +584,25 @@ void assignMembers() {
 }
 
 /*******************************************************************************
-*	This function encrypts a given password with Caesar Cipher.
+*	This function encrypts a given password.
 *******************************************************************************/
 char *passEncrypt(char password[]) {
-	int i;
+	int i, privKey;
+	privKey = strlen(password) + KEY;
 
-	/* Caesar */
 	for (i = 0; i < strlen(password); i++) {
-		password[i] = password[i] + 3;
+		password[i] = password[i] + privKey;
 	}
-
 	return password;
 }
 
 /*******************************************************************************
-*	This function decrypts a given password encrypted with Caesar Cipher.
+*	This function decrypts a given encrypted password.
 *******************************************************************************/
 char *passDecrypt(char encrypted[]) {
-	int i;
-	
+	int i, privKey;
+	privKey = strlen(encrypted) + KEY;
+
 	for (i = 0; i < strlen(encrypted); i++) {
 		encrypted[i] = encrypted[i] - 3;
 	}
