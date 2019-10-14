@@ -20,6 +20,7 @@
 /*******************************************************************************
  * List header files
 *******************************************************************************/
+#define _CRT_SECURE_NO_WARNINGS /* remember to delete!!!*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -81,6 +82,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size);
 int checkPass(person_t* user, char password[MAX_LEN]);
 int passMatch(char pass1[MAX_LEN], char pass2[MAX_LEN]);
 void printEditMenu();
+void displayUser(person_t users[], int* size);
 
 /*******************************************************************************
  * Main
@@ -310,7 +312,8 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 Contributor: Danielle Alota
 */
 void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
-	char choice;
+	char choice; /* For the purpose of testing, let's stick with scanning int */
+	/* Then change to char to deal with inputs not of same data type */
 	char editCh;
 
 	while (1) {
@@ -430,9 +433,6 @@ int addItem(person_t* user) {
 	return user->listSize;
 }
 
-/*
-Contributor: Danielle Alota
-*/
 void removeItem(person_t* user) {
 	int i, itemCheck;
 	char itemName[MAX_LEN];
@@ -453,9 +453,6 @@ void removeItem(person_t* user) {
 	}
 }
 
-/*
-Contributor: Danielle Alota
-*/
 int itemExists(char itemName[MAX_LEN], person_t* user) {
 	int i;
 	for (i = 0; i < user->listSize; i++) {
@@ -592,7 +589,7 @@ char *passEncrypt(char password[]) {
 	int i;
 
 	/* Caesar */
-	for (i = 0; i < sizeof(password); i++) {
+	for (i = 0; i < strlen(password); i++) {
 		password[i] = password[i] + 3;
 	}
 
@@ -605,7 +602,7 @@ char *passEncrypt(char password[]) {
 char *passDecrypt(char encrypted[]) {
 	int i;
 	
-	for (i = 0; i < sizeof(encrypted); i++) {
+	for (i = 0; i < strlen(encrypted); i++) {
 		encrypted[i] = encrypted[i] - 3;
 	}
 	return encrypted;
