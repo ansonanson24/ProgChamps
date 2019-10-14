@@ -14,7 +14,7 @@
  * 13023748
  * 13001589
  *
- * Date of submission:
+ * Date of submission: 14/10/2019
 *******************************************************************************/
 
 /*******************************************************************************
@@ -24,12 +24,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 /*******************************************************************************
  * List preprocessing directives.
 *******************************************************************************/
 #define MAX_NAME_LEN 10
-#define MAX_LEN 99
+#define MAX_LEN 50
 #define MAX_WISHES 5
 #define MAX_NUM 3
 
@@ -67,7 +68,8 @@ int nameTaken(person_t users[MAX_NUM], char name[], int* size);
 int removeMember(person_t users[MAX_NUM], int* size);
 void assignMembers();
 int viewWishes(person_t users[MAX_NUM], int* size);
-void passEncrypt();
+char *passEncrypt(char password[]);
+char *passDecrypt(char encrypted[]);
 void sortByAlphabet();
 int printList(person_t users[MAX_NUM], int* size, person_t* user);
 int addItem(person_t* user);
@@ -154,17 +156,17 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 Contributors:  Danielle Alota
 *******************************************************************************/
 int userRegister(person_t users[MAX_NUM], int* size) {
-	char name[MAX_NAME_LEN + 1];
+	char name[MAX_NAME_LEN + 1], password[MAX_LEN];
 	/* char password[MAX_PASS_LEN + 1];  for future encryption*/
 	int valid;
 
-	printf("Enter your name (without spaces): ");
+	printf("Enter your username (without spaces)> \n");
 	scanf("%s", name);
 	valid = nameTaken(users, name, size);
 
 	while (valid == 1) {
 		printf("User already exists! Please try again.\n");
-		printf("Enter your name (without spaces): ");
+		printf("Enter your username (without spaces)> \n");
 		scanf("%s", name);
 		valid = nameTaken(users, name, size);
 	}
@@ -172,11 +174,11 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 	if (valid == 0) {
 		strcpy(users[*size].name, name);
 		users[*size].listSize = 0;
-		printf("Enter your password: ");
-		scanf("%s", users[*size].password);
+		printf("Enter your password> \n");
+		scanf("%s", password);
+		strcpy(users[*size].password, passEncrypt(password));
+		printf("%S", users[*size].password);
 	}
-
-
 
 	return *size;
 }
@@ -202,10 +204,10 @@ void adminLogin(person_t users[MAX_NUM], int* size) {
 	char username[MAX_NAME_LEN];
 	char password[MAX_LEN];
 
-	printf("Enter username>\n");
+	printf("Enter your username> \n");
 	scanf("%s", username);
 
-	printf("Enter password>\n");
+	printf("Enter your password> \n");
 	scanf("%s", password);
 
 	if (strcmp(username, "admin") == 0 && strcmp(password, "admin") == 0) {
@@ -229,7 +231,8 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 		scanf(" %c", &c);
 		switch (c) {
 		case '1':
-			printf("displaying...\n");
+			printf("Displaying all users' info...\n");
+			displayUser(users, size);
 			break;
 		case '2':
 			if (removeMember(users, size) != -1) {
@@ -241,6 +244,7 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 			break;
 		case '3':
 			printf("assigning...\n");
+			/* Failed to complete */
 			break;
 		case '4':
 			printf("Logged out\n");
@@ -256,9 +260,18 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 	}
 }
 
+/* Contributor: Yat Ho Kwok */
+void displayUser(person_t users[], int* size) {
+	int i, j;
+	printf("Username | Password\n");
+	for (i = 0; i < *size; i++) {
+		printf("%s %s\n", users[i].name, users[i].password);
+	}
+	printf("\n");
+}
+
 /*
-Contributors: Danielle Alota
-Anson Kwok
+Contributors: Danielle Alota, Yat Ho Kwok
 */
 void userLogin(person_t users[MAX_NUM], int* size) {
 	char username[MAX_NAME_LEN];
@@ -275,7 +288,7 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 
 	/* change into function*/
 	for (i = 0; i < *size + 1; i++) {
-		if (strcmp(username, users[i].name) == 0 && strcmp(password, users[i].password) == 0) {
+		if (strcmp(username, users[i].name) == 0 && strcmp(password, passDecrypt(users[i].password)) == 0) {
 			valid = 1;
 			foundUser_p = &users[i];
 			break;
@@ -437,11 +450,6 @@ void removeItem(person_t* user) {
 			return;
 		}
 	}
-
-	/*
-	more to be added..just not bothered atm
-	*/
-
 }
 
 int itemExists(char itemName[MAX_LEN], person_t* user) {
@@ -570,13 +578,33 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 *******************************************************************************/
 void assignMembers() {
 	printf("assign\n");
+	/* Unable to complete */
 }
 
 /*******************************************************************************
-*	This function encrypts a given password.
+*	This function encrypts a given password with Caesar Cipher.
 *******************************************************************************/
-void passEncrypt() {
-	printf("encrypt\n");
+char *passEncrypt(char password[]) {
+	int i;
+
+	/* Caesar */
+	for (i = 0; i < sizeof(password); i++) {
+		password[i] = password[i] + 3;
+	}
+
+	return password;
+}
+
+/*******************************************************************************
+*	This function decrypts a given password encrypted with Caesar Cipher.
+*******************************************************************************/
+char *passDecrypt(char encrypted[]) {
+	int i;
+	
+	for (i = 0; i < sizeof(encrypted); i++) {
+		encrypted[i] = encrypted[i] - 3;
+	}
+	return encrypted;
 }
 
 /*******************************************************************************
@@ -606,6 +634,7 @@ int viewWishes(person_t users[MAX_NUM], int* size) {
 *******************************************************************************/
 void sortByAlphabet() {
 	printf("sort\n");
+	/* Unable to complete */
 }
 
 /*******************************************************************************
