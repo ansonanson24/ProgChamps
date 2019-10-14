@@ -20,7 +20,6 @@
 /*******************************************************************************
  * List header files
 *******************************************************************************/
-#define _CRT_SECURE_NO_WARNINGS /* remember to delete!!!*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -311,8 +310,7 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 Contributor: Danielle Alota
 */
 void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
-	char choice; /* For the purpose of testing, let's stick with scanning int */
-	/* Then change to char to deal with inputs not of same data type */
+	char choice;
 	char editCh;
 
 	while (1) {
@@ -432,6 +430,9 @@ int addItem(person_t* user) {
 	return user->listSize;
 }
 
+/*
+Contributor: Danielle Alota
+*/
 void removeItem(person_t* user) {
 	int i, itemCheck;
 	char itemName[MAX_LEN];
@@ -452,6 +453,9 @@ void removeItem(person_t* user) {
 	}
 }
 
+/*
+Contributor: Danielle Alota
+*/
 int itemExists(char itemName[MAX_LEN], person_t* user) {
 	int i;
 	for (i = 0; i < user->listSize; i++) {
