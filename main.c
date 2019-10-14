@@ -241,7 +241,18 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 			}
 			break;
 		case '3':
-			printf("assigning...\n");
+			if (assignMember(users,size) == -1) {
+				printf("person_index >= MAX_NUM\n");
+			}
+			else if(assignMember(users,size) == -2) {
+				printf("users[person_index].name = 0\n");
+			}
+			else if(assignMember(users,size) == -3) {
+				printf("not enough people\n");
+			}	
+			else {
+				printf("success\n");
+			}
 			break;
 		case '4':
 			printf("Logged out\n");
@@ -571,19 +582,17 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 *******************************************************************************/
 
 /*contributor: Jack */
-int assignMembers(person_t users[MAX_NUM], int size, int person_index) {
-
+int assignMembers(person_t users[MAX_NUM], int size, ) {
+	int person_index
 	/* person_index validate*/
 	if(person_index >= MAX_NUM) {
-		printf("person_index >= MAX_NUM\n");
 		return -1;
 	}
 	if(strcmp(" ", users[person_index].name) == 0) {
-		printf("users[person_index].name = 0\n");
 		return -2;
 	}
 
-	/* check how many pp, if less than 2, then return -1*/
+	/* check how many pp, if less than 2, then return -3*/
 	int i = 0;
 	int vaild_user_number = 0
 	for (i = 0; i < MAX_NUM; i++) {
@@ -593,7 +602,6 @@ int assignMembers(person_t users[MAX_NUM], int size, int person_index) {
 	}
 
 	if(vaild_user_number < 2) {
-		printf("not enough people\n");
 		return -3;
 	}
 	/* while get random num*/
@@ -610,9 +618,6 @@ int assignMembers(person_t users[MAX_NUM], int size, int person_index) {
 	}
 	/* success*/
 	return 0;
-
-	/* fail*/
-
 }
 
 /*******************************************************************************
