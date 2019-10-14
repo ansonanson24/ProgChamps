@@ -2,19 +2,19 @@
  * 48430 Fundamentals of C Programming - Assignment 3
  * Names:
  * Bilal Ali
- * Anson Kwok
- * Danielle Alota -12954121
+ * Yat Ho Kwok
+ * Danielle Alota
  * Zhongzhuo Wu
  * Yuekai Sun
  *
  * Student ID:
  * 13205657
+ * 12879779
+ * 12954121
+ * 13023748
+ * 13001589
  *
- *
- *
- *
- *
- * Date of submission:
+ * Date of submission: 14/10/2019
 *******************************************************************************/
 
 /*******************************************************************************
@@ -24,14 +24,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 /*******************************************************************************
  * List preprocessing directives.
 *******************************************************************************/
 #define MAX_NAME_LEN 10
-#define MAX_LEN 99
+#define MAX_LEN 50
 #define MAX_WISHES 5
 #define MAX_NUM 3
+#define KEY 3
 
 /*******************************************************************************
  * List structs.
@@ -65,9 +67,10 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user_p);
 int userRegister(person_t users[MAX_NUM], int* size);
 int nameTaken(person_t users[MAX_NUM], char name[], int* size);
 int removeMember(person_t users[MAX_NUM], int* size);
-int assignMembers();
+int assignMembers(person_t users[MAX_NUM], int* size);
 int viewWishes(person_t users[MAX_NUM], int* size);
-void passEncrypt();
+char *passEncrypt(char password[]);
+char *passDecrypt(char encrypted[]);
 void sortByAlphabet();
 int printList(person_t users[MAX_NUM], int* size, person_t* user);
 int addItem(person_t* user);
@@ -80,6 +83,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size);
 int checkPass(person_t* user, char password[MAX_LEN]);
 int passMatch(char pass1[MAX_LEN], char pass2[MAX_LEN]);
 void printEditMenu();
+void displayUser(person_t users[], int* size);
 void personsDataInit();
 
 /*******************************************************************************
@@ -155,17 +159,17 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 Contributors:  Danielle Alota
 *******************************************************************************/
 int userRegister(person_t users[MAX_NUM], int* size) {
-	char name[MAX_NAME_LEN + 1];
+	char name[MAX_NAME_LEN + 1], password[MAX_LEN];
 	/* char password[MAX_PASS_LEN + 1];  for future encryption*/
 	int valid;
 
-	printf("Enter your name (without spaces): ");
+	printf("Enter your username (without spaces)> \n");
 	scanf("%s", name);
 	valid = nameTaken(users, name, size);
 
 	while (valid == 1) {
 		printf("User already exists! Please try again.\n");
-		printf("Enter your name (without spaces): ");
+		printf("Enter your username (without spaces)> \n");
 		scanf("%s", name);
 		valid = nameTaken(users, name, size);
 	}
@@ -173,11 +177,11 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 	if (valid == 0) {
 		strcpy(users[*size].name, name);
 		users[*size].listSize = 0;
-		printf("Enter your password: ");
-		scanf("%s", users[*size].password);
+		printf("Enter your password> \n");
+		scanf("%s", password);
+		strcpy(users[*size].password, passEncrypt(password));
+		printf("%S", users[*size].password);
 	}
-
-
 
 	return *size;
 }
@@ -203,10 +207,10 @@ void adminLogin(person_t users[MAX_NUM], int* size) {
 	char username[MAX_NAME_LEN];
 	char password[MAX_LEN];
 
-	printf("Enter username>\n");
+	printf("Enter your username> \n");
 	scanf("%s", username);
 
-	printf("Enter password>\n");
+	printf("Enter your password> \n");
 	scanf("%s", password);
 
 	if (strcmp(username, "admin") == 0 && strcmp(password, "admin") == 0) {
@@ -230,7 +234,8 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 		scanf(" %c", &c);
 		switch (c) {
 		case '1':
-			printf("displaying...\n");
+			printf("Displaying all users' info...\n");
+			displayUser(users, size);
 			break;
 		case '2':
 			if (removeMember(users, size) != -1) {
@@ -240,7 +245,7 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 				printf("This member does not exist. Returning to admin menu.\n");
 			}
 			break;
-		case '3':
+        case '3':
 			if (assignMember(users,size) == -1) {
 				printf("person_index >= MAX_NUM\n");
 			}
@@ -253,7 +258,7 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 			else {
 				printf("success\n");
 			}
-			break;
+            break;
 		case '4':
 			printf("Logged out\n");
 			selectionMain(users, size);
@@ -268,9 +273,18 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 	}
 }
 
+/* Contributor: Yat Ho Kwok */
+void displayUser(person_t users[], int* size) {
+	int i, j;
+	printf("Username | Password\n");
+	for (i = 0; i < *size; i++) {
+		printf("%s %s\n", users[i].name, users[i].password);
+	}
+	printf("\n");
+}
+
 /*
-Contributors: Danielle Alota
-Anson Kwok
+Contributors: Danielle Alota, Yat Ho Kwok
 */
 void userLogin(person_t users[MAX_NUM], int* size) {
 	char username[MAX_NAME_LEN];
@@ -287,7 +301,7 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 
 	/* change into function*/
 	for (i = 0; i < *size + 1; i++) {
-		if (strcmp(username, users[i].name) == 0 && strcmp(password, users[i].password) == 0) {
+		if (strcmp(username, users[i].name) == 0 && strcmp(password, passDecrypt(users[i].password)) == 0) {
 			valid = 1;
 			foundUser_p = &users[i];
 			break;
@@ -449,11 +463,6 @@ void removeItem(person_t* user) {
 			return;
 		}
 	}
-
-	/*
-	more to be added..just not bothered atm
-	*/
-
 }
 
 int itemExists(char itemName[MAX_LEN], person_t* user) {
@@ -480,9 +489,9 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	if (strcmp(password, "*") == 0) {
 		return;
 	}
-	validPass = checkPass(user, password);
+	validPass = checkPass(user, passEncrypt(password));
 
-	while (validPass == 1) {
+	while (!validPass) {
 		printf("Incorrect password. Try again or enter * to go back to menu.\n");
 		printf("Please enter your current password: ");
 		scanf("%s", password);
@@ -514,8 +523,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	}
 
 	if (validNew == 0) {
-		strcpy(user->password, newPass2);
-		printf("%s", user->password);
+		strcpy(user->password, passEncrypt(newPass2));
 		printf("Password changed successfully! Redirecting to user menu.\n");
 		selectionUser(users, size, user);
 	}
@@ -580,9 +588,8 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 /*******************************************************************************
 *	This function assigns a random member's wishlist to another member.
 *******************************************************************************/
-
 /*contributor: Jack */
-int assignMembers(person_t users[MAX_NUM], int size, ) {
+int assignMembers(person_t users[MAX_NUM], int* size) {
 	int person_index;
 	/* person_index validate*/
 	if(person_index >= MAX_NUM) {
@@ -594,7 +601,7 @@ int assignMembers(person_t users[MAX_NUM], int size, ) {
 
 	/* check how many pp, if less than 2, then return -3*/
 	int i = 0;
-	int vaild_user_number = 0
+	int vaild_user_number = 0;
 	for (i = 0; i < MAX_NUM; i++) {
 		if(strcmp(" ", users[person_index].name) != 0) {
 			vaild_user_number++;
@@ -604,14 +611,16 @@ int assignMembers(person_t users[MAX_NUM], int size, ) {
 	if(vaild_user_number < 2) {
 		return -3;
 	}
+	
 	/* while get random num*/
+	int random_user;
 	while(1) {
-		int random_user = rand() % 19;
-		if(strcmp(" ", users[random_user].name) != 0) && (strcmp(random_user, person_index) != 0){
+		random_user = rand() % 19;
+		if((strcmp(" ", users[random_user].name)) != 0 && (random_user != person_index)) {
 			/* assign wishlist*/
-			for(int i = 0; i < MAX_WISHES; i++) {
-				users[random_user].wishlist[i].priority = users[person_index].wishlist[i].priority;
-				strcpy(users[random_user].wishlist[i].name, users[person_index].wishlist[i].name);
+			for(i = 0; i < MAX_WISHES; i++) {
+				users[random_user].list[i].priority = users[person_index].list[i].priority;
+				strcpy(users[random_user].list[i].name, users[person_index].list[i].name);
 			}
 		}
 		break;
@@ -623,8 +632,27 @@ int assignMembers(person_t users[MAX_NUM], int size, ) {
 /*******************************************************************************
 *	This function encrypts a given password.
 *******************************************************************************/
-void passEncrypt() {
-	printf("encrypt\n");
+char *passEncrypt(char password[]) {
+	int i, privKey;
+	privKey = strlen(password) + KEY;
+
+	for (i = 0; i < strlen(password); i++) {
+		password[i] = password[i] + privKey;
+	}
+	return password;
+}
+
+/*******************************************************************************
+*	This function decrypts a given encrypted password.
+*******************************************************************************/
+char *passDecrypt(char encrypted[]) {
+	int i, privKey;
+	privKey = strlen(encrypted) + KEY;
+
+	for (i = 0; i < strlen(encrypted); i++) {
+		encrypted[i] = encrypted[i] - privKey;
+	}
+	return encrypted;
 }
 
 /*******************************************************************************
@@ -654,6 +682,7 @@ int viewWishes(person_t users[MAX_NUM], int* size) {
 *******************************************************************************/
 void sortByAlphabet() {
 	printf("sort\n");
+	/* Unable to complete */
 }
 
 /*******************************************************************************
@@ -711,18 +740,16 @@ void printEditMenu() {
 }
 
 /*author: Jack*/
-void personsDataInit() {
+/*void personsDataInit() {
 	int i = 0;
 	for ( i = 0; i < MAX_NUM; i++) {
-		persons[i].age = 0;
-		persons[i].santa = 0;
-		strcpy(persons[i].name, " ");
-		strcpy(persons[i].password, " ");
-		strcpy(persons[i].wishlist, " ");
+		users[i].index = 0;
+		strcpy(users[i].name, " ");
+		strcpy(users[i].password, " ");
+		strcpy(users[i].listSize, " ");
 	}
 
-	strcpy(persons[0].name, "Santa"); 				/*Dummy data*/
-	persons[0].age = 7;					 	/*Dummy data*/
-	strcpy(persons[0].password, "Rudolph");				/*Dummy data*/
-	strcpy(persons[0].wishlist, "High Distinction");
-}
+	strcpy(users[0].name, "Santa"); 	                
+	strcpy(users[0].password, "Rudolph");				
+	strcpy(users[0].listSize, "High Distinction");
+}*/
