@@ -478,9 +478,9 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	if (strcmp(password, "*") == 0) {
 		return;
 	}
-	validPass = checkPass(user, password);
+	validPass = checkPass(user, passEncrypt(password));
 
-	while (validPass == 1) {
+	while (!validPass) {
 		printf("Incorrect password. Try again or enter * to go back to menu.\n");
 		printf("Please enter your current password: ");
 		scanf("%s", password);
@@ -512,8 +512,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	}
 
 	if (validNew == 0) {
-		strcpy(user->password, newPass2);
-		printf("%s", user->password);
+		strcpy(user->password, passEncrypt(newPass2));
 		printf("Password changed successfully! Redirecting to user menu.\n");
 		selectionUser(users, size, user);
 	}
@@ -604,7 +603,7 @@ char *passDecrypt(char encrypted[]) {
 	privKey = strlen(encrypted) + KEY;
 
 	for (i = 0; i < strlen(encrypted); i++) {
-		encrypted[i] = encrypted[i] - 3;
+		encrypted[i] = encrypted[i] - privKey;
 	}
 	return encrypted;
 }
