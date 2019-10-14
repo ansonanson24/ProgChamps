@@ -583,7 +583,7 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 
 /*contributor: Jack */
 int assignMembers(person_t users[MAX_NUM], int size, ) {
-	int person_index
+	int person_index;
 	/* person_index validate*/
 	if(person_index >= MAX_NUM) {
 		return -1;
