@@ -74,10 +74,10 @@ void assignMembers();
 void passEncrypt(person_t users[MAX_NUM], int* size, char password[MAX_LEN]);
 int passDecrypt(person_t users[MAX_NUM], int index, char pass[10]);
 int viewWishes(person_t users[MAX_NUM], int* size);
-void sortByAlphabet();
+void sortByAlphabet(person_t users[MAX_NUM], int *size);
 int printList(person_t users[MAX_NUM], int* size, person_t* user);
 int addItem(person_t* user);
-void removeItem();
+void removeItem(person_t* user);
 int itemExists(char itemName[MAX_LEN], person_t* user);
 void printMain();
 void printUser();
@@ -86,6 +86,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size);
 int checkPass(person_t* user, char password[MAX_LEN]);
 int passMatch(char pass1[MAX_LEN], char pass2[MAX_LEN]);
 void printEditMenu();
+void displayUser(person_t users[], int* size);
 char* strCompress(char myStr[]);
 void saveUsers (person_t users[], int size);
 int loadUsers (person_t users[]);
@@ -251,7 +252,9 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 		scanf(" %c", &c);
 		switch (c) {
 		case '1':
-			printf("displaying...\n");
+			printf("Displaying all particpating members...");
+			sortByAlphabet(users, size);
+			displayUser(users, size);
 			break;
 		case '2':
 			if (removeMember(users, size) != -1) {
@@ -448,7 +451,7 @@ int addItem(person_t* user) {
 }
 
 void removeItem(person_t* user) {
-	int i, itemCheck;
+	int itemCheck;
 	char itemName[MAX_LEN];
 
 	printf("Enter the item name you wish to delete: ");
@@ -481,6 +484,15 @@ int itemExists(char itemName[MAX_LEN], person_t* user) {
 		}
 	}
 	return -1; /* if it doesn't exists return -1*/
+}
+
+void displayUser(person_t users[], int* size) {
+	int i;
+	printf("Username | Password\n");
+	for (i = 0; i < *size; i++) {
+		printf("%-10s %s\n", users[i].name, users[i].password);
+	}
+	printf("\n");
 }
 
 /*
@@ -674,9 +686,33 @@ int viewWishes(person_t users[MAX_NUM], int* size) {
 
 /*******************************************************************************
 *	This function sorts the member list by their names in alphabetical order.
+
+Contributors:
+Zhongzhuo Wu
+Danielle Alota
 *******************************************************************************/
-void sortByAlphabet() {
-	printf("sort\n");
+void sortByAlphabet(person_t users[MAX_NUM], int *size) {
+ char temp[MAX_NAME_LEN];
+ 
+    int i, j; /* index of the array */
+ int k=0; /* index of alph*/
+    for(i = 0; i < *size+1; i++){
+        for(j = i + 1; j<*size; j++){
+			while(users[i].name[k] == users[j].name[k]){ /*  checks the length of the names*/
+			k++;/* change names to user */
+			if( users[i].name[k] != users[j].name[k]){
+				break;
+			}
+		}
+		if(users[j].name[k] < users[i].name[k]) {
+			strcpy(temp, users[i].name); /*  if the letter is > */
+			strcpy(users[i].name, users[j].name);
+			strcpy(users[j].name, temp);
+			}   
+        }
+    }
+ 
+ return;
 }
 
 /*******************************************************************************
