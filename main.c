@@ -2,17 +2,17 @@
  * 48430 Fundamentals of C Programming - Assignment 3
  * Names:
  * Bilal Ali
- * Anson Kwok
- * Danielle Alota -12954121
+ * Yat Ho Kwok
+ * Danielle Alota
  * Zhongzhuo Wu
  * Yuekai Sun
  *
  * Student ID:
  * 13205657
- *
- *
- *
- *
+ * 12879779
+ * 12954121
+ * 13023748
+ * 13001589
  *
  * Date of submission:
 *******************************************************************************/
@@ -36,6 +36,7 @@
 #define KEY 3
 #define DB_NAME "users"
 /* #define DEBUG_MODE 1 */
+
 
 /*******************************************************************************
  * List structs.
@@ -137,11 +138,11 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 
 		case '3':
 			if (*size == MAX_NUM) {
-				puts("Max users reached. Returning to main menu.");
+				printf("Max users reached. Returning to main menu.");
 			}
 			else {
 				*size = userRegister(users, size);
-				puts("User has been registered successfully! Returning to main menu.");
+				printf("User has been registered successfully! Returning to main menu.");
 			}
 			break;
 		case '4':
@@ -192,16 +193,13 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 		users[*size].listSize = 0;
 		printf("Enter your password: ");
 		scanf("%s", password);
-
+    
 		passEncrypt(users, size, password);
 		*size = *size + 1;
 		printf("Register Success! Returning to main menu.\n");
 		printf("Username: %s - Password: %s\n", name, users[*size-1].password);
 		selectionMain(users, size);
 	}
-
-
-
 	return *size;
 }
 
@@ -414,7 +412,7 @@ int addItem(person_t* user) {
 		scanf(" %s", itemName);
 		itemCheck = itemExists(itemName, user);
 
-		while (itemCheck > -1) {
+		while (itemCheck == 1) {
 			printf("This item already exists in your list. Please enter a new item or '*' to return to user menu.\n");
 			printf("What item would you like to add to your wishlist? ");
 			scanf(" %s", itemName);
@@ -424,7 +422,7 @@ int addItem(person_t* user) {
 			itemCheck = itemExists(itemName, user);
 		}
 
-		if (itemCheck == -1 && user->listSize != MAX_WISHES) {
+		if (itemCheck == 0 && user->listSize != MAX_WISHES) {
 			strcpy(user->list[user->listSize].name, itemName);
 			user->listSize++;
 			printf("%s added successfully! Would you like to add more items? (y / n) ", itemName);
@@ -449,20 +447,17 @@ int addItem(person_t* user) {
 	return user->listSize;
 }
 
-/*
-Contributor: Danielle Alota
-*/
 void removeItem(person_t* user) {
 	int i, itemCheck;
 	char itemName[MAX_LEN];
 
-	printf("Enter the name of the item you wish to delete: ");
+	printf("Enter the item name you wish to delete: ");
 	scanf(" %s", itemName);
 	itemCheck = itemExists(itemName, user);
 
-	while (itemCheck == -1) {
+	while (itemCheck == 0) {
 		printf("This item does not exist in your wishlist. Please try again or enter '*' to return to user menu.");
-		printf("Enter the name of the item you wish to delete: ");
+		printf("Enter the item name you wish to delete: ");
 		scanf(" %s", itemName);
 		itemCheck = itemExists(itemName, user);
 
@@ -471,16 +466,13 @@ void removeItem(person_t* user) {
 		}
 	}
 
-	if (itemCheck > -1) {
-		for (i = itemCheck - 1; i < user->listSize - 1; i++) {
-			user->list[i] = user->list[i + 1];
-		} /* currently needs a lot of work, not quite removing as intended*/
-	}
+
+	/*
+	more to be added..just not bothered atm
+	*/
+
 }
 
-/*
-Contributor: Danielle Alota
-*/
 int itemExists(char itemName[MAX_LEN], person_t* user) {
 	int i;
 	for (i = 0; i < user->listSize; i++) {
@@ -488,7 +480,6 @@ int itemExists(char itemName[MAX_LEN], person_t* user) {
 			return i; /* if item exists return the position of the item*/
 		}
 	}
-
 	return -1; /* if it doesn't exists return -1*/
 }
 
@@ -564,6 +555,7 @@ int passMatch(char pass1[MAX_LEN], char pass2[MAX_LEN]) {
 Contributor: Danielle Alota
 */
 int checkPass(person_t* user, char password[MAX_LEN]) {
+
 	int i;
 
 	for(i = 0; i < strlen(user->password); i++)
@@ -627,11 +619,13 @@ void passEncrypt(person_t users[MAX_NUM], int* size, char password[MAX_LEN]) {
 	{
 		users[*size].password[j] = password[j] + KEY;
 	}
+
 }
 
 /*******************************************************************************
-*	This function encrypts a given password.
+*	This function handles the displaying of a member's wishlist.
 *******************************************************************************/
+
 int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]) {
 	char username[MAX_NAME_LEN];
 	char password[MAX_PASS_LEN];
