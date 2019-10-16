@@ -251,9 +251,14 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 		scanf(" %c", &c);
 		switch (c) {
 		case '1':
-			printf("Displaying all particpating members...");
-			sortByAlphabet(users, size);
-			displayUser(users, size);
+			if (*size == 0) {
+				printf("There are currently no participating members. Returning to admin menu.\n");
+			}
+			else {
+				printf("Displaying all particpating members...\n");
+				sortByAlphabet(users, size);
+				displayUser(users, size);
+			}
 			break;
 		case '2':
 			if (removeMember(users, size) != -1) {
