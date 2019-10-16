@@ -68,7 +68,7 @@ int removeMember(person_t users[MAX_NUM], int* size);
 void assignMembers();
 int viewWishes(person_t users[MAX_NUM], int* size);
 void passEncrypt();
-void sortByAlphabet();
+person_t* sortByAlphabet(person_t users[MAX_NUM]);
 int printList(person_t users[MAX_NUM], int* size, person_t* user);
 int addItem(person_t* user);
 void removeItem();
@@ -604,18 +604,18 @@ int viewWishes(person_t users[MAX_NUM], int* size) {
 /*******************************************************************************
 *	This function sorts the member list by their names in alphabetical order.
 *******************************************************************************/
-/*contributor:zhongzhuo wu*/
-person_t* sortByAlphabet(person_t user[MAX_NUM]) {
- person_t sortedArray[];
-    sortedArray = user;
+person_t* sortByAlphabet(person_t users[MAX_NUM]) {
+ person_t sortedArray[sizeof(users)];
+    sortedArray = users;
  char *tmp;
+ int len = sizeof(users);
     int i, j; /* index of the array */
  int k=0; /* index of alph*/
-    for(i = 0; i<（len-1）; i++){
+    for(i = 0; i <（len-1）; i++){
         for(j = i + 1; j<len; j++){
-            while(user[i].names[k] == user[j].names[k]){ /*  checks the length of the names*/
+            while(users[i].names[k] == users[j].names[k]){ /*  checks the length of the names*/
                 k++；/* change names to user */
-        if（（user[i].names[k] == 0）||（user[j].names[k] == 0））
+        if（（users[i].names[k] == 0）||（users[j].names[k] == 0））
         {break;}
 
     /*
@@ -623,10 +623,10 @@ person_t* sortByAlphabet(person_t user[MAX_NUM]) {
     */
             }
 
-    if(user[j].names[k] > user[i].names[k]){
-     tmp = user[i].names; /*  if the letter is > */
-                user[i].names = user[j].names;
-                user[j].names = tmp;
+    if(users[j].names[k] > users[i].names[k]){
+     tmp = users[i].names; /*  if the letter is > */
+                users[i].names = users[j].names;
+                users[j].names = tmp;
     }   
    
 
