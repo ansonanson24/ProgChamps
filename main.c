@@ -525,15 +525,15 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	while (validNew) {
 		printf("Passwords do not match. Try again or enter * to go back to menu\n.");
 		printf("Please enter a new password: ");
+
 		scanf("%s", newPass1); /* add: check for max length (fgets/sscanf isnt working for me)*/
-		if (strcmp(newPass1, "*") == 0) {
-			return;
-		}
+		if (!strcmp(newPass1, "*")) return;
+
 		printf("Confirm password: ");
+
 		scanf("%s", newPass2);
-		if (strcmp(newPass2, "*") == 0) {
-			break;
-		}
+		if (!strcmp(newPass2, "*")) break;
+		
 		validNew = passMatch(newPass1, newPass2);
 	}
 }
