@@ -293,7 +293,6 @@ Anson Kwok
 void userLogin(person_t users[MAX_NUM], int* size) {
 	char username[MAX_NAME_LEN];
 	char password[MAX_LEN];
-	char passCheck[10];
 	int i, valid = 0;
 	person_t* foundUser_p = NULL;
 
@@ -483,10 +482,9 @@ void removeItem(person_t* user) {
 Contributor: Danielle Alota
 */
 int itemExists(char itemName[MAX_LEN], person_t* user) {
-	int i, itemFound = 0;
+	int i;
 	for (i = 0; i < user->listSize; i++) {
 		if (strcmp(itemName, user->list[i].name) == 0) {
-			itemFound = 1;
 			return i; /* if item exists return the position of the item*/
 		}
 	}
@@ -623,14 +621,11 @@ void assignMembers() {
 *	This function encrypts a given password.
 *******************************************************************************/
 void passEncrypt(person_t users[MAX_NUM], int* size, char password[MAX_LEN]) {
-	char username[MAX_NAME_LEN];
-	int i, j;
-
-	i = *size;
+	int j;
 
 	for (j = 0; j < strlen(password); j++)
 	{
-		users[i].password[j] = password[j] + KEY;
+		users[*size].password[j] = password[j] + KEY;
 	}
 }
 
@@ -732,8 +727,10 @@ void printAdmin() {
 		"1. Display all users' info \n"
 		"2. Remove a user\n"
 		"3. Assign users\n"
-		"4. Log out\n"
-		"5. Exit the program\n"
+		"4. Save user info\n"
+		"5. Load user info\n"
+		"6. Log out\n"
+		"7. Exit the program\n"
 		"Enter choice (number between 1-4)>\n");
 }
 
@@ -779,10 +776,10 @@ void saveUsers(person_t users[], int size) {
 	if (saveFile) {
 		for (index = 0; index < size; index++)
 			fwrite(&users[index], sizeof(person_t), 1, saveFile);
-		printf("Users info has been saved to 'users' successfully !");
+		printf("Users info has been saved to 'users' successfully!");
 	}
 	else printf("Failed to save users info. Please check and try again.");
-
+	printf("\n");
 	fclose(saveFile);
 }
 
@@ -793,6 +790,7 @@ int loadUsers(person_t users[]) {
 	int index = 0;
 	if (loadFile) {
 		while(!feof(loadFile)) {
+			/* Read file line by line */
 			fread(&users[index], sizeof(person_t), 1, loadFile);
 			index++;
 		}
@@ -800,5 +798,6 @@ int loadUsers(person_t users[]) {
 		fclose(loadFile);
 	} else printf("Failed to read file. Please check and try again.");
 
+	printf("\n");
 	return index - 1;
 }
