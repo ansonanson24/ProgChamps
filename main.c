@@ -34,6 +34,7 @@
 #define MAX_WISHES 5
 #define MAX_NUM 3
 #define KEY 3
+#define DB_NAME "users"
 /* #define DEBUG_MODE 1 */
 
 /*******************************************************************************
@@ -85,6 +86,8 @@ int checkPass(person_t* user, char password[MAX_LEN]);
 int passMatch(char pass1[MAX_LEN], char pass2[MAX_LEN]);
 void printEditMenu();
 char* strCompress(char myStr[]);
+void saveUsers (person_t users[], int size);
+int loadUsers (person_t users[]);
 
 /*******************************************************************************
  * Main
@@ -264,10 +267,16 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 			printf("assigning...\n");
 			break;
 		case '4':
+			saveUsers(users, *size);
+			break;
+		case '5':
+			*size = loadUsers(users);
+			break;
+		case '6':
 			printf("Logged out\n");
 			selectionMain(users, size);
 			break;
-		case '5':
+		case '7':
 			exit(0);
 			break;
 		default:
@@ -760,4 +769,36 @@ char* strCompress(char myStr[])
 	}
 	in[0] = 0;
 	return myStr;
+}
+
+/* Anson */
+void saveUsers(person_t users[], int size) {
+	FILE* saveFile = fopen(DB_NAME, "w");
+
+	int index;
+	if (saveFile) {
+		for (index = 0; index < size; index++)
+			fwrite(&users[index], sizeof(person_t), 1, saveFile);
+		printf("Users info has been saved to 'users' successfully !");
+	}
+	else printf("Failed to save users info. Please check and try again.");
+
+	fclose(saveFile);
+}
+
+/* Anson */
+int loadUsers(person_t users[]) {
+	FILE* loadFile = fopen(DB_NAME, "rb");
+
+	int index = 0;
+	if (loadFile) {
+		while(!feof(loadFile)) {
+			fread(&users[index], sizeof(person_t), 1, loadFile);
+			index++;
+		}
+		printf("Users info has been loaded from 'users' successfully!");
+		fclose(loadFile);
+	} else printf("Failed to read file. Please check and try again.");
+
+	return index - 1;
 }
