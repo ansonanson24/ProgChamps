@@ -84,6 +84,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size);
 int checkPass(person_t* user, char password[MAX_LEN]);
 int passMatch(char pass1[MAX_LEN], char pass2[MAX_LEN]);
 void printEditMenu();
+char* strCompress(char myStr[]);
 
 /*******************************************************************************
  * Main
@@ -158,12 +159,22 @@ Contributors:  Danielle Alota
 *******************************************************************************/
 int userRegister(person_t users[MAX_NUM], int* size) {
 	char name[MAX_NAME_LEN + 1];
+	char compressed[MAX_NAME_LEN + 1];
 	char password[MAX_LEN];
 	/* char password[MAX_PASS_LEN + 1];  for future encryption*/
 	int valid;
 
 	printf("Enter your name (without spaces): ");
 	scanf("%s", name);
+
+
+	strcpy(compressed, name);
+	strCompress(compressed);
+	
+	#ifdef DEBUG_MODE
+	printf("compressed name: %s\n", compressed);
+	#endif
+	
 	valid = nameTaken(users, name, size);
 
 	while (valid == 1) {
@@ -724,3 +735,29 @@ void printEditMenu() {
 		"Enter choice: ");
 }
 
+/*******************************************************************************
+*	This function compresses (RLE) a given string by eliminating the duplicates
+*	with the number of duplicates.
+*******************************************************************************/
+char* strCompress(char myStr[])
+{
+	char *s, *in;
+	for (s = myStr, in = myStr; *s; s++)
+	{
+		int count = 1;
+		in[0] = s[0];
+		in++;
+		while (s[0] == s[1])
+		{
+			count++;
+			s++;
+		}
+		if (count > 1)
+		{
+			in[0] = '0' + count;
+			in++;
+		}
+	}
+	in[0] = 0;
+	return myStr;
+}
