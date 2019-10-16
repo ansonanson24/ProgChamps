@@ -29,9 +29,14 @@
  * List preprocessing directives.
 *******************************************************************************/
 #define MAX_NAME_LEN 10
+#define MAX_PASS_LEN 20
 #define MAX_LEN 99
 #define MAX_WISHES 5
 #define MAX_NUM 3
+#define KEY 3
+#define DB_NAME "users"
+/* #define DEBUG_MODE 1 */
+
 
 /*******************************************************************************
  * List structs.
@@ -66,8 +71,9 @@ int userRegister(person_t users[MAX_NUM], int* size);
 int nameTaken(person_t users[MAX_NUM], char name[], int* size);
 int removeMember(person_t users[MAX_NUM], int* size);
 void assignMembers();
+void passEncrypt(person_t users[MAX_NUM], int* size, char password[MAX_LEN]);
+int passDecrypt(person_t users[MAX_NUM], int index, char pass[10]);
 int viewWishes(person_t users[MAX_NUM], int* size);
-void passEncrypt();
 void sortByAlphabet(person_t users[MAX_NUM], int *size);
 int printList(person_t users[MAX_NUM], int* size, person_t* user);
 int addItem(person_t* user);
@@ -81,6 +87,9 @@ int checkPass(person_t* user, char password[MAX_LEN]);
 int passMatch(char pass1[MAX_LEN], char pass2[MAX_LEN]);
 void printEditMenu();
 void displayUser(person_t users[], int* size);
+char* strCompress(char myStr[]);
+void saveUsers (person_t users[], int size);
+int loadUsers (person_t users[]);
 
 /*******************************************************************************
  * Main
@@ -130,12 +139,11 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 
 		case '3':
 			if (*size == MAX_NUM) {
-				puts("Max users reached. Returning to main menu.");
+				printf("Max users reached. Returning to main menu.");
 			}
 			else {
 				*size = userRegister(users, size);
-				*size = *size + 1;
-				puts("User has been registered successfully! Returning to main menu.");
+				printf("User has been registered successfully! Returning to main menu.");
 			}
 			break;
 		case '4':
@@ -156,11 +164,22 @@ Contributors:  Danielle Alota
 *******************************************************************************/
 int userRegister(person_t users[MAX_NUM], int* size) {
 	char name[MAX_NAME_LEN + 1];
+	char compressed[MAX_NAME_LEN + 1];
+	char password[MAX_LEN];
 	/* char password[MAX_PASS_LEN + 1];  for future encryption*/
 	int valid;
 
 	printf("Enter your name (without spaces): ");
 	scanf("%s", name);
+
+
+	strcpy(compressed, name);
+	strCompress(compressed);
+	
+	#ifdef DEBUG_MODE
+	printf("compressed name: %s\n", compressed);
+	#endif
+	
 	valid = nameTaken(users, name, size);
 
 	while (valid == 1) {
@@ -174,11 +193,14 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 		strcpy(users[*size].name, name);
 		users[*size].listSize = 0;
 		printf("Enter your password: ");
-		scanf("%s", users[*size].password);
+		scanf("%s", password);
+    
+		passEncrypt(users, size, password);
+		*size = *size + 1;
+		printf("Register Success! Returning to main menu.\n");
+		printf("Username: %s - Password: %s\n", name, users[*size-1].password);
+		selectionMain(users, size);
 	}
-
-
-
 	return *size;
 }
 
@@ -246,10 +268,16 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 			printf("assigning...\n");
 			break;
 		case '4':
+			saveUsers(users, *size);
+			break;
+		case '5':
+			*size = loadUsers(users);
+			break;
+		case '6':
 			printf("Logged out\n");
 			selectionMain(users, size);
 			break;
-		case '5':
+		case '7':
 			exit(0);
 			break;
 		default:
@@ -277,8 +305,8 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 	scanf("%s", password);
 
 	/* change into function*/
-	for (i = 0; i < *size + 1; i++) {
-		if (strcmp(username, users[i].name) == 0 && strcmp(password, users[i].password) == 0) {
+	for (i = 0; i < *size; i++) {
+		if (strcmp(username, users[i].name) == 0 && passDecrypt(users, i, password) == 1) {
 			valid = 1;
 			foundUser_p = &users[i];
 			break;
@@ -351,7 +379,7 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
 			break;
 
 		case '3': /* view santa's wishlist*/
-			printf("nothing assigned yet...\n");
+			printf("nothing yet...");
 			break;
 
 		case '4':
@@ -372,7 +400,7 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
 }
 
 /*
-Contributor: Danielle
+Contributor: Danielle Alota
 */
 int addItem(person_t* user) {
 	char itemName[MAX_LEN], addMore;
@@ -441,6 +469,7 @@ void removeItem(person_t* user) {
 		}
 	}
 
+
 	/*
 	more to be added..just not bothered atm
 	*/
@@ -451,10 +480,10 @@ int itemExists(char itemName[MAX_LEN], person_t* user) {
 	int i;
 	for (i = 0; i < user->listSize; i++) {
 		if (strcmp(itemName, user->list[i].name) == 0) {
-			return 1;
+			return i; /* if item exists return the position of the item*/
 		}
 	}
-	return 0;
+	return -1; /* if it doesn't exists return -1*/
 }
 
 void displayUser(person_t users[], int* size) {
@@ -514,7 +543,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	}
 
 	if (validNew == 0) {
-		strcpy(user->password, newPass2);
+		passEncrypt(users, size, newPass2);
 		printf("%s", user->password);
 		printf("Password changed successfully! Redirecting to user menu.\n");
 		selectionUser(users, size, user);
@@ -538,6 +567,14 @@ int passMatch(char pass1[MAX_LEN], char pass2[MAX_LEN]) {
 Contributor: Danielle Alota
 */
 int checkPass(person_t* user, char password[MAX_LEN]) {
+
+	int i;
+
+	for(i = 0; i < strlen(user->password); i++)
+	{
+		password[i] = password[i] + KEY;
+	}
+
 	if (strcmp(user->password, password) == 0) {
 		return 0;
 	}
@@ -587,8 +624,42 @@ void assignMembers() {
 /*******************************************************************************
 *	This function encrypts a given password.
 *******************************************************************************/
-void passEncrypt() {
-	printf("encrypt\n");
+void passEncrypt(person_t users[MAX_NUM], int* size, char password[MAX_LEN]) {
+	int j;
+
+	for (j = 0; j < strlen(password); j++)
+	{
+		users[*size].password[j] = password[j] + KEY;
+	}
+
+}
+
+/*******************************************************************************
+*	This function handles the displaying of a member's wishlist.
+*******************************************************************************/
+
+int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]) {
+	char username[MAX_NAME_LEN];
+	char password[MAX_PASS_LEN];
+	int j;
+
+	strcpy(password, users[index].password);
+	strcpy(username, users[index].name);
+
+	for (j = 0; j < strlen(password); j++)
+	{
+		password[j] = users[index].password[j] - KEY;
+	}
+	password[strlen(password)] = '\0';
+	
+#ifdef DEBUG_MODE
+	printf("decrypt: %s\n", password);
+#endif
+	if(strcmp(password, pass) == 0)
+	{
+		return 1;
+	}
+	return 0;
 }
 
 /*******************************************************************************
@@ -686,8 +757,10 @@ void printAdmin() {
 		"1. Display all users' info \n"
 		"2. Remove a user\n"
 		"3. Assign users\n"
-		"4. Log out\n"
-		"5. Exit the program\n"
+		"4. Save user info\n"
+		"5. Load user info\n"
+		"6. Log out\n"
+		"7. Exit the program\n"
 		"Enter choice (number between 1-4)>\n");
 }
 
@@ -696,4 +769,65 @@ void printEditMenu() {
 		"1. Add an item.\n"
 		"2. Remove an item.\n"
 		"Enter choice: ");
+}
+
+/*******************************************************************************
+*	This function compresses (RLE) a given string by eliminating the duplicates
+*	with the number of duplicates.
+*******************************************************************************/
+char* strCompress(char myStr[])
+{
+	char *s, *in;
+	for (s = myStr, in = myStr; *s; s++)
+	{
+		int count = 1;
+		in[0] = s[0];
+		in++;
+		while (s[0] == s[1])
+		{
+			count++;
+			s++;
+		}
+		if (count > 1)
+		{
+			in[0] = '0' + count;
+			in++;
+		}
+	}
+	in[0] = 0;
+	return myStr;
+}
+
+/* Anson */
+void saveUsers(person_t users[], int size) {
+	FILE* saveFile = fopen(DB_NAME, "w");
+
+	int index;
+	if (saveFile) {
+		for (index = 0; index < size; index++)
+			fwrite(&users[index], sizeof(person_t), 1, saveFile);
+		printf("Users info has been saved to 'users' successfully!");
+	}
+	else printf("Failed to save users info. Please check and try again.");
+	printf("\n");
+	fclose(saveFile);
+}
+
+/* Anson */
+int loadUsers(person_t users[]) {
+	FILE* loadFile = fopen(DB_NAME, "rb");
+
+	int index = 0;
+	if (loadFile) {
+		while(!feof(loadFile)) {
+			/* Read file line by line */
+			fread(&users[index], sizeof(person_t), 1, loadFile);
+			index++;
+		}
+		printf("Users info has been loaded from 'users' successfully!");
+		fclose(loadFile);
+	} else printf("Failed to read file. Please check and try again.");
+
+	printf("\n");
+	return index - 1;
 }
