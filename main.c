@@ -834,6 +834,7 @@ void printEditMenu() {
 	printf("\nEditing wishlist.\n"
 		"1. Add an item.\n"
 		"2. Remove an item.\n"
+		"3. View my wishlist.\n"
 		"Enter choice: ");
 }
 
