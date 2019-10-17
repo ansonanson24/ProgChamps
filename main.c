@@ -91,7 +91,7 @@ void displayUser(person_t users[], int* size);
 char* strCompress(char myStr[]);
 void saveUsers(person_t users[], int size);
 int loadUsers(person_t users[]);
-int checkUserLogin(char username[], char password[], person_t users[], int* size);
+person_t* checkUserLogin(char username[], char password[], person_t users[], int* size);
 void printMain();
 void printUser();
 void printAdmin();
@@ -246,9 +246,14 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 		scanf(" %c", &c);
 		switch (c) {
 		case '1':
-			printf("Displaying all particpating members...");
-			sortByAlphabet(users, size);
-			displayUser(users, size);
+			if (*size == 0) {
+				printf("There are currently no participants.");
+			}
+			else {
+				printf("Displaying all particpating members...");
+				sortByAlphabet(users, size);
+				displayUser(users, size);
+			}
 			break;
 		case '2':
 			if (viewWishes(users, size) == -1) {
@@ -291,7 +296,6 @@ Anson Kwok
 void userLogin(person_t users[MAX_NUM], int* size) {
 	char username[MAX_NAME_LEN];
 	char password[MAX_PASS_LEN];
-	int userPos = 0;
 	person_t* foundUser_p = NULL;
 
 	printf("Enter username>\n");
@@ -300,32 +304,31 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 	printf("Enter password>\n");
 	scanf("%s", password);
 
-	userPos = checkUserLogin(username, password, users, size);
+	foundUser_p = checkUserLogin(username, password, users, size);
 
 	/* pass logged in user */
-	if (userPos > -1) {
-		foundUser_p = &users[userPos];
+	if (foundUser_p != NULL) {
 		printf(LOGIN_SUCCESSFUL);
 		printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome %s ·._.·´¯)·._.·´¯)\n", foundUser_p->name);
 		selectionUser(users, size, foundUser_p);
 	}
 	else {
-		printf("Login failed. Returning to main menu.\n"); /* to be changed to while*/
+		printf("Login failed. Returning to main menu.\n");
 		selectionMain(users, size);
 	}
 }
 
 /* Anson, returns position of logged in user or -1 */
-int checkUserLogin(char username[], char password[], person_t users[], int* size) {
+person_t* checkUserLogin(char username[], char password[], person_t users[], int* size) {
 	int i;
 
-	for (i = 0; i < *size; i++) {
+	for (i = 0; i < *size + 1; i++) {
 		if (!strcmp(username, users[i].name) && passDecrypt(users, i, password)) {
-			return i;
+			return &users[i];
 		}
 	}
 
-	return -1;
+	return NULL;
 }
 
 
