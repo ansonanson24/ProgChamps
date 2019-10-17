@@ -39,6 +39,11 @@
 #define LOGIN_ENTER_PASSWORD "Please enter your password>\n"
 #define LOGIN_SUCCESSFUL "Login Successful! Redirecting to selection menu..."\
 							"\n\n"
+#define ASSIGNING_MEMBERS "Assigning members...\n\n"
+#define ASSIGN_MEMBERS_SUCCESS "Secret Santas have been assigned successfully! "\
+								"Returning to admin menu...\n"
+#define YOU_DONT_HAVE_A_GIFTEE_YET "\nYou don't have a giftee yet! Please "\
+									"contact the admin and try again!\n"
 /* #define DEBUG_MODE 1 */
 
 
@@ -74,7 +79,7 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user_p);
 int userRegister(person_t users[MAX_NUM], int* size);
 int nameTaken(person_t users[MAX_NUM], char name[], int* size);
 int removeMember(person_t users[MAX_NUM], int* size);
-void assignMembers();
+void assignMembers(person_t users[], int* size);
 void passEncrypt(person_t users[MAX_NUM], int* size, char password[MAX_PASS_LEN]);
 int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]);
 int viewWishes(person_t users[MAX_NUM], int* size);
@@ -95,6 +100,7 @@ person_t* checkUserLogin(char username[], char password[], person_t users[], int
 void printMain();
 void printUser();
 void printAdmin();
+void viewGiftee(person_t users[], int* size, person_t user);
 
 /*******************************************************************************
  * Main
@@ -185,6 +191,7 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 	if (valid == 0) {
 		strcpy(users[*size].name, name);
 		users[*size].listSize = 0;
+    users[*size].index = -1;
 		printf("Enter your password: ");
 		scanf("%s", password);
 		strcpy(users[*size].password, password);
@@ -273,7 +280,7 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 				printf("This member does not exist. Returning to admin menu.\n");
 			break;
 		case '4':
-			printf("assigning...\n");
+			assignMembers(users, size);
 			break;
 		case '5':
 			saveUsers(users, *size);
@@ -400,7 +407,7 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
 			break;
 
 		case '3': /* view santa's wishlist*/
-			printf("tba");
+			viewGiftee(users, size, *user);
 			break;
 
 		case '4':
@@ -417,7 +424,15 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
 			break;
 		}
 	}
+}
 
+/* Anson */
+void viewGiftee(person_t users[], int* size, person_t user) {
+	if (user.index == -1) printf(YOU_DONT_HAVE_A_GIFTEE_YET);
+	else {
+    printf("\n(¯`·._.· Ho Ho Ho, you're %s's Secret Santa ·._.·´¯)\n", users[user.index].name);
+    printList(users, size, &users[user.index]);
+	}
 }
 
 /*
@@ -517,10 +532,10 @@ int itemExists(char itemName[MAX_LEN], person_t* user) {
 
 void displayUser(person_t users[], int* size) {
 	int i;
-	printf("Username | Password\n");
+	printf("Username | Password | Index\n");
 
 	for (i = 0; i < *size; i++)
-		printf("%-10s %s\n", users[i].name, users[i].password);
+		printf("%-10s %-20s %d\n", users[i].name, users[i].password, users[i].index);
 
 	printf("\n");
 }
@@ -624,8 +639,40 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 /*******************************************************************************
 *	This function assigns a random member's wishlist to another member.
 *******************************************************************************/
-void assignMembers() {
-	printf("assign\n");
+void assignMembers(person_t users[], int* size) {
+	  printf(ASSIGNING_MEMBERS);
+
+  if (*size <= 1) printf("not enough...");
+  else {
+	  int userAssigned[*size];
+    int i;
+
+	  //initialise flag array
+	  for (i = 0; i < *size; i++) userAssigned[i] = 0;
+
+	  for (i = 0; i < *size; i++) {
+		  int randIndex = rand() % *size;
+		  while (userAssigned[randIndex] == 1 || randIndex == i) {
+#ifdef DEBUG_MODE
+        printf("//randIndex = %d", randIndex);
+#endif
+        randIndex = rand() % *size;
+  
+      }
+			  
+		  
+		  users[i].index = randIndex;
+		  userAssigned[randIndex] = 1;
+#ifdef DEBUG_MODE
+      printf("//users[%d].index = %d\n", i, randIndex);
+#endif
+	  }
+
+
+	  printf(ASSIGN_MEMBERS_SUCCESS);
+	  //randomly generate 0 - size by size times
+		  //check if number is taken, if not: index = num else keep generating
+  }
 }
 
 /*******************************************************************************
@@ -789,7 +836,7 @@ int loadUsers(person_t users[]) {
 void printList(person_t users[MAX_NUM], int* size, person_t* user) {
 	int i, j;
 
-	printf("\n(¯`·._.·(¯`·._.· Your Wishlist ·._.·´¯)·._.·´¯)\n");
+	printf("\n(¯`·._.·(¯`·._.· %s's Wishlist ·._.·´¯)·._.·´¯)\n", user->name);
 
 	/*show all wishlist*/
 	for (i = 0; i < *size + 1; i++)
