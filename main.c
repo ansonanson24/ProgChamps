@@ -172,28 +172,34 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 	printf("compressed name: %s\n", compressed);
 #endif
 	valid = nameTaken(users, name, size);
-	while (valid) {
-		printf("User already exists! Please try again.\n");
+	while (valid == 1) {
+		printf("User already exists! Please try again or enter '*' to return to menu.\n");
 		printf("Enter your name (without spaces): ");
 		scanf("%s", name);
+		if (strcmp(name, "*")) {
+			return -1;
+		}
 		valid = nameTaken(users, name, size);
 	}
 
-	strcpy(users[*size].name, name);
-	users[*size].listSize = 0;
-	printf("Enter your password: ");
-	scanf("%s", password);
+	if (valid == 0) {
+		strcpy(users[*size].name, name);
+		users[*size].listSize = 0;
+		printf("Enter your password: ");
+		scanf("%s", password);
+		strcpy(users[*size].password, password);
+		passEncrypt(users, size, password);
+		*size = *size + 1;
+		printf("User has been registered successfully! "
+			"Returning to main menu.\n");
+	}
+	
 
-	passEncrypt(users, size, password);
-	*size = *size + 1;
+	
 
 #ifdef DEBUG_MODE
 	printf("Username: %s - Password: %s\n", name, users[*size - 1].password);
 #endif
-
-	printf("User has been registered successfully! "
-		"Returning to main menu.\n");
-	selectionMain(users, size);
 
 	return *size;
 }
