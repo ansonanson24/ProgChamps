@@ -30,7 +30,27 @@
 *******************************************************************************/
 
 /* Debug mode and administration **********************************************/
-/*#define DEBUG_MODE 1*/
+#define DEBUG_MODE 1
+#define LOG_USER_REGISTER "DEBUG - userRegister\n"
+#define LOG_USERNAME_IS_VALID "DEBUG - usernameIsValid\n"
+#define LOG_PASSWORD_IS_VALID "DEBUG - passwordIsValid\n"
+#define LOG_NAME_TAKEN "DEBUG - nameTaken\n"
+#define LOG_CHECK_USER_LOGIN "DEBUG - checkUserLogin\n"
+#define LOG_VIEW_GIFTEE "DEBUG - viewGiftee\n"
+#define LOG_ADD_ITEM "DEBUG - addItem\n"
+#define LOG_REMOVE_ITEM "DEBUG - removeItem\n"
+#define LOG_ITEM_EXISTS "DEBUG - itemExists\n"
+#define LOG_CHANGE_PASSWORD "DEBUG - changePassword\n"
+#define LOG_PASS_MATCH "DEBUG - passMatch\n"
+#define LOG_CHECK_PASS "DEBUG - checkPass\n"
+#define LOG_REMOVE_MEMBER "DEBUG - removeMember\n"
+#define LOG_ASSIGN_MEMBERS "DEBUG - assignMembers\n"
+#define LOG_PASS_DECRYPT "DEBUG - passDecrypt\n"
+#define LOG_VIEW_WISHES "DEBUG - viewWishes\n"
+#define LOG_SORT_BY_ALPHABET "DEBUG - sortByAlphabet\n"
+#define LOG_PRINT_LIST "DEBUG - printList\n"
+#define LOG_DISPLAY_USER "DEBUG - displayUser\n"
+
 #define ADMIN_LOGIN "admin"
 /******************************************************************************/
 
@@ -66,7 +86,7 @@
 							"·._.·´¯)\n"
 #define NO_PARTICIPANTS "There are currently no participants."
 #define DISPLAYING_ALL_PARTICIPANTS "Displaying all particpating "\
-										  "members..."
+										  "members...\n\n"
 #define ADMIN_USER_DOES_NOT_EXIST "This user does not exist. Returning to "\
 								  "admin menu.\n"
 #define ADMIN_REMOVE_MEMBER_SUCCESS "Member removed successfully. "\
@@ -82,7 +102,8 @@
 #define LOAD_USERS_INFO_FAIL "Failed to read file. Please check and try again."
 #define REMOVING_MEMBER "Removing member. Please enter the name of the "\
 						"member you wish to delete: "
-#define DISPLAY_USER_HEADER "Username | Password | Index\n"								
+#define DISPLAY_USER_HEADER "Username | Password           | Index\n" \
+							"-------------------------------------\n"					
 /******************************************************************************/
 
 /* Error messages *************************************************************/
@@ -322,6 +343,10 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
  * Author: Danielle Alota
 *******************************************************************************/
 int userRegister(person_t users[MAX_NUM], int* size) {
+#ifdef DEBUG_MODE
+	printf(LOG_USER_REGISTER);
+#endif
+
 	char name[MAX_NAME_LEN + 1];
 	char compressed[MAX_NAME_LEN + 1];
 	char password[MAX_PASS_LEN];
@@ -380,7 +405,7 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 	}
 
 #ifdef DEBUG_MODE
-	printf("//Username: %s - Password: %s\n", name, users[*size - 1].password);
+	printf("DEBUG - Username: %s - Password: %s\n", name, users[*size - 1].password);
 #endif
 	return *size;
 }
@@ -397,6 +422,10 @@ int userRegister(person_t users[MAX_NUM], int* size) {
  * Author: Yat Ho KWok
 *******************************************************************************/
 int usernameIsValid(char* username) {
+#ifdef DEBUG_MODE
+	printf(LOG_USERNAME_IS_VALID);
+#endif
+
 	return strlen(username) <= MAX_NAME_LEN;
 }
 
@@ -411,6 +440,10 @@ int usernameIsValid(char* username) {
  * Author: Yat Ho KWok
 *******************************************************************************/
 int passwordIsValid(char* password) {
+#ifdef DEBUG_MODE
+	printf(LOG_PASSWORD_IS_VALID);
+#endif
+
 	return strlen(password) <= MAX_PASS_LEN;
 }
 
@@ -427,6 +460,10 @@ int passwordIsValid(char* password) {
  * Author: Danielle Alota
 *******************************************************************************/
 int nameTaken(person_t users[MAX_NUM], char name[], int* size) {
+#ifdef DEBUG_MODE
+	printf(LOG_NAME_TAKEN);
+#endif
+
 	int i;
 	for (i = 0; i < *size + 1; i++) {
 		if (!strcmp(users[i].name, name)) {
@@ -581,6 +618,10 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 *******************************************************************************/
 person_t* checkUserLogin(char username[], char password[], person_t users[], 
 																	int* size) {
+#ifdef DEBUG_MODE
+	printf(LOG_CHECK_USER_LOGIN);
+#endif
+
 	int i;
 
 	for (i = 0; i < *size + 1; i++) {
@@ -712,9 +753,14 @@ void editWishlist(person_t users[MAX_NUM], int* size, person_t* user) {
  * Author: Yat Ho Kwok
 *******************************************************************************/
 void viewGiftee(person_t users[], int* size, person_t user) {
+#ifdef DEBUG_MODE
+	printf(LOG_VIEW_GIFTEE);
+#endif
+
 	if (user.index == -1) printf(YOU_DONT_HAVE_A_GIFTEE_YET);
 	else {
-		printf("\n(¯`·._.· Ho Ho Ho, you're %s's Secret Santa ·._.·´¯)\n", users[user.index].name);
+		printf("\n(¯`·._.· Ho Ho Ho, you're %s's Secret Santa ·._.·´¯)\n", 
+				users[user.index].name);
 		printList(users, size, &users[user.index]);
 	}
 }
@@ -732,6 +778,10 @@ void viewGiftee(person_t users[], int* size, person_t user) {
  * Author: Danielle Alota
 *******************************************************************************/
 int addItem(person_t* user) {
+#ifdef DEBUG_MODE
+	printf(LOG_ADD_ITEM);
+#endif
+
 	char itemName[MAX_LEN], addMore;
 	int itemCheck;
 
@@ -753,11 +803,12 @@ int addItem(person_t* user) {
 			}
 			itemCheck = itemExists(itemName, user);
 		}
-
-		if (itemCheck == -1 && user->listSize != MAX_WISHES) { /* ensures item doesn't exist and is below 6*/
+		/* ensures item doesn't exist and is below 6*/
+		if (itemCheck == -1 && user->listSize != MAX_WISHES) { 
 			strcpy(user->list[user->listSize].name, itemName);
 			user->listSize++;
-			printf("%s added successfully! Would you like to add more items? (y / n) ", itemName);
+			printf("%s added successfully!" \
+					"Would you like to add more items? (y / n) ", itemName);
 			scanf(" %c", &addMore);
 
 			while (addMore != 'y' && addMore != 'n') {
@@ -786,11 +837,15 @@ int addItem(person_t* user) {
  * - user: address of user currently logged in
  * 
  * outputs:
- * none
+ * - none
  * 
  * Author: Danielle Alota
 *******************************************************************************/
 void removeItem(person_t* user) {
+#ifdef DEBUG_MODE
+	printf(LOG_REMOVE_ITEM);
+#endif
+
 	int itemCheck;
 	char itemName[MAX_LEN];
 
@@ -830,6 +885,9 @@ void removeItem(person_t* user) {
  * Author: Danielle Alota
 *******************************************************************************/
 int itemExists(char itemName[MAX_LEN], person_t* user) {
+#ifdef DEBUG_MODE
+	printf(LOG_ITEM_EXISTS);
+#endif
 	int i;
 
 	for (i = 0; i < user->listSize; i++) {
@@ -853,11 +911,15 @@ int itemExists(char itemName[MAX_LEN], person_t* user) {
  * Author: Yat Ho Kwok
 *******************************************************************************/
 void displayUser(person_t users[], int* size) {
+#ifdef DEBUG_MODE
+	printf(LOG_DISPLAY_USER);
+#endif
 	int i;
 	printf(DISPLAY_USER_HEADER);
 
 	for (i = 0; i < *size; i++)
-		printf("%-10s %-20s %d\n", users[i].name, users[i].password, users[i].index);
+		printf("%-8s | %-18s | %d\n", users[i].name, users[i].password, 
+				users[i].index);
 
 	printf("\n");
 }
@@ -877,6 +939,9 @@ void displayUser(person_t users[], int* size) {
  * Author: Danielle Alota
 *******************************************************************************/
 void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
+#ifdef DEBUG_MODE
+	printf(LOG_CHANGE_PASSWORD);
+#endif
 	char password[MAX_PASS_LEN];
 	char newPass1[MAX_PASS_LEN];
 	char newPass2[MAX_PASS_LEN];
@@ -914,7 +979,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 		if (!strcmp(newPass2, "*")) break;
 	}
 #ifdef DEBUG_MODE
-	printf("//newPass1 = %s - newPass2 = %s\n", newPass1, newPass2);
+	printf("DEBUG - newPass1 = %s - newPass2 = %s\n", newPass1, newPass2);
 #endif
 	passEncrypt(user, newPass2);
 }
@@ -932,10 +997,13 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
  * Author: Danielle Alota
 *******************************************************************************/
 int passMatch(char pass1[MAX_PASS_LEN], char pass2[MAX_PASS_LEN]) {
+#ifdef DEBUG_MODE
+	printf(LOG_PASS_MATCH);
+#endif
 	return !strcmp(pass1, pass2);
 }
 
-/*********************************************************************************
+/*******************************************************************************
  * This function checks if the password, when decrypted, matches the one in 
  * users[].
  * 
@@ -949,6 +1017,9 @@ int passMatch(char pass1[MAX_PASS_LEN], char pass2[MAX_PASS_LEN]) {
  * Authors: Danielle Alota, Bilal Ali
 *******************************************************************************/
 int checkPass(person_t* user, char password[MAX_PASS_LEN]) {
+#ifdef DEBUG_MODE
+	printf(LOG_CHECK_PASS);
+#endif
 	int i;
 
 	for (i = 0; i < strlen(user->password); i++)
@@ -972,6 +1043,9 @@ int checkPass(person_t* user, char password[MAX_PASS_LEN]) {
  * Authors: Yuekai Sun, Danielle Alota
 *******************************************************************************/
 int removeMember(person_t users[MAX_NUM], int* size) {
+#ifdef DEBUG_MODE
+	printf(LOG_REMOVE_MEMBER);
+#endif
 	int i;
 	char name[MAX_NAME_LEN];
 	printf(REMOVING_MEMBER);
@@ -985,7 +1059,8 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 
 			users[i].index = users[*size - 1].index;
 
-			strcpy(users[i].list[users->listSize].name, users[*size - 1].list[users->listSize].name);
+			strcpy(users[i].list[users->listSize].name, 
+					users[*size - 1].list[users->listSize].name);
 			*size = *size - 1;
 
 			return *size;
@@ -995,7 +1070,7 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 	return -1;
 }
 
-/*********************************************************************************
+/*******************************************************************************
  * This function numbers each user and randomly assigns the wish list 
  * corresponding to the number to other users.
  * 
@@ -1007,8 +1082,12 @@ int removeMember(person_t users[MAX_NUM], int* size) {
  * - none
  * 
  * Author: Yat Ho Kwok
-*********************************************************************************/
+*******************************************************************************/
 void assignMembers(person_t users[], int* size) {
+#ifdef DEBUG_MODE
+	printf(LOG_ASSIGN_MEMBERS);
+#endif
+
 	printf(ASSIGNING_MEMBERS);
 
 	if (*size <= 1) printf(ERROR_NOT_ENOUGH_MEMBERS);
@@ -1025,7 +1104,7 @@ void assignMembers(person_t users[], int* size) {
 			/* check if number is taken, else keep generating */
 			while (userAssigned[randIndex] == 1 || randIndex == i) {
 #ifdef DEBUG_MODE
-				printf("//randIndex = %d", randIndex);
+				printf("DEBUG - randIndex = %d\n", randIndex);
 #endif
 
 				randIndex = rand() % *size;
@@ -1034,7 +1113,7 @@ void assignMembers(person_t users[], int* size) {
 			users[i].index = randIndex;
 			userAssigned[randIndex] = 1;
 #ifdef DEBUG_MODE
-			printf("//users[%d].index = %d\n", i, randIndex);
+			printf("DEBUG - users[%d].index = %d\n", i, randIndex);
 #endif
 		}
 		printf(ASSIGN_MEMBERS_SUCCESS);		
@@ -1055,7 +1134,7 @@ void assignMembers(person_t users[], int* size) {
 *******************************************************************************/
 void passEncrypt(person_t* user, char password[MAX_PASS_LEN]) {
 #ifdef DEBUG_MODE
-	printf("//passEncrypt has been called!\n//password = %s\n", password);
+	printf("DEBUG - passEncrypt\nDEBUG - password = %s\n", password);
 #endif
 	int j;
 
@@ -1063,7 +1142,7 @@ void passEncrypt(person_t* user, char password[MAX_PASS_LEN]) {
 		user->password[j] = password[j] + KEY;
 
 #ifdef DEBUG_MODE
-	printf("//Encrypted password = %s\n", user->password);
+	printf("DEBUG - Encrypted password = %s\n", user->password);
 #endif
 }
 
@@ -1081,6 +1160,9 @@ void passEncrypt(person_t* user, char password[MAX_PASS_LEN]) {
  * Author: Bilal Ali, Yat Ho Kwok
 *******************************************************************************/
 int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]) {
+#ifdef DEBUG_MODE
+	printf(LOG_PASS_DECRYPT);
+#endif
 	char username[MAX_NAME_LEN];
 	char password[MAX_PASS_LEN];
 	int j;
@@ -1094,7 +1176,7 @@ int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]) {
 	password[strlen(password)] = '\0';
 
 #ifdef DEBUG_MODE
-	printf("Decrypted password: %s\n", password);
+	printf("DEBUG - Decrypted password: %s\n", password);
 #endif
 	return !strcmp(password, pass);
 }
@@ -1112,6 +1194,9 @@ int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]) {
  * Authors: Yuekai Sun, Danielle Alota
 *******************************************************************************/
 int viewWishes(person_t users[MAX_NUM], int* size) {
+#ifdef DEBUG_MODE
+	printf(LOG_VIEW_WISHES);
+#endif
 	int i, j;
 	char username[MAX_NAME_LEN];
 
@@ -1150,6 +1235,9 @@ int viewWishes(person_t users[MAX_NUM], int* size) {
  * Authors: Zhongzhuo Wu, Danielle Alota
 *******************************************************************************/
 void sortByAlphabet(person_t users[MAX_NUM], int* size) {
+#ifdef DEBUG_MODE
+	printf(LOG_SORT_BY_ALPHABET);
+#endif
 	char temp[MAX_NAME_LEN];
 
 	int i, j; /* index of the array */
@@ -1270,12 +1358,16 @@ int loadUsers(person_t users[]) {
  * - none
 *******************************************************************************/
 void printList(person_t users[MAX_NUM], int* size, person_t* user) {
+#ifdef DEBUG_MODE
+	printf(LOG_PRINT_LIST);
+#endif
 	int i, j;
 
 	if (user->listSize == 0) 
 		printf(GIFTEE_HAS_NO_ITEMS);
 	else {
-		printf("\n(¯`·._.·(¯`·._.· %s's Wishlist ·._.·´¯)·._.·´¯)\n", user->name);
+		printf("\n(¯`·._.·(¯`·._.· %s's Wishlist ·._.·´¯)·._.·´¯)\n", 
+				user->name);
 
 		/*show all wishlist*/
 		for (i = 0; i < *size + 1; i++)
@@ -1289,8 +1381,9 @@ void printList(person_t users[MAX_NUM], int* size, person_t* user) {
  * This function displays the main menu.
 ******************************************************************************/	
 void printMain() {
-	printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome to ProgChamp's Secret Santa ·._.·´¯)"\
-		"·._.·´¯)\n\n"
+	printf(
+		"\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome to ProgChamp's "\
+		"Secret Santa ·._.·´¯)·._.·´¯)\n\n"
 		"1. Login as Admin\n"
 		"2. Login as User\n"
 		"3. Register\n"
@@ -1300,7 +1393,7 @@ void printMain() {
 
 /*******************************************************************************
  * This function displays the user menu.
-******************************************************************************/
+*******************************************************************************/
 void printUser() {
 	printf("\n"
 		"1. Edit my wishlist\n"
