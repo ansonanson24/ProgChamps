@@ -1117,7 +1117,7 @@ void sortByAlphabet(person_t users[MAX_NUM], int* size) {
 	int k = 0; /* index of alphabet*/
 	for (i = 0; i < *size + 1; i++) {
 		for (j = i + 1; j < *size; j++) {
-			while (users[i].name[k] == users[j].name[k]) { /*  checks the length of the names*/
+			while (users[i].name[k] == users[j].name[k]) { 
 				k++;
 				if (users[i].name[k] != users[j].name[k]) {
 					break;
