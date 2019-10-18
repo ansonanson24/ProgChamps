@@ -20,9 +20,9 @@
 /*******************************************************************************
  * List header files
 *******************************************************************************/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdio.h> /* used exit, NULL, feof, rewind, scanf, printf, fopen, fclose, fread, fwrite */
+#include <stdlib.h> 
+#include <string.h> /* used strlen, strcpy, strcmp*/
 
 /*******************************************************************************
  * List preprocessing directives.
