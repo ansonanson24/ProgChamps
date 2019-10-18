@@ -28,36 +28,40 @@
 /*******************************************************************************
  * List preprocessing directives.
 *******************************************************************************/
-#define DEBUG_MODE 1
 
+/* Debug mode and administration **********************************************/
+#define DEBUG_MODE 1
+#define ADMIN_LOGIN "admin"
+/******************************************************************************/
+
+/* Field lengths **************************************************************/
 #define MAX_NAME_LEN 10
 #define MAX_PASS_LEN 20
 #define MAX_LEN 99
 #define MAX_WISHES 5
 #define MAX_NUM 3
+/******************************************************************************/
+
+/* Encryption keys */
 #define KEY 3
+/*******************/
+
+/* FIle processing ************************************************************/
 #define DB_NAME "users"
+/******************************************************************************/
+
+/*Login messages **************************************************************/
 #define LOGIN_ENTER_USERNAME "Please enter your username>\n"
 #define LOGIN_ENTER_PASSWORD "Please enter your password>\n"
 #define LOGIN_SUCCESSFUL "Login Successful! Redirecting to selection menu..."\
 							"\n\n"
 #define LOGIN_FAIL "Login failed. Returning to main menu.\n"
+/******************************************************************************/
+
+/* Admin menu messages ********************************************************/
 #define ASSIGNING_MEMBERS "Assigning members...\n\n"
 #define ASSIGN_MEMBERS_SUCCESS "Secret Santas have been assigned successfully!"\
 								" Returning to admin menu...\n"
-#define YOU_DONT_HAVE_A_GIFTEE_YET "\nYou don't have a giftee yet! Please "\
-								   "contact the admin and try again!\n"
-#define ERROR_MAX_USERS_REACHED "Max users reached. Returning to main menu.\n"
-#define ERROR_INVALID_CHOICE "Invalid choice! Please check and try again!\n"
-#define ERROR_WISHLIST_INVALID_CHOICE "Invalid choice. Please try again"\
-									  " or enter * to return to user menu.\n"
-#define REGISTER_ENTER_USERNAME "Please enter your name (without spaces)>\n"
-#define REGISTER_ENTER_PASSWORD "Enter your password>\n"
-#define ERROR_USER_ALREADY_EXISTS "User already exists! Please try again or"\
-								  " enter '*' to return to menu.\n"
-#define REGISTER_SUCCESSFUL "User has been registered successfully! "\
-							"Returning to main menu.\n"
-#define ADMIN_LOGIN "admin"
 #define WELCOME_ADMIN "\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome Admin ·._.·´¯)"\
 							"·._.·´¯)\n"
 #define NO_PARTICIPANTS "There are currently no participants."
@@ -69,43 +73,6 @@
 										  "Returning to admin menu.\n"
 #define ADMIN_MEMBER_DOES_NOT_EXIST "This member does not exist. Returning to "\
 									"admin menu.\n"
-#define LOGGED_OUT_SUCCESSFULLY "Logged out successfully! Return to the "\
-								"previous menu...\n"
-#define WISHLIST_RETURN_TO_MENU "Returning to user menu.\n"
-#define ERROR_WISHLIST_IS_FULL "Your list is currently full!\n"
-#define WISHLIST_IS_EMPTY "Your list is currently empty.\n"
-#define WISHLIST_ADDING_AN_ITEM "Adding an item.\n"
-#define WISHLIST_REMOVING_AN_ITEM "Removing an item.\n"
-#define WISHLIST_ENTER_ADD_ITEM_NAME "What item would you like to add to your "\
-									 "wishlist?\n"
-#define ERROR_WISHLIST_ITEM_ALREADY_EXIST "This item already exists in your "\
-											"list. Please enter a new item "\
-											"or '*' to return to user menu.\n"
-#define WISHLIST_ADD_MORE_ITEMS_Y_N "Would you like to add more items ? "\
-									"(y / n) "
-#define RETURNING_TO_USER_MENU "Returning to user menu.\n"
-#define WISHLIST_ENTER_REMOVE_ITEM_NAME "Enter the item name you wish to "\
-										"delete: "
-#define ERROR_WISHLIST_ITEM_DOES_NOT_EXIST "This item does not exist in your "\
-										   "wishlist. Please try again or "\
-										   "enter '*' to return to user menu.\n"
-#define WISHLIST_REMOVE_ITEM_SUCCESS "Item successfully removed from your "\
-									 "wishlist.\n"
-#define DISPLAY_USER_HEADER "Username | Password | Index\n"
-#define ENTER_YOUR_CURRENT_PASSWORD	"Please enter your current password: "
-#define ERROR_INCORRECT_PASSWORD "Incorrect password. Try again or enter * to "\
-								 "go back to menu.\n"
-#define ENTER_NEW_PASSWORD "Please enter a new password: "
-#define CONFIRM_PASSWORD "Confirm password: "
-#define ERROR_PASSWORDS_DO_NOT_MATCH "Passwords do not match. Try again or "\
-									 "enter * to go back to menu.\n"
-#define REMOVING_MEMBER "Removing member. Please enter the name of the "\
-						"member you wish to delete: "
-#define ERROR_NOT_ENOUGH_MEMBERS "There are not enough members. Please create" \
-								 "more users!\n"
-#define ENTER_VIEW_WISHES_NAME "Please enter the username you want to check: "
-#define USER_HAS_NO_ITEMS "This user currently has no items in their " \
-						  "wishlist.\n"
 #define SAVE_USERS_INFO_SUCCESS "Users info has been saved to 'users' " \
 								"successfully!"
 #define SAVE_USERS_INFO_FAIL "Failed to save users info. Please check and " \
@@ -113,7 +80,77 @@
 #define LOAD_USERS_INFO_SUCCESS "Users info has been loaded from 'users' " \
 								"successfully!"
 #define LOAD_USERS_INFO_FAIL "Failed to read file. Please check and try again."
+#define REMOVING_MEMBER "Removing member. Please enter the name of the "\
+						"member you wish to delete: "
+#define DISPLAY_USER_HEADER "Username | Password | Index\n"								
+/******************************************************************************/
 
+/* Error messages *************************************************************/
+#define ERROR_MAX_USERS_REACHED "Max users reached. Returning to main menu.\n"
+#define ERROR_INVALID_CHOICE "Invalid choice! Please check and try again!\n"
+#define ERROR_WISHLIST_INVALID_CHOICE "Invalid choice. Please try again"\
+									  " or enter * to return to user menu.\n"
+#define ERROR_USER_ALREADY_EXISTS "User already exists! Please try again or"\
+								  " enter '*' to return to menu.\n"
+#define ERROR_WISHLIST_ITEM_ALREADY_EXIST "This item already exists in your "\
+											"list. Please enter a new item "\
+											"or '*' to return to user menu.\n"
+#define ERROR_WISHLIST_ITEM_DOES_NOT_EXIST "This item does not exist in your "\
+										   "wishlist. Please try again or "\
+										   "enter '*' to return to user menu.\n"
+#define ERROR_INCORRECT_PASSWORD "Incorrect password. Try again or enter * to "\
+								 "go back to menu.\n"
+#define ERROR_PASSWORDS_DO_NOT_MATCH "Passwords do not match. Try again or "\
+									 "enter * to go back to menu.\n"
+#define ERROR_NOT_ENOUGH_MEMBERS "There are not enough members. Please create" \
+								 "more users!\n"
+#define ERROR_WISHLIST_IS_FULL "Your list is currently full!\n"									 														   											
+/******************************************************************************/
+
+/*userRegister messags*********************************************************/
+#define REGISTER_ENTER_USERNAME "Please enter your name (without spaces)>\n"
+#define REGISTER_ENTER_PASSWORD "Enter your password>\n"
+#define REGISTER_SUCCESSFUL "User has been registered successfully! "\
+							"Returning to main menu.\n"
+/******************************************************************************/
+
+/* viewGiftee *****************************************************************/						
+#define YOU_DONT_HAVE_A_GIFTEE_YET "\nYou don't have a giftee yet! Please "\
+								   "contact the admin and try again!\n"
+/******************************************************************************/
+
+/* Logout messages ************************************************************/								   
+#define LOGGED_OUT_SUCCESSFULLY "Logged out successfully! Return to the "\
+								"previous menu...\n"
+#define RETURNING_TO_USER_MENU "Returning to user menu.\n"
+/******************************************************************************/
+
+/* Edit wishlist messages *****************************************************/
+#define WISHLIST_RETURN_TO_MENU "Returning to user menu.\n"
+#define WISHLIST_IS_EMPTY "Your list is currently empty.\n"
+#define WISHLIST_ADDING_AN_ITEM "Adding an item.\n"
+#define WISHLIST_REMOVING_AN_ITEM "Removing an item.\n"
+#define WISHLIST_ENTER_ADD_ITEM_NAME "What item would you like to add to your "\
+									 "wishlist?\n"
+#define WISHLIST_ADD_MORE_ITEMS_Y_N "Would you like to add more items ? "\
+									"(y / n) "
+#define WISHLIST_ENTER_REMOVE_ITEM_NAME "Enter the item name you wish to "\
+										"delete: "
+#define WISHLIST_REMOVE_ITEM_SUCCESS "Item successfully removed from your "\
+									 "wishlist.\n"
+/******************************************************************************/
+
+/******************************************************************************/
+#define ENTER_YOUR_CURRENT_PASSWORD	"Please enter your current password: "
+#define ENTER_NEW_PASSWORD "Please enter a new password: "
+#define CONFIRM_PASSWORD "Confirm new password: "
+/******************************************************************************/
+
+/******************************************************************************/
+#define ENTER_VIEW_WISHES_NAME "Please enter the username you want to check: "
+#define USER_HAS_NO_ITEMS "This user currently has no items in their " \
+						  "wishlist.\n"
+/******************************************************************************/
 
 /*******************************************************************************
  * List structs.
