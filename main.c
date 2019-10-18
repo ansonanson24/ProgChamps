@@ -28,6 +28,8 @@
 /*******************************************************************************
  * List preprocessing directives.
 *******************************************************************************/
+#define DEBUG_MODE 1
+
 #define MAX_NAME_LEN 10
 #define MAX_PASS_LEN 20
 #define MAX_LEN 99
@@ -96,7 +98,7 @@
 #define ENTER_NEW_PASSWORD "Please enter a new password: "
 #define CONFIRM_PASSWORD "Confirm password: "
 #define ERROR_PASSWORDS_DO_NOT_MATCH "Passwords do not match. Try again or "\
-									 "enter * to go back to menu\n."
+									 "enter * to go back to menu.\n"
 #define REMOVING_MEMBER "Removing member. Please enter the name of the "\
 						"member you wish to delete: "
 #define ERROR_NOT_ENOUGH_MEMBERS "There are not enough members. Please create" \
@@ -111,7 +113,7 @@
 #define LOAD_USERS_INFO_SUCCESS "Users info has been loaded from 'users' " \
 								"successfully!"
 #define LOAD_USERS_INFO_FAIL "Failed to read file. Please check and try again."
-/* #define DEBUG_MODE 1 */
+
 
 /*******************************************************************************
  * List structs.
@@ -146,7 +148,7 @@ int userRegister(person_t users[MAX_NUM], int* size);
 int nameTaken(person_t users[MAX_NUM], char name[], int* size);
 int removeMember(person_t users[MAX_NUM], int* size);
 void assignMembers(person_t users[], int* size);
-void passEncrypt(person_t users[MAX_NUM], int* size, char password[MAX_PASS_LEN]);
+void passEncrypt(person_t* user, char password[MAX_PASS_LEN]);
 int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]);
 int viewWishes(person_t users[MAX_NUM], int* size);
 void sortByAlphabet(person_t users[MAX_NUM], int* size);
@@ -262,7 +264,7 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 		printf(REGISTER_ENTER_PASSWORD);
 		scanf("%s", password);
 		strcpy(users[*size].password, password);
-		passEncrypt(users, size, password);
+		passEncrypt(&users[*size], password);
 		*size = *size + 1;
 		printf(REGISTER_SUCCESSFUL);
 	}
@@ -635,7 +637,8 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	scanf("%s", newPass2);
 	validNew = passMatch(newPass1, newPass2);
 
-	while (validNew) {
+
+	while (strcmp(newPass1, newPass2)) {
 		printf(ERROR_PASSWORDS_DO_NOT_MATCH);
 		printf(ENTER_NEW_PASSWORD);
 
@@ -649,13 +652,17 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 
 		validNew = passMatch(newPass1, newPass2);
 	}
+#ifdef DEBUG_MODE
+  printf("//newPass1 = %s - newPass2 = %s\n", newPass1, newPass2);
+#endif
+  passEncrypt(user, newPass2);
 }
 
 /*
 Contributor: Danielle Alota
 */
 int passMatch(char pass1[MAX_PASS_LEN], char pass2[MAX_PASS_LEN]) {
-	return strcmp(pass1, pass2);
+	return !strcmp(pass1, pass2);
 }
 
 /*
@@ -744,11 +751,18 @@ void assignMembers(person_t users[], int* size) {
 /*******************************************************************************
 *	This function encrypts a given password.
 *******************************************************************************/
-void passEncrypt(person_t users[MAX_NUM], int* size, char password[MAX_PASS_LEN]) {
-	int j;
+void passEncrypt(person_t* user, char password[MAX_PASS_LEN]) {
+#ifdef DEBUG_MODE
+  printf("//passEncrypt has been called!\n//password = %s\n", password);
+#endif
+  int j;
 
 	for (j = 0; j < strlen(password); j++)
-		users[*size].password[j] = password[j] + KEY;
+		user->password[j] = password[j] + KEY;
+
+#ifdef DEBUG_MODE
+  printf("//Encrypted password = %s\n", user->password);
+#endif
 }
 
 /*******************************************************************************
