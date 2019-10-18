@@ -20,7 +20,6 @@
 /*******************************************************************************
  * List header files
 *******************************************************************************/
-#define _CRT_SECURE_NO_WARNINGS /* remember to delete!!!*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,7 +29,7 @@
 *******************************************************************************/
 
 /* Debug mode and administration **********************************************/
-#define DEBUG_MODE 1
+/*#define DEBUG_MODE 1*/
 #define ADMIN_LOGIN "admin"
 /******************************************************************************/
 
@@ -94,7 +93,7 @@
 								  " enter '*' to return to menu.\n"
 #define ERROR_WISHLIST_ITEM_ALREADY_EXIST "This item already exists in your "\
 											"list. Please enter a new item "\
-											"or '*' to return to user menu.\n"
+											"or '*' to return to menu.\n"
 #define ERROR_WISHLIST_ITEM_DOES_NOT_EXIST "This item does not exist in your "\
 										   "wishlist. Please try again or "\
 										   "enter '*' to return to user menu.\n"
@@ -104,7 +103,7 @@
 									 "enter * to go back to menu.\n"
 #define ERROR_NOT_ENOUGH_MEMBERS "There are not enough members. Please create" \
 								 "more users!\n"
-#define ERROR_WISHLIST_IS_FULL "Your list is currently full!\n"									 														   											
+#define ERROR_WISHLIST_IS_FULL "Your list is currently full!\n"			
 /******************************************************************************/
 
 /*userRegister messags*********************************************************/
@@ -114,12 +113,12 @@
 							"Returning to main menu.\n"
 /******************************************************************************/
 
-/* viewGiftee *****************************************************************/						
+/* viewGiftee *****************************************************************/
 #define YOU_DONT_HAVE_A_GIFTEE_YET "\nYou don't have a giftee yet! Please "\
 								   "contact the admin and try again!\n"
 /******************************************************************************/
 
-/* Logout messages ************************************************************/								   
+/* Logout messages ************************************************************/
 #define LOGGED_OUT_SUCCESSFULLY "Logged out successfully! Return to the "\
 								"previous menu...\n"
 #define RETURNING_TO_USER_MENU "Returning to user menu.\n"
@@ -150,6 +149,7 @@
 #define ENTER_VIEW_WISHES_NAME "Please enter the username you want to check: "
 #define USER_HAS_NO_ITEMS "This user currently has no items in their " \
 						  "wishlist.\n"
+#define GIFTEE_HAS_NO_ITEMS "\n....but they don't have anything on their wishlist yet.\n"
 /******************************************************************************/
 
 /*******************************************************************************
@@ -164,9 +164,8 @@ typedef struct wishlist wishlist_t;
 struct person
 {
 	char name[MAX_NAME_LEN + 1];
-	char password[MAX_LEN + 1]; /* Gonna see if we can use other
-					libraries besides those for limits.h */
-	wishlist_t list[MAX_WISHES + 1]; /* will be written to text file */
+	char password[MAX_LEN + 1];
+	wishlist_t list[MAX_WISHES + 1];
 	int listSize;
 	int index; /* santa*/
 };
@@ -197,6 +196,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size);
 int checkPass(person_t* user, char password[MAX_PASS_LEN]);
 int passMatch(char pass1[MAX_PASS_LEN], char pass2[MAX_PASS_LEN]);
 void printEditMenu();
+void editWishlist(person_t users[MAX_NUM], int* size, person_t* user);
 void displayUser(person_t users[], int* size);
 char* strCompress(char myStr[]);
 void saveUsers(person_t users[], int size);
@@ -234,8 +234,8 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 	char c;
 	while (1) {
 		printMain();
-		scanf(" %c", &c); /* This is so it takes inputs that aren't numbers*/
-		switch (c)
+		scanf(" %c", &c); /* This is so it doesn't go into an infinite loop */
+		switch (c) /* when input aren't numbers*/
 		{
 		case '1':
 			adminLogin(users, size);
@@ -297,7 +297,7 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 	if (valid == 0) {
 		strcpy(users[*size].name, name);
 		users[*size].listSize = 0;
-    users[*size].index = -1;
+		users[*size].index = -1;
 		printf(REGISTER_ENTER_PASSWORD);
 		scanf("%s", password);
 		strcpy(users[*size].password, password);
@@ -305,9 +305,9 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 		*size = *size + 1;
 		printf(REGISTER_SUCCESSFUL);
 	}
-	
 
-	
+
+
 
 #ifdef DEBUG_MODE
 	printf("Username: %s - Password: %s\n", name, users[*size - 1].password);
@@ -418,13 +418,11 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 
 	printf(LOGIN_ENTER_USERNAME);
 	scanf("%s", username);
-	/* need to catch errors for over the length limit*/
 	printf(LOGIN_ENTER_PASSWORD);
 	scanf("%s", password);
 
 	foundUser_p = checkUserLogin(username, password, users, size);
 
-	/* pass logged in user */
 	if (foundUser_p != NULL) {
 		printf(LOGIN_SUCCESSFUL);
 		printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome %s ·._.·´¯)·._.·´¯)\n", foundUser_p->name);
@@ -454,9 +452,7 @@ person_t* checkUserLogin(char username[], char password[], person_t users[], int
 Contributor: Danielle Alota
 */
 void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
-	char choice; /* For the purpose of testing, let's stick with scanning int */
-	/* Then change to char to deal with inputs not of same data type */
-	char editCh;
+	char choice;
 
 	while (1) {
 		printUser();
@@ -464,54 +460,14 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
 		switch (choice)
 		{
 		case '1':
-			editCh = ' ';
-			printEditMenu();
-			scanf(" %c", &editCh);
-
-			while (editCh != '1' && editCh != '2' && editCh != '3') {
-				printf("%c\n", editCh);
-				printf(ERROR_WISHLIST_INVALID_CHOICE);
-				printEditMenu();
-				scanf(" %c", &editCh);
-				if (editCh == '*') {
-					printf(WISHLIST_RETURN_TO_MENU);
-					break;
-				}
-			}
-
-			if (editCh == '1') {
-				if (user->listSize == MAX_WISHES) {
-					printf(ERROR_WISHLIST_IS_FULL);
-				}
-				else {
-					printf(WISHLIST_ADDING_AN_ITEM);
-					addItem(user);
-				}
-			}
-			else if (editCh == '2') {
-				if (user->listSize == 0) {
-					printf(WISHLIST_IS_EMPTY);
-				}
-				else {
-					printf(WISHLIST_REMOVING_AN_ITEM);
-					removeItem(user);
-				}
-			}
-			else if (editCh == '3') {
-				if (user->listSize == 0) {
-					printf(WISHLIST_IS_EMPTY);
-				}
-				else {
-					printList(users, size, user);
-				}
-			}
+			editWishlist(users, size, user);
 			break;
 
-		case '2':
+		case '2': /* changees current password*/
 			changePassword(users, user, size);
 			break;
 
-		case '3': /* view santa's wishlist*/
+		case '3': /* view your assigned's member's wishlist*/
 			viewGiftee(users, size, *user);
 			break;
 
@@ -531,12 +487,56 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
 	}
 }
 
+void editWishlist(person_t users[MAX_NUM], int* size, person_t* user) {
+	char c;
+
+	while (1) {
+		printEditMenu();
+		scanf(" %c", &c);
+		switch (c) {
+		case '1':
+			if (user->listSize == MAX_WISHES) {
+				printf(ERROR_WISHLIST_IS_FULL);
+			}
+			else {
+				printf(WISHLIST_ADDING_AN_ITEM);
+				addItem(user);
+			}
+			break;
+		case '2':
+			if (user->listSize == 0) {
+				printf(WISHLIST_IS_EMPTY);
+			}
+			else {
+				printf(WISHLIST_REMOVING_AN_ITEM);
+				removeItem(user);
+			}
+			break;
+		case '3':
+			if (user->listSize == 0) {
+				printf(WISHLIST_IS_EMPTY);
+			}
+			else {
+				printList(users, size, user);
+			}
+			break;
+		case '4':
+			printf(WISHLIST_RETURN_TO_MENU);
+			return;
+		case '*':
+			printf(WISHLIST_RETURN_TO_MENU);
+			break;
+		default: printf(ERROR_WISHLIST_INVALID_CHOICE); break;
+		}
+	}
+
+}
 /* Anson */
 void viewGiftee(person_t users[], int* size, person_t user) {
 	if (user.index == -1) printf(YOU_DONT_HAVE_A_GIFTEE_YET);
 	else {
-    printf("\n(¯`·._.· Ho Ho Ho, you're %s's Secret Santa ·._.·´¯)\n", users[user.index].name);
-    printList(users, size, &users[user.index]);
+		printf("\n(¯`·._.· Ho Ho Ho, you're %s's Secret Santa ·._.·´¯)\n", users[user.index].name);
+		printList(users, size, &users[user.index]);
 	}
 }
 
@@ -672,7 +672,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	scanf("%s", newPass1); /* add: check for max length (fgets/sscanf isnt working for me)*/
 	printf(CONFIRM_PASSWORD); /* have not checked if inputted nothing*/
 	scanf("%s", newPass2);
-	
+
 	while (strcmp(newPass1, newPass2)) {
 		printf(ERROR_PASSWORDS_DO_NOT_MATCH);
 		printf(ENTER_NEW_PASSWORD);
@@ -686,9 +686,9 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 		if (!strcmp(newPass2, "*")) break;
 	}
 #ifdef DEBUG_MODE
-  printf("//newPass1 = %s - newPass2 = %s\n", newPass1, newPass2);
+	printf("//newPass1 = %s - newPass2 = %s\n", newPass1, newPass2);
 #endif
-  passEncrypt(user, newPass2);
+	passEncrypt(user, newPass2);
 }
 
 /*
@@ -746,39 +746,39 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 *	This function assigns a random member's wishlist to another member.
 *******************************************************************************/
 void assignMembers(person_t users[], int* size) {
-	  printf(ASSIGNING_MEMBERS);
+	printf(ASSIGNING_MEMBERS);
 
-  if (*size <= 1) printf(ERROR_NOT_ENOUGH_MEMBERS);
-  else {
-	  int userAssigned[*size];
-    int i;
+	if (*size <= 1) printf(ERROR_NOT_ENOUGH_MEMBERS);
+	else {
+		int userAssigned[*size];
+		int i;
 
-	  /* Initialise flag array */
-	  for (i = 0; i < *size; i++) userAssigned[i] = 0;
+		/* Initialise flag array */
+		for (i = 0; i < *size; i++) userAssigned[i] = 0;
 
-	  for (i = 0; i < *size; i++) {
-		  int randIndex = rand() % *size;
-		  while (userAssigned[randIndex] == 1 || randIndex == i) {
+		for (i = 0; i < *size; i++) {
+			int randIndex = rand() % *size;
+			while (userAssigned[randIndex] == 1 || randIndex == i) {
 #ifdef DEBUG_MODE
-        printf("//randIndex = %d", randIndex);
+				printf("//randIndex = %d", randIndex);
 #endif
-        randIndex = rand() % *size;
-  
-      }
-			  
-		  
-		  users[i].index = randIndex;
-		  userAssigned[randIndex] = 1;
+				randIndex = rand() % *size;
+
+			}
+
+
+			users[i].index = randIndex;
+			userAssigned[randIndex] = 1;
 #ifdef DEBUG_MODE
-      printf("//users[%d].index = %d\n", i, randIndex);
+			printf("//users[%d].index = %d\n", i, randIndex);
 #endif
-	  }
+		}
 
 
-	  printf(ASSIGN_MEMBERS_SUCCESS);
-	  /* randomly generate 0 - size by size times */
-		  /* check if number is taken, if not: index = num else keep generating */
-  }
+		printf(ASSIGN_MEMBERS_SUCCESS);
+		/* randomly generate 0 - size by size times */
+			/* check if number is taken, if not: index = num else keep generating */
+	}
 }
 
 /*******************************************************************************
@@ -786,15 +786,15 @@ void assignMembers(person_t users[], int* size) {
 *******************************************************************************/
 void passEncrypt(person_t* user, char password[MAX_PASS_LEN]) {
 #ifdef DEBUG_MODE
-  printf("//passEncrypt has been called!\n//password = %s\n", password);
+	printf("//passEncrypt has been called!\n//password = %s\n", password);
 #endif
-  int j;
+	int j;
 
 	for (j = 0; j < strlen(password); j++)
 		user->password[j] = password[j] + KEY;
 
 #ifdef DEBUG_MODE
-  printf("//Encrypted password = %s\n", user->password);
+	printf("//Encrypted password = %s\n", user->password);
 #endif
 }
 
@@ -863,17 +863,17 @@ void sortByAlphabet(person_t users[MAX_NUM], int* size) {
 	char temp[MAX_NAME_LEN];
 
 	int i, j; /* index of the array */
-	int k = 0; /* index of alph*/
+	int k = 0; /* index of alphabet*/
 	for (i = 0; i < *size + 1; i++) {
 		for (j = i + 1; j < *size; j++) {
 			while (users[i].name[k] == users[j].name[k]) { /*  checks the length of the names*/
-				k++;/* change names to user */
+				k++;
 				if (users[i].name[k] != users[j].name[k]) {
 					break;
 				}
 			}
 			if (users[j].name[k] < users[i].name[k]) {
-				strcpy(temp, users[i].name); /*  if the letter is > */
+				strcpy(temp, users[i].name);
 				strcpy(users[i].name, users[j].name);
 				strcpy(users[j].name, temp);
 			}
@@ -885,6 +885,8 @@ void sortByAlphabet(person_t users[MAX_NUM], int* size) {
 /*******************************************************************************
 *	This function compresses (RLE) a given string by eliminating the duplicates
 *	with the number of duplicates.
+
+Contributor: Bilal
 *******************************************************************************/
 char* strCompress(char myStr[]) {
 	char* s, * in;
@@ -949,6 +951,11 @@ int loadUsers(person_t users[]) {
 void printList(person_t users[MAX_NUM], int* size, person_t* user) {
 	int i, j;
 
+	if (user->listSize == 0) {
+		printf(GIFTEE_HAS_NO_ITEMS);
+		return;
+	}
+
 	printf("\n(¯`·._.·(¯`·._.· %s's Wishlist ·._.·´¯)·._.·´¯)\n", user->name);
 
 	/*show all wishlist*/
@@ -961,7 +968,7 @@ void printList(person_t users[MAX_NUM], int* size, person_t* user) {
 
 void printMain() {
 	printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome ·._.·´¯)"\
-							"·._.·´¯)\n\n"
+		"·._.·´¯)\n\n"
 		"1. Login as Admin\n"
 		"2. Login as User\n"
 		"3. Register\n"
@@ -997,5 +1004,6 @@ void printEditMenu() {
 		"1. Add an item.\n"
 		"2. Remove an item.\n"
 		"3. View my wishlist.\n"
+		"4. Return to user menu.\n"
 		"Enter choice: ");
 }
