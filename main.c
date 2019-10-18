@@ -39,13 +39,79 @@
 #define LOGIN_ENTER_PASSWORD "Please enter your password>\n"
 #define LOGIN_SUCCESSFUL "Login Successful! Redirecting to selection menu..."\
 							"\n\n"
+#define LOGIN_FAIL "Login failed. Returning to main menu.\n"
 #define ASSIGNING_MEMBERS "Assigning members...\n\n"
-#define ASSIGN_MEMBERS_SUCCESS "Secret Santas have been assigned successfully! "\
-								"Returning to admin menu...\n"
+#define ASSIGN_MEMBERS_SUCCESS "Secret Santas have been assigned successfully!"\
+								" Returning to admin menu...\n"
 #define YOU_DONT_HAVE_A_GIFTEE_YET "\nYou don't have a giftee yet! Please "\
-									"contact the admin and try again!\n"
+								   "contact the admin and try again!\n"
+#define ERROR_MAX_USERS_REACHED "Max users reached. Returning to main menu.\n"
+#define ERROR_INVALID_CHOICE "Invalid choice! Please check and try again!\n"
+#define ERROR_WISHLIST_INVALID_CHOICE "Invalid choice. Please try again"\
+									  " or enter * to return to user menu.\n"
+#define REGISTER_ENTER_USERNAME "Please enter your name (without spaces)>\n"
+#define REGISTER_ENTER_PASSWORD "Enter your password>\n"
+#define ERROR_USER_ALREADY_EXISTS "User already exists! Please try again or"\
+								  " enter '*' to return to menu.\n"
+#define REGISTER_SUCCESSFUL "User has been registered successfully! "\
+							"Returning to main menu.\n"
+#define ADMIN_LOGIN "admin"
+#define WELCOME_ADMIN "\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome Admin ·._.·´¯)"\
+							"·._.·´¯)\n"
+#define NO_PARTICIPANTS "There are currently no participants."
+#define DISPLAYING_ALL_PARTICIPANTS "Displaying all particpating "\
+										  "members..."
+#define ADMIN_USER_DOES_NOT_EXIST "This user does not exist. Returning to "\
+								  "admin menu.\n"
+#define ADMIN_REMOVE_MEMBER_SUCCESS "Member removed successfully. "\
+										  "Returning to admin menu.\n"
+#define ADMIN_MEMBER_DOES_NOT_EXIST "This member does not exist. Returning to "\
+									"admin menu.\n"
+#define LOGGED_OUT_SUCCESSFULLY "Logged out successfully! Return to the "\
+								"previous menu...\n"
+#define WISHLIST_RETURN_TO_MENU "Returning to user menu.\n"
+#define ERROR_WISHLIST_IS_FULL "Your list is currently full!\n"
+#define WISHLIST_IS_EMPTY "Your list is currently empty.\n"
+#define WISHLIST_ADDING_AN_ITEM "Adding an item.\n"
+#define WISHLIST_REMOVING_AN_ITEM "Removing an item.\n"
+#define WISHLIST_ENTER_ADD_ITEM_NAME "What item would you like to add to your "\
+									 "wishlist?\n"
+#define ERROR_WISHLIST_ITEM_ALREADY_EXIST "This item already exists in your "\ 
+											"list. Please enter a new item "\ 
+											"or '*' to return to user menu.\n"
+#define WISHLIST_ADD_MORE_ITEMS_Y_N "Would you like to add more items ? "\
+									"(y / n) "
+#define RETURNING_TO_USER_MENU "Returning to user menu.\n"
+#define WISHLIST_ENTER_REMOVE_ITEM_NAME "Enter the item name you wish to "\ 
+										"delete: "
+#define ERROR_WISHLIST_ITEM_DOES_NOT_EXIST "This item does not exist in your "\ 
+										   "wishlist. Please try again or "\ 
+										   "enter '*' to return to user menu.\n"
+#define WISHLIST_REMOVE_ITEM_SUCCESS "Item successfully removed from your "\ 
+									 "wishlist.\n"
+#define DISPLAY_USER_HEADER "Username | Password | Index\n"
+#define ENTER_YOUR_CURRENT_PASSWORD	"Please enter your current password: "
+#define ERROR_INCORRECT_PASSWORD "Incorrect password. Try again or enter * to "\ 
+								 "go back to menu.\n"
+#define ENTER_NEW_PASSWORD "Please enter a new password: "
+#define CONFIRM_PASSWORD "Confirm password: "
+#define ERROR_PASSWORDS_DO_NOT_MATCH "Passwords do not match. Try again or "\ 
+									 "enter * to go back to menu\n."
+#define REMOVING_MEMBER "Removing member. Please enter the name of the "\ 
+						"member you wish to delete: "
+#define ERROR_NOT_ENOUGH_MEMBERS "There are not enough members. Please create" \
+								 "more users!\n"
+#define ENTER_VIEW_WISHES_NAME "Please enter the username you want to check: "
+#define USER_HAS_NO_ITEMS "This user currently has no items in their " \
+						  "wishlist.\n"
+#define SAVE_USERS_INFO_SUCCESS "Users info has been saved to 'users' " \ 
+								"successfully!"
+#define SAVE_USERS_INFO_FAIL "Failed to save users info. Please check and " \ 
+							 "try again."
+#define LOAD_USERS_INFO_SUCCESS "Users info has been loaded from 'users' " \ 
+								"successfully!"
+#define LOAD_USERS_INFO_FAIL "Failed to read file. Please check and try again."
 /* #define DEBUG_MODE 1 */
-
 
 /*******************************************************************************
  * List structs.
@@ -140,7 +206,7 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 			break;
 		case '3':
 			if (*size == MAX_NUM)
-				printf("Max users reached. Returning to main menu.");
+				printf(ERROR_MAX_USERS_REACHED);
 			else {
 				*size = userRegister(users, size);
 
@@ -151,7 +217,7 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 			break;
 
 		default:
-			printf("Invalid choice!\n");
+			printf(ERROR_INVALID_CHOICE);
 			break;
 		}
 	}
@@ -168,19 +234,20 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 	char password[MAX_PASS_LEN];
 	int valid;
 
-	printf("Enter your name (without spaces): ");
+	printf(REGISTER_ENTER_USERNAME);
 	scanf("%s", name);
 
 	strcpy(compressed, name);
 	strCompress(compressed);
 
 #ifdef DEBUG_MODE
-	printf("compressed name: %s\n", compressed);
+	printf("Compressed name = %s\n", compressed);
 #endif
+
 	valid = nameTaken(users, name, size);
-	while (valid == 1) {
-		printf("User already exists! Please try again or enter '*' to return to menu.\n");
-		printf("Enter your name (without spaces): ");
+	while (valid) {
+		printf(ERROR_USER_ALREADY_EXISTS);
+		printf(REGISTER_ENTER_USERNAME);
 		scanf("%s", name);
 		if (strcmp(name, "*")) {
 			return -1;
@@ -192,13 +259,12 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 		strcpy(users[*size].name, name);
 		users[*size].listSize = 0;
     users[*size].index = -1;
-		printf("Enter your password: ");
+		printf(REGISTER_ENTER_PASSWORD);
 		scanf("%s", password);
 		strcpy(users[*size].password, password);
 		passEncrypt(users, size, password);
 		*size = *size + 1;
-		printf("User has been registered successfully! "
-			"Returning to main menu.\n");
+		printf(REGISTER_SUCCESSFUL);
 	}
 	
 
@@ -238,13 +304,13 @@ void adminLogin(person_t users[MAX_NUM], int* size) {
 	printf(LOGIN_ENTER_PASSWORD);
 	scanf("%s", password);
 
-	if (!strcmp(username, "admin") && !strcmp(password, "admin")) {
+	if (!strcmp(username, ADMIN_LOGIN) && !strcmp(password, ADMIN_LOGIN)) {
 		printf(LOGIN_SUCCESSFUL);
-		printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome Admin ·._.·´¯)·._.·´¯)\n");
+		printf(WELCOME_ADMIN);
 		selectionAdmin(users, size);
 	}
 	else {
-		printf("Login failed\n");
+		printf(LOGIN_FAIL);
 		return;
 	}
 }
@@ -260,24 +326,24 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 		switch (c) {
 		case '1':
 			if (*size == 0) {
-				printf("There are currently no participants.");
+				printf(ADMIN_NO_PARTICIPANTS);
 			}
 			else {
-				printf("Displaying all particpating members...");
+				printf(DISPLAYING_ALL_PARTICIPANTS);
 				sortByAlphabet(users, size);
 				displayUser(users, size);
 			}
 			break;
 		case '2':
 			if (viewWishes(users, size) == -1) {
-				puts("This user does not exist. Returning to admin menu.\n");
+				puts(ADMIN_USER_DOES_NOT_EXIST);
 			}
 			break;
 		case '3':
 			if (removeMember(users, size) != -1)
-				printf("Member removed successfully. Returning to admin menu.\n");
+				printf(ADMIN_REMOVE_MEMBER_SUCCESS);
 			else
-				printf("This member does not exist. Returning to admin menu.\n");
+				printf(ADMIN_MEMBER_DOES_NOT_EXIST);
 			break;
 		case '4':
 			assignMembers(users, size);
@@ -289,14 +355,14 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 			*size = loadUsers(users);
 			break;
 		case '7':
-			printf("Logged out\n");
+			printf(LOGGED_OUT_SUCCESSFULLY);
 			selectionMain(users, size);
 			break;
 		case '8':
 			exit(0);
 			break;
 		default:
-			printf("Invalid choice\n");
+			printf(ERROR_INVALID_CHOICE);
 			break;
 		}
 	}
@@ -311,10 +377,10 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 	char password[MAX_PASS_LEN];
 	person_t* foundUser_p = NULL;
 
-	printf("Enter username>\n");
+	printf(LOGIN_ENTER_USERNAME);
 	scanf("%s", username);
 	/* need to catch errors for over the length limit*/
-	printf("Enter password>\n");
+	printf(LOGIN_ENTER_PASSWORD);
 	scanf("%s", password);
 
 	foundUser_p = checkUserLogin(username, password, users, size);
@@ -326,7 +392,7 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 		selectionUser(users, size, foundUser_p);
 	}
 	else {
-		printf("Login failed. Returning to main menu.\n");
+		printf(LOGIN_FAIL);
 		selectionMain(users, size);
 	}
 }
@@ -365,36 +431,36 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
 
 			while (editCh != '1' && editCh != '2' && editCh != '3') {
 				printf("%c\n", editCh);
-				printf("Invalid choice. Please try again or enter * to return to user menu.\n");
+				printf(ERROR_WISHLIST_INVALID_CHOICE);
 				printEditMenu();
 				scanf(" %c", &editCh);
 				if (editCh == '*') {
-					printf("Returning to user menu.\n");
+					printf(WISHLIST_RETURN_TO_MENU);
 					break;
 				}
 			}
 
 			if (editCh == '1') {
 				if (user->listSize == MAX_WISHES) {
-					printf("Your list is currently full!");
+					printf(ERROR_WISHLIST_IS_FULL);
 				}
 				else {
-					printf("Adding an item.\n");
+					printf(WISHLIST_ADDING_AN_ITEM);
 					addItem(user);
 				}
 			}
 			else if (editCh == '2') {
 				if (user->listSize == 0) {
-					printf("Your list is currently empty.\n");
+					printf(WISHLIST_IS_EMPTY);
 				}
 				else {
-					printf("Removing an item.\n");
+					printf(WISHLIST_REMOVING_AN_ITEM);
 					removeItem(user);
 				}
 			}
 			else if (editCh == '3') {
 				if (user->listSize == 0) {
-					printf("Your list is currently empty.\n");
+					printf(WISHLIST_IS_EMPTY);
 				}
 				else {
 					printList(users, size, user);
@@ -411,7 +477,7 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
 			break;
 
 		case '4':
-			printf("Successfully logged out. Returning to main menu.\n");
+			printf(LOGGED_OUT_SUCCESSFULLY);
 			selectionMain(users, size);
 			break;
 
@@ -420,7 +486,7 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
 			break;
 
 		default:
-			printf("Invalid choice\n");
+			printf(ERROR_INVALID_CHOICE);
 			break;
 		}
 	}
@@ -444,17 +510,17 @@ int addItem(person_t* user) {
 
 	while (1) { /* addresses the "add more items" option*/
 		if (user->listSize == MAX_WISHES) {
-			printf("Your wishlist is currently full! Redirecting to user menu.\n");
+			printf(ERROR_WISHLIST_IS_FULL);
 			break;
 		}
-		printf("What item would you like to add to your wishlist? ");
-		scanf(" %s", itemName);
+		printf(WISHLIST_ENTER_ADD_ITEM_NAME);
+		scanf("%s", itemName);
 		itemCheck = itemExists(itemName, user);
 
 		while (itemCheck != -1) {
-			printf("This item already exists in your list. Please enter a new item or '*' to return to user menu.\n");
-			printf("What item would you like to add to your wishlist? ");
-			scanf(" %s", itemName);
+			printf(ERROR_WISHLIST_ITEM_ALREADY_EXIST);
+			printf(WISHLIST_ENTER_ADD_ITEM_NAME);
+			scanf("%s", itemName);
 			if (strcmp(itemName, "*") == 0) {
 				return -1;
 			}
@@ -468,8 +534,8 @@ int addItem(person_t* user) {
 			scanf(" %c", &addMore);
 
 			while (addMore != 'y' && addMore != 'n') {
-				printf("Invalid choice. Please try again or enter * to return to user menu.\n");
-				printf("Would you like to add more items ? (y / n) ");
+				printf(ERROR_WISHLIST_INVALID_CHOICE);
+				printf(WISHLIST_ADD_MORE_ITEMS_Y_N);
 				scanf(" %c", &addMore);
 			}
 
@@ -477,7 +543,7 @@ int addItem(person_t* user) {
 				addItem(user);
 			}
 			else if (addMore == 'n') {
-				printf("Returning to user menu.\n");
+				printf(RETURNING_TO_USER_MENU);
 				break;
 			}
 		}
@@ -493,13 +559,13 @@ void removeItem(person_t* user) {
 	int itemCheck;
 	char itemName[MAX_LEN];
 
-	printf("Enter the item name you wish to delete: ");
+	printf(WISHLIST_ENTER_REMOVE_ITEM_NAME);
 	scanf(" %s", itemName);
 	itemCheck = itemExists(itemName, user);
 
 	while (itemCheck == -1) {
-		printf("This item does not exist in your wishlist. Please try again or enter '*' to return to user menu.\n");
-		printf("Enter the item name you wish to delete: ");
+		printf(ERROR_WISHLIST_ITEM_DOES_NOT_EXIST);
+		printf(WISHLIST_ENTER_REMOVE_ITEM_NAME);
 		scanf(" %s", itemName);
 		itemCheck = itemExists(itemName, user);
 
@@ -511,7 +577,7 @@ void removeItem(person_t* user) {
 	if (itemCheck != -1) {
 		strcpy(user->list[itemCheck].name, user->list[user->listSize - 1].name);
 		user->listSize--;
-		printf("Item successfully removed from your wishlist.\n");
+		printf(WISHLIST_REMOVE_ITEM_SUCCESS);
 		return;
 	}
 
@@ -532,7 +598,7 @@ int itemExists(char itemName[MAX_LEN], person_t* user) {
 
 void displayUser(person_t users[], int* size) {
 	int i;
-	printf("Username | Password | Index\n");
+	printf(DISPLAY_USER_HEADER);
 
 	for (i = 0; i < *size; i++)
 		printf("%-10s %-20s %d\n", users[i].name, users[i].password, users[i].index);
@@ -549,34 +615,34 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	char newPass2[MAX_PASS_LEN];
 	int validPass, validNew;
 
-	printf("Please enter your current password: ");
+	printf(ENTER_YOUR_CURRENT_PASSWORD);
 	scanf("%s", password);
 	if (!strcmp(password, "*")) return;
 
 	validPass = checkPass(user, password);
 
 	while (validPass) {
-		printf("Incorrect password. Try again or enter * to go back to menu.\n");
-		printf("Please enter your current password: ");
+		printf(ERROR_INCORRECT_PASSWORD);
+		printf(ENTER_YOUR_CURRENT_PASSWORD);
 		scanf("%s", password);
 		validPass = checkPass(user, password);
 		if (!strcmp(password, "*")) return;
 	} /* checks for correct password*/
 
-	printf("Please enter a new password: ");
+	printf(ENTER_NEW_PASSWORD);
 	scanf("%s", newPass1); /* add: check for max length (fgets/sscanf isnt working for me)*/
-	printf("Confirm password: "); /* have not checked if inputted nothing*/
+	printf(CONFIRM_PASSWORD); /* have not checked if inputted nothing*/
 	scanf("%s", newPass2);
 	validNew = passMatch(newPass1, newPass2);
 
 	while (validNew) {
-		printf("Passwords do not match. Try again or enter * to go back to menu\n.");
-		printf("Please enter a new password: ");
+		printf(ERROR_PASSWORDS_DO_NOT_MATCH);
+		printf(ENTER_NEW_PASSWORD);
 
 		scanf("%s", newPass1); /* add: check for max length (fgets/sscanf isnt working for me)*/
 		if (!strcmp(newPass1, "*")) return;
 
-		printf("Confirm password: ");
+		printf(CONFIRM_PASSWORD);
 
 		scanf("%s", newPass2);
 		if (!strcmp(newPass2, "*")) break;
@@ -615,7 +681,7 @@ Danielle
 int removeMember(person_t users[MAX_NUM], int* size) {
 	int i;
 	char name[MAX_NAME_LEN];
-	printf("Removing member. Please enter the name of the member you wish to delete: ");
+	printf(ADMIN_REMOVING_MEMBER);
 	scanf(" %s", name);
 
 	/*if exist delete*/
@@ -642,7 +708,7 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 void assignMembers(person_t users[], int* size) {
 	  printf(ASSIGNING_MEMBERS);
 
-  if (*size <= 1) printf("not enough...");
+  if (*size <= 1) printf(ERROR_NOT_ENOUGH_MEMBERS);
   else {
 	  int userAssigned[*size];
     int i;
@@ -718,12 +784,12 @@ int viewWishes(person_t users[MAX_NUM], int* size) {
 	char username[MAX_NAME_LEN];
 
 	/*enter username then show the wishlist*/
-	printf("Please enter the username you want to check: ");
+	printf(ENTER_VIEW_WISHES_NAME);
 	scanf("%s", username);
 	for (i = 0; i < *size; i++) {
 		if (strcmp(username, users[i].name) == 0) {
 			if (users[i].listSize == 0) {
-				printf("This user currently has no items in their wishlist.\n");
+				printf(USER_HAS_NO_ITEMS);
 				return 0;
 			}
 			else {
@@ -802,9 +868,9 @@ void saveUsers(person_t users[], int size) {
 	if (saveFile) {
 		for (index = 0; index < size; index++)
 			fwrite(&users[index], sizeof(person_t), 1, saveFile);
-		printf("Users info has been saved to 'users' successfully!");
+		printf(SAVE_USERS_INFO_SUCCESS);
 	}
-	else printf("Failed to save users info. Please check and try again.");
+	else printf(SAVE_USERS_INFO_FAIL);
 	printf("\n");
 	fclose(saveFile);
 }
@@ -820,10 +886,10 @@ int loadUsers(person_t users[]) {
 			fread(&users[index], sizeof(person_t), 1, loadFile);
 			index++;
 		}
-		printf("Users info has been loaded from 'users' successfully!");
+		printf(LOAD_USERS_INFO_SUCCESS);
 		fclose(loadFile);
 	}
-	else printf("Failed to read file. Please check and try again.");
+	else printf(LOAD_USERS_INFO_FAIL);
 
 	printf("\n");
 	return index - 1;
@@ -844,6 +910,7 @@ void printList(person_t users[MAX_NUM], int* size, person_t* user) {
 			for (j = 0; j < user->listSize; j++)
 				printf("%s\n", user->list[j].name);
 }
+
 
 void printMain() {
 	printf("\n"
@@ -884,4 +951,3 @@ void printEditMenu() {
 		"3. View my wishlist.\n"
 		"Enter choice: ");
 }
-
