@@ -76,39 +76,39 @@
 #define WISHLIST_REMOVING_AN_ITEM "Removing an item.\n"
 #define WISHLIST_ENTER_ADD_ITEM_NAME "What item would you like to add to your "\
 									 "wishlist?\n"
-#define ERROR_WISHLIST_ITEM_ALREADY_EXIST "This item already exists in your "\ 
-											"list. Please enter a new item "\ 
+#define ERROR_WISHLIST_ITEM_ALREADY_EXIST "This item already exists in your "\
+											"list. Please enter a new item "\
 											"or '*' to return to user menu.\n"
 #define WISHLIST_ADD_MORE_ITEMS_Y_N "Would you like to add more items ? "\
 									"(y / n) "
 #define RETURNING_TO_USER_MENU "Returning to user menu.\n"
-#define WISHLIST_ENTER_REMOVE_ITEM_NAME "Enter the item name you wish to "\ 
+#define WISHLIST_ENTER_REMOVE_ITEM_NAME "Enter the item name you wish to "\
 										"delete: "
-#define ERROR_WISHLIST_ITEM_DOES_NOT_EXIST "This item does not exist in your "\ 
-										   "wishlist. Please try again or "\ 
+#define ERROR_WISHLIST_ITEM_DOES_NOT_EXIST "This item does not exist in your "\
+										   "wishlist. Please try again or "\
 										   "enter '*' to return to user menu.\n"
-#define WISHLIST_REMOVE_ITEM_SUCCESS "Item successfully removed from your "\ 
+#define WISHLIST_REMOVE_ITEM_SUCCESS "Item successfully removed from your "\
 									 "wishlist.\n"
 #define DISPLAY_USER_HEADER "Username | Password | Index\n"
 #define ENTER_YOUR_CURRENT_PASSWORD	"Please enter your current password: "
-#define ERROR_INCORRECT_PASSWORD "Incorrect password. Try again or enter * to "\ 
+#define ERROR_INCORRECT_PASSWORD "Incorrect password. Try again or enter * to "\
 								 "go back to menu.\n"
 #define ENTER_NEW_PASSWORD "Please enter a new password: "
 #define CONFIRM_PASSWORD "Confirm password: "
-#define ERROR_PASSWORDS_DO_NOT_MATCH "Passwords do not match. Try again or "\ 
+#define ERROR_PASSWORDS_DO_NOT_MATCH "Passwords do not match. Try again or "\
 									 "enter * to go back to menu\n."
-#define REMOVING_MEMBER "Removing member. Please enter the name of the "\ 
+#define REMOVING_MEMBER "Removing member. Please enter the name of the "\
 						"member you wish to delete: "
 #define ERROR_NOT_ENOUGH_MEMBERS "There are not enough members. Please create" \
 								 "more users!\n"
 #define ENTER_VIEW_WISHES_NAME "Please enter the username you want to check: "
 #define USER_HAS_NO_ITEMS "This user currently has no items in their " \
 						  "wishlist.\n"
-#define SAVE_USERS_INFO_SUCCESS "Users info has been saved to 'users' " \ 
+#define SAVE_USERS_INFO_SUCCESS "Users info has been saved to 'users' " \
 								"successfully!"
-#define SAVE_USERS_INFO_FAIL "Failed to save users info. Please check and " \ 
+#define SAVE_USERS_INFO_FAIL "Failed to save users info. Please check and " \
 							 "try again."
-#define LOAD_USERS_INFO_SUCCESS "Users info has been loaded from 'users' " \ 
+#define LOAD_USERS_INFO_SUCCESS "Users info has been loaded from 'users' " \
 								"successfully!"
 #define LOAD_USERS_INFO_FAIL "Failed to read file. Please check and try again."
 /* #define DEBUG_MODE 1 */
@@ -326,7 +326,7 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 		switch (c) {
 		case '1':
 			if (*size == 0) {
-				printf(ADMIN_NO_PARTICIPANTS);
+				printf(NO_PARTICIPANTS);
 			}
 			else {
 				printf(DISPLAYING_ALL_PARTICIPANTS);
@@ -681,7 +681,7 @@ Danielle
 int removeMember(person_t users[MAX_NUM], int* size) {
 	int i;
 	char name[MAX_NAME_LEN];
-	printf(ADMIN_REMOVING_MEMBER);
+	printf(REMOVING_MEMBER);
 	scanf(" %s", name);
 
 	/*if exist delete*/
