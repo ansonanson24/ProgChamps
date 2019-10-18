@@ -30,26 +30,26 @@
 *******************************************************************************/
 
 /* Debug mode and administration **********************************************/
-/*#define DEBUG_MODE 1*/
-#define LOG_USER_REGISTER "DEBUG - userRegister"
-#define LOG_USERNAME_IS_VALID "DEBUG - usernameIsValid"
-#define LOG_PASSWORD_IS_VALID "DEBUG - passwordIsValid"
-#define LOG_NAME_TAKEN "DEBUG - nameTaken"
-#define LOG_CHECK_USER_LOGIN "DEBUG - checkUserLogin"
-#define LOG_VIEW_GIFTEE "DEBUG - viewGiftee"
-#define LOG_ADD_ITEM "DEBUG - addItem"
-#define LOG_REMOVE_ITEM "DEBUG - removeItem"
-#define LOG_ITEM_EXISTS "DEBUG - itemExists"
-#define LOG_CHANGE_PASSWORD "DEBUG - changePassword"
-#define LOG_PASS_MATCH "DEBUG - passMatch"
-#define LOG_CHECK_PASS "DEBUG - checkPass"
-#define LOG_REMOVE_MEMBER "DEBUG - removeMember"
-#define LOG_ASSIGN_MEMBERS "DEBUG - assignMembers"
-#define LOG_PASS_DECRYPT "DEBUG - passDecrypt"
-#define LOG_VIEW_WISHES "DEBUG - viewWishes"
-#define LOG_SORT_BY_ALPHABET "DEBUG - sortByAlphabet"
-#define LOG_PRINT_LIST "DEBUG - printList"
-#define LOG_DISPLAY_USER "DEBUG - displayUser"
+#define DEBUG_MODE 1
+#define LOG_USER_REGISTER "DEBUG - userRegister\n"
+#define LOG_USERNAME_IS_VALID "DEBUG - usernameIsValid\n"
+#define LOG_PASSWORD_IS_VALID "DEBUG - passwordIsValid\n"
+#define LOG_NAME_TAKEN "DEBUG - nameTaken\n"
+#define LOG_CHECK_USER_LOGIN "DEBUG - checkUserLogin\n"
+#define LOG_VIEW_GIFTEE "DEBUG - viewGiftee\n"
+#define LOG_ADD_ITEM "DEBUG - addItem\n"
+#define LOG_REMOVE_ITEM "DEBUG - removeItem\n"
+#define LOG_ITEM_EXISTS "DEBUG - itemExists\n"
+#define LOG_CHANGE_PASSWORD "DEBUG - changePassword\n"
+#define LOG_PASS_MATCH "DEBUG - passMatch\n"
+#define LOG_CHECK_PASS "DEBUG - checkPass\n"
+#define LOG_REMOVE_MEMBER "DEBUG - removeMember\n"
+#define LOG_ASSIGN_MEMBERS "DEBUG - assignMembers\n"
+#define LOG_PASS_DECRYPT "DEBUG - passDecrypt\n"
+#define LOG_VIEW_WISHES "DEBUG - viewWishes\n"
+#define LOG_SORT_BY_ALPHABET "DEBUG - sortByAlphabet\n"
+#define LOG_PRINT_LIST "DEBUG - printList\n"
+#define LOG_DISPLAY_USER "DEBUG - displayUser\n"
 
 #define ADMIN_LOGIN "admin"
 /******************************************************************************/
@@ -405,7 +405,7 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 	}
 
 #ifdef DEBUG_MODE
-	printf("//Username: %s - Password: %s\n", name, users[*size - 1].password);
+	printf("DEBUG - Username: %s - Password: %s\n", name, users[*size - 1].password);
 #endif
 	return *size;
 }
@@ -1104,7 +1104,7 @@ void assignMembers(person_t users[], int* size) {
 			/* check if number is taken, else keep generating */
 			while (userAssigned[randIndex] == 1 || randIndex == i) {
 #ifdef DEBUG_MODE
-				printf("DEBUG - randIndex = %d", randIndex);
+				printf("DEBUG - randIndex = %d\n", randIndex);
 #endif
 
 				randIndex = rand() % *size;
