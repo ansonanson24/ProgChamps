@@ -108,7 +108,7 @@ void viewGiftee(person_t users[], int* size, person_t user);
 int main(int argc, char* argv[]) {
 	int size = 0;
 	int* size_p = &size;
-	person_t users[MAX_NUM];
+	person_t users[MAX_NUM + 1];
 
 	if (argc)
 		selectionMain(users, size_p);
