@@ -49,6 +49,7 @@
 #define LOG_VIEW_WISHES "DEBUG - viewWishes"
 #define LOG_SORT_BY_ALPHABET "DEBUG - sortByAlphabet"
 #define LOG_PRINT_LIST "DEBUG - printList"
+#define LOG_DISPLAY_USER "DEBUG - displayUser"
 
 #define ADMIN_LOGIN "admin"
 /******************************************************************************/
