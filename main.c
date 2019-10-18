@@ -104,8 +104,10 @@
 #define ERROR_NOT_ENOUGH_MEMBERS "There are not enough members. Please create" \
 								 "more users!\n"
 #define ERROR_WISHLIST_IS_FULL "Your list is currently full!\n"
-#define ERROR_INVALID_USERNAME "Invalid username. Please check and try again!\n\n"
-#define ERROR_INVALID_PASSWORD "Invalid password. Please check and try again!\n\n"
+#define ERROR_INVALID_USERNAME "Invalid username. Please check and try again!" \
+							   "\n\n"
+#define ERROR_INVALID_PASSWORD "Invalid password. Please check and try again!" \
+							   "\n\n"
 /******************************************************************************/
 
 /*userRegister messags*********************************************************/
@@ -151,7 +153,8 @@
 #define ENTER_VIEW_WISHES_NAME "Please enter the username you want to check: "
 #define USER_HAS_NO_ITEMS "This user currently has no items in their " \
 						  "wishlist.\n"
-#define GIFTEE_HAS_NO_ITEMS "\n....but they don't have anything on their wishlist yet.\n"
+#define GIFTEE_HAS_NO_ITEMS "\n....but they don't have anything on their " \
+							"wishlist yet.\n"
 /******************************************************************************/
 
 /*******************************************************************************
@@ -203,7 +206,8 @@ void displayUser(person_t users[], int* size);
 char* strCompress(char myStr[]);
 void saveUsers(person_t users[], int size);
 int loadUsers(person_t users[]);
-person_t* checkUserLogin(char username[], char password[], person_t users[], int* size);
+person_t* checkUserLogin(char username[], char password[], person_t users[], 
+						 int* size);
 void printMain();
 void printUser();
 void printAdmin();
@@ -276,7 +280,7 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 	char password[MAX_PASS_LEN];
 	int valid;
 
-	printf("Create a username no more than %d characters, numbers and " \
+	printf("\nCreate a username no more than %d characters, numbers and " \
 			   "letters are accepted (without spaces).\n", MAX_NAME_LEN);
 	printf(REGISTER_ENTER_USERNAME);
 	scanf("%s", name);
@@ -310,7 +314,7 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 		users[*size].listSize = 0;
 		users[*size].index = -1;
 
-		printf("Create a password no more than %d characters, numbers and " \
+		printf("\nCreate a password no more than %d characters, numbers and " \
 			   "letters are accepted (without spaces).\n", MAX_PASS_LEN);
 		printf(REGISTER_ENTER_PASSWORD);
 		scanf("%s", password);
@@ -453,7 +457,8 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 
 	if (foundUser_p != NULL) {
 		printf(LOGIN_SUCCESSFUL);
-		printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome %s ·._.·´¯)·._.·´¯)\n", foundUser_p->name);
+		printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome %s ·._.·´¯)·._.·´¯)\n", 
+				foundUser_p->name);
 		selectionUser(users, size, foundUser_p);
 	}
 	else {
@@ -463,15 +468,15 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 }
 
 /* Anson, returns position of logged in user or -1 */
-person_t* checkUserLogin(char username[], char password[], person_t users[], int* size) {
+person_t* checkUserLogin(char username[], char password[], person_t users[], 
+																	int* size) {
 	int i;
 
 	for (i = 0; i < *size + 1; i++) {
-		if (!strcmp(username, users[i].name) && passDecrypt(users, i, password)) {
-			return &users[i];
-		}
+		if (!strcmp(username, users[i].name) && passDecrypt(users, i, 
+			password))
+				return &users[i];
 	}
-
 	return NULL;
 }
 
@@ -995,7 +1000,7 @@ void printList(person_t users[MAX_NUM], int* size, person_t* user) {
 
 
 void printMain() {
-	printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome to Secret Santa ·._.·´¯)"\
+	printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome to ProgChamp's Secret Santa ·._.·´¯)"\
 		"·._.·´¯)\n\n"
 		"1. Login as Admin\n"
 		"2. Login as User\n"
