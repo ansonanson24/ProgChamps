@@ -913,7 +913,8 @@ void printList(person_t users[MAX_NUM], int* size, person_t* user) {
 
 
 void printMain() {
-	printf("\n"
+	printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome ·._.·´¯)"\
+							"·._.·´¯)\n\n"
 		"1. Login as Admin\n"
 		"2. Login as User\n"
 		"3. Register\n"
