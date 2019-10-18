@@ -110,7 +110,7 @@
 							   "\n\n"
 /******************************************************************************/
 
-/*userRegister messags*********************************************************/
+/*userRegister messages *******************************************************/
 #define REGISTER_ENTER_USERNAME "Please enter your name (without spaces)>\n"
 #define REGISTER_ENTER_PASSWORD "Enter your password>\n"
 #define REGISTER_SUCCESSFUL "User has been registered successfully! "\
@@ -143,13 +143,13 @@
 									 "wishlist.\n"
 /******************************************************************************/
 
-/******************************************************************************/
+/* Change password ************************************************************/
 #define ENTER_YOUR_CURRENT_PASSWORD	"Please enter your current password: "
 #define ENTER_NEW_PASSWORD "Please enter a new password: "
 #define CONFIRM_PASSWORD "Confirm new password: "
 /******************************************************************************/
 
-/******************************************************************************/
+/* Wishlist messages **********************************************************/
 #define ENTER_VIEW_WISHES_NAME "Please enter the username you want to check: "
 #define USER_HAS_NO_ITEMS "This user currently has no items in their " \
 						  "wishlist.\n"
@@ -180,40 +180,66 @@ typedef struct person person_t;
  * Function prototypes.
 *******************************************************************************/
 
+/* Main menu ******************************************************************/
 void selectionMain(person_t users[MAX_NUM], int* size);
-void adminLogin(person_t users[MAX_NUM], int* size);
-void selectionAdmin(person_t users[MAX_NUM], int* size);
-void userLogin(person_t users[MAX_NUM], int* size);
-void selectionUser(person_t users[MAX_NUM], int* size, person_t* user_p);
 int userRegister(person_t users[MAX_NUM], int* size);
-int nameTaken(person_t users[MAX_NUM], char name[], int* size);
+void adminLogin(person_t users[MAX_NUM], int* size);
+void userLogin(person_t users[MAX_NUM], int* size);
+/******************************************************************************/
+
+/* Admin actions **************************************************************/
+void selectionAdmin(person_t users[MAX_NUM], int* size);
 int removeMember(person_t users[MAX_NUM], int* size);
 void assignMembers(person_t users[], int* size);
-void passEncrypt(person_t* user, char password[MAX_PASS_LEN]);
-int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]);
 int viewWishes(person_t users[MAX_NUM], int* size);
-void sortByAlphabet(person_t users[MAX_NUM], int* size);
-void printList(person_t users[MAX_NUM], int* size, person_t* user);
-int addItem(person_t* user);
-void removeItem(person_t* user);
-int itemExists(char itemName[MAX_LEN], person_t* user);
-void changePassword(person_t users[MAX_NUM], person_t* user, int* size);
-int checkPass(person_t* user, char password[MAX_PASS_LEN]);
-int passMatch(char pass1[MAX_PASS_LEN], char pass2[MAX_PASS_LEN]);
-void printEditMenu();
-void editWishlist(person_t users[MAX_NUM], int* size, person_t* user);
-void displayUser(person_t users[], int* size);
-char* strCompress(char myStr[]);
 void saveUsers(person_t users[], int size);
 int loadUsers(person_t users[]);
-person_t* checkUserLogin(char username[], char password[], person_t users[], 
-						 int* size);
+/******************************************************************************/
+
+/* User actions ***************************************************************/
+void selectionUser(person_t users[MAX_NUM], int* size, person_t* user_p);
+void changePassword(person_t users[MAX_NUM], person_t* user, int* size);
+void viewGiftee(person_t users[], int* size, person_t user);
+/******************************************************************************/
+
+/* Wishlist actions ***********************************************************/
+int addItem(person_t* user);
+void removeItem(person_t* user);
+void editWishlist(person_t users[MAX_NUM], int* size, person_t* user);
+/******************************************************************************/
+
+/* Encryption and Decryption **************************************************/
+void passEncrypt(person_t* user, char password[MAX_PASS_LEN]);
+int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]);
+/******************************************************************************/
+
+/* Compression ****************************************************************/
+char* strCompress(char myStr[]);
+/******************************************************************************/
+
+/* Sorting ********************************************************************/
+void sortByAlphabet(person_t users[MAX_NUM], int* size);
+/******************************************************************************/
+
+/* Printing & displaying ******************************************************/
+void printEditMenu();
 void printMain();
 void printUser();
 void printAdmin();
-void viewGiftee(person_t users[], int* size, person_t user);
+void printList(person_t users[MAX_NUM], int* size, person_t* user);
+/******************************************************************************/
+
+/* Miscellaneous & data checks ************************************************/
+int nameTaken(person_t users[MAX_NUM], char name[], int* size);
+int itemExists(char itemName[MAX_LEN], person_t* user);
+int checkPass(person_t* user, char password[MAX_PASS_LEN]);
+int passMatch(char pass1[MAX_PASS_LEN], char pass2[MAX_PASS_LEN]);
+void displayUser(person_t users[], int* size);
+person_t* checkUserLogin(char username[], char password[], person_t users[], 
+						 int* size);
 int usernameIsValid(char* username);
 int passwordIsValid(char* password);
+/******************************************************************************/
 
 /*******************************************************************************
  * Main
