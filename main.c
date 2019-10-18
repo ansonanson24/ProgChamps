@@ -20,8 +20,9 @@
 /*******************************************************************************
  * List header files
 *******************************************************************************/
-#include <stdio.h> /* used exit, NULL, feof, rewind, scanf, printf, fopen, fclose, fread, fwrite */
-#include <stdlib.h> 
+#include <stdio.h> /* used exit, NULL, feof, rewind, scanf, printf, fopen, 
+						fclose, fread, fwrite */
+#include <stdlib.h> /* used rand */
 #include <string.h> /* used strlen, strcpy, strcmp*/
 
 /*******************************************************************************
@@ -43,7 +44,7 @@
 
 /* Encryption keys ************************************************************/
 #define KEY 3
-/*******************/
+/******************************************************************************/
 
 /* FIle processing ************************************************************/
 #define DB_NAME "users"
