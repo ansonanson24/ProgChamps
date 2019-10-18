@@ -244,7 +244,7 @@ int passwordIsValid(char* password);
 
 /*******************************************************************************
  *                          Program starts here                                *
- ******************************************************************************/
+*******************************************************************************/
 
 /*******************************************************************************
  * Main
@@ -267,14 +267,15 @@ int main(int argc, char* argv[]) {
 }
 
 /*******************************************************************************
- * This function handles the main menu selection
+ * This function handles the main menu selection.
+ * 
  * inputs: 
  * - users[]: list of users
  * - *size: size of users[]
  * outputs:
  * - none
-
- Author: Danielle Alota
+ *
+ * Author: Danielle Alota
 *******************************************************************************/
 void selectionMain(person_t users[MAX_NUM], int* size) {
 	char c;
@@ -300,7 +301,6 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 		case '4':
 			exit(0);
 			break;
-
 		default:
 			printf(ERROR_INVALID_CHOICE);
 			break;
@@ -309,14 +309,17 @@ void selectionMain(person_t users[MAX_NUM], int* size) {
 }
 
 /*******************************************************************************
- * This function adds a user to users[]
+ * This function adds a user to the existing users.
+ * 
  * inputs:
  * - users[]: list of users
  * - *size: size of users[]
+ * 
  * outputs:
- * - +1 to size if successfully registered
-
- Author: Danielle Alota
+ * - *size: updated number of current users
+ * - -1 when user wishes to return
+ * 
+ * Author: Danielle Alota
 *******************************************************************************/
 int userRegister(person_t users[MAX_NUM], int* size) {
 	char name[MAX_NAME_LEN + 1];
@@ -383,42 +386,45 @@ int userRegister(person_t users[MAX_NUM], int* size) {
 }
 
 /*******************************************************************************
- * This function checks if the given username is within the limit
+ * This function checks if the given username is within the limit.
+ * 
  * inputs:
  * - username
+ * 
  * outputs:
- * - 0 if within the limit
-
- Author: Yat Ho KWok
+ * - Returns 1 if username is shorter than MAX_NAME_LEN, 0 otherwise
+ * 
+ * Author: Yat Ho KWok
 *******************************************************************************/
 int usernameIsValid(char* username) {
 	return strlen(username) <= MAX_NAME_LEN;
 }
 
 /*******************************************************************************
- * This function checks if the given username is within the limit
+ * This function checks if the given password is within the limit.
+ * 
  * inputs:
  * - password
  * outputs:
- * - 0 if within the limit
-
- Author: Yat Ho KWok
+ * - Returns 1 if password is shorter than MAX_PASS_LEN, 0 otherwise
+ * 
+ * Author: Yat Ho KWok
 *******************************************************************************/
 int passwordIsValid(char* password) {
 	return strlen(password) <= MAX_PASS_LEN;
 }
 
 /*******************************************************************************
- * This function checks if the given username has already been used
+ * This function checks if the given username has already been used.
  * inputs:
  * - users[]: list of users
- * - name attempting to be registered
- * - size of users[]
+ * - name[]: username inputted by user
+ * - *size: number of users
+ * 
  * outputs:
- * - 1 if name matches a name in users[]
- * - 0 otherwise
-
- Author: Danielle Alota
+ * - Returns 1 if name matches a username in users[], 0 otherwise
+ * 
+ * Author: Danielle Alota
 *******************************************************************************/
 int nameTaken(person_t users[MAX_NUM], char name[], int* size) {
 	int i;
@@ -431,14 +437,17 @@ int nameTaken(person_t users[MAX_NUM], char name[], int* size) {
 }
 
 /*******************************************************************************
- * This function checks if the given username and password matched the defined admin info
+ * This function checks if the given username and password matched the defined 
+ * admin info.
+ * 
  * inputs:
- * - users[]: list of users
- * - size of users[]
+ * - users[MAX_NUM]: list of users
+ * - *size: number of users
+ * 
  * outputs:
  * - none
-
- Author: Bilal Ali
+ * 
+ * Author: Bilal Ali
 *******************************************************************************/
 void adminLogin(person_t users[MAX_NUM], int* size) {
 	char username[MAX_NAME_LEN];
@@ -455,21 +464,20 @@ void adminLogin(person_t users[MAX_NUM], int* size) {
 		printf(WELCOME_ADMIN);
 		selectionAdmin(users, size);
 	}
-	else {
-		printf(LOGIN_FAIL);
-		return;
-	}
+	else printf(LOGIN_FAIL);
 }
 
 /*******************************************************************************
- * This function handles the admin menu selection
+ * This function handles the admin menu selection.
+ * 
  * inputs:
- * - users[]: list of users
- * - *size: size of users[]
+ * - users[MAX_NUM] list of users
+ * - *size: number of users
+ * 
  * outputs:
  * - none
-
- Author: Danielle Alota
+ * 
+ * Author: Danielle Alota
 *******************************************************************************/
 void selectionAdmin(person_t users[MAX_NUM], int* size) {
 	char c;
@@ -523,9 +531,11 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 
 /*******************************************************************************
  * This function handles user login feature in the main selection menu.
+ * 
  * inputs:
  * - users[MAX_NUM]: list of users
- * - size: pointer to number of existing users
+ * - *size: pointer to number of existing users
+ * 
  * outputs:
  * - none
  * 
@@ -556,16 +566,17 @@ void userLogin(person_t users[MAX_NUM], int* size) {
 }
 
 /*******************************************************************************
- * This function checks if name and password matches within users[]
+ * This function checks if name and password matches within users.
+ * 
  * inputs:
- * - username[]
- * - password[]: will be passed to passDecrypt() 
+ * - username
+ * - password: to be passed to passDecrypt() 
  * - users[MAX_NUM]: list of users
  * - size: pointer to number of existing users
+ * 
  * outputs:
- * - if found, return address of the matching user
- * - else, return NULL
-
+ * - Returns address of the matching user if found, NULL otherwise
+ * 
  Author: Danielle Alota
 *******************************************************************************/
 person_t* checkUserLogin(char username[], char password[], person_t users[], 
@@ -581,15 +592,17 @@ person_t* checkUserLogin(char username[], char password[], person_t users[],
 }
 
 /*******************************************************************************
- * This function handles the user menu selection
+ * This function handles the user menu selection.
+ * 
  * inputs:
  * - users[]: list of users
  * - *size: size of users[]
- * - struct user currently logged in
+ * - user: user currently logged in
+ * 
  * outputs:
  * - none
-
- Author: Danielle Alota
+ * 
+ * Author: Danielle Alota
 *******************************************************************************/
 void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
 	char choice;
@@ -628,15 +641,17 @@ void selectionUser(person_t users[MAX_NUM], int* size, person_t* user) {
 }
 
 /*******************************************************************************
- * This function handles the edit wishlist menu selection
+ * This function handles the edit wishlist menu selection.
+ * 
  * inputs:
  * - users[]: list of users
- * - *size: size of users[]
- * - struct user currently logged in
+ * - *size: number of users
+ * - user: user currently logged in
  * outputs:
  * - none
-
- Author: Danielle Alota
+ * - Returns to user menu if user inputs 4
+ * 
+ * Author: Danielle Alota
 *******************************************************************************/
 void editWishlist(person_t users[MAX_NUM], int* size, person_t* user) {
 	char c;
@@ -684,15 +699,17 @@ void editWishlist(person_t users[MAX_NUM], int* size, person_t* user) {
 }
 
 /*******************************************************************************
- * This function prints the assigned member's wishlist
+ * This function prints the assigned member's wishlist.
+ * 
  * inputs:
  * - users[]: list of users
- * - *size: size of users[]
- * - struct user currently logged in
+ * - *size: number of users
+ * - user: user currently logged in
+ * 
  * outputs:
  * - none
-
- Author: Yat Ho Kwok
+ * 
+ * Author: Yat Ho Kwok
 *******************************************************************************/
 void viewGiftee(person_t users[], int* size, person_t user) {
 	if (user.index == -1) printf(YOU_DONT_HAVE_A_GIFTEE_YET);
@@ -703,13 +720,16 @@ void viewGiftee(person_t users[], int* size, person_t user) {
 }
 
 /*******************************************************************************
- * This function adds an item to a user's list
+ * This function adds an item to a user's list.
+ * 
  * inputs:
- * - struct user currently logged in
+ * - user: user currently logged in
+ * 
  * outputs:
- * - +1 to listSize within given user struct
-
- Author: Danielle Alota
+ * - user->listSize: updated number of user's wishlist items
+ * - returns -1 if user wishes to return
+ * 
+ * Author: Danielle Alota
 *******************************************************************************/
 int addItem(person_t* user) {
 	char itemName[MAX_LEN], addMore;
@@ -760,13 +780,15 @@ int addItem(person_t* user) {
 }
 
 /*******************************************************************************
- * This function removes an item from a user's list
+ * This function removes an item from a user's list.
+ * 
  * inputs:
- * - struct user currently logged in
+ * - user: address of user currently logged in
+ * 
  * outputs:
  * none
-
- Author: Danielle Alota
+ * 
+ * Author: Danielle Alota
 *******************************************************************************/
 void removeItem(person_t* user) {
 	int itemCheck;
@@ -791,21 +813,21 @@ void removeItem(person_t* user) {
 		strcpy(user->list[itemCheck].name, user->list[user->listSize - 1].name);
 		user->listSize--;
 		printf(WISHLIST_REMOVE_ITEM_SUCCESS);
-		return;
 	}
-
 }
 
 /*******************************************************************************
- * This function checks if an item name already exists within a user's list
+ * This function checks if an item name already exists within a user's list.
+ * 
  * inputs:
- * - itemName string
- * - struct user currently logged in
+ * - itemName: name of item to be checked
+ * - user: user currently logged in
+ * 
  * outputs:
  * - if found, return position of item in list
  * - else, return -1
-
- Author: Danielle Alota
+ * 
+ * Author: Danielle Alota
 *******************************************************************************/
 int itemExists(char itemName[MAX_LEN], person_t* user) {
 	int i;
@@ -819,14 +841,16 @@ int itemExists(char itemName[MAX_LEN], person_t* user) {
 
 /*******************************************************************************
  * This function loops through all users in users[] and prints name, password
- * and index, which represents their giftee
+ * and index, which represents their giftee.
+ * 
  * inputs:
  * - users[]: list of users
  * - *size: size of users[]
+ * 
  * outputs:
  * - none
-
- Author: Yat Ho Kwok
+ * 
+ * Author: Yat Ho Kwok
 *******************************************************************************/
 void displayUser(person_t users[], int* size) {
 	int i;
@@ -838,16 +862,19 @@ void displayUser(person_t users[], int* size) {
 	printf("\n");
 }
 
-/*******************************************************************************************************
- * This function removes the user's previous password and puts in a new password into the password list.
+/*******************************************************************************
+ * This function removes the user's previous password and puts in a new password 
+ * into the password list.
+ * 
  * inputs:
  * - users[]: list of users
  * - *size: size of users[]
- * - struct user currently logged in
+ * - user: address of user currently logged in
+ * 
  * outputs:
  * - none
-
- Author: Danielle Alota
+ * 
+ * Author: Danielle Alota
 *******************************************************************************/
 void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	char password[MAX_PASS_LEN];
@@ -892,31 +919,34 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	passEncrypt(user, newPass2);
 }
 
-/***************************************************************
- * This function checks if given passwords match
+/*******************************************************************************
+ * This function checks if given passwords match.
+ * 
  * inputs:
- * - pass1: 
- * - pass2: from "Confirm password"
+ * - pass1
+ * - pass2: both from confirmPassword()
+ * 
  * outputs:
- * - return 1 if matches
- * - else return 0
-
- Author: Danielle Alota
+ * - return 1 if matches, 0 otherwise
+ * 
+ * Author: Danielle Alota
 *******************************************************************************/
 int passMatch(char pass1[MAX_PASS_LEN], char pass2[MAX_PASS_LEN]) {
 	return !strcmp(pass1, pass2);
 }
 
 /*********************************************************************************
- * This function checks if the password, when decrypted, matches the one in users[]
+ * This function checks if the password, when decrypted, matches the one in 
+ * users[].
+ * 
  * inputs:
- * - struct user currently logged in
+ * - user: address of user currently logged in
  * - password[]: inputted password
+ * 
  * outputs:
- * - return 1 if matches
- * - else return 0
-
- Authors: Danielle Alota, Bilal Ali
+ * - return 1 if matches, 0 otherwise
+ * 
+ * Authors: Danielle Alota, Bilal Ali
 *******************************************************************************/
 int checkPass(person_t* user, char password[MAX_PASS_LEN]) {
 	int i;
@@ -928,16 +958,18 @@ int checkPass(person_t* user, char password[MAX_PASS_LEN]) {
 }
 
 /*******************************************************************************
-*	This function removes an existing member inputted by the user from the
-        member list.
-* inputs:
+ * This function removes an existing member inputted by the user from the
+ * member list.
+ *  
+ * inputs:
  * - users[]: list of users
  * - *size: size of users[]
-* outputs:
-* - -1 to size if member exists
-* - return -1 if member does not exist
-
-Authors: Yuekai Sun, Danielle Alota
+ * 
+ * outputs:
+ * - *size: updated number of existing users if member is removed, -1 if member
+ *			 does not exist
+ * 
+ * Authors: Yuekai Sun, Danielle Alota
 *******************************************************************************/
 int removeMember(person_t users[MAX_NUM], int* size) {
 	int i;
@@ -945,7 +977,7 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 	printf(REMOVING_MEMBER);
 	scanf(" %s", name);
 
-	/*if exist delete*/
+	/* if member exists, delete */
 	for (i = 0; i < *size + 1; i++) {
 		if (!strcmp(name, users[i].name)) {
 			strcpy(users[i].name, users[*size - 1].name);
@@ -959,20 +991,22 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 			return *size;
 		}
 	}
-	/*not exist return -1*/
+	/* return -1 otherwise */
 	return -1;
 }
 
 /*********************************************************************************
-*	This function numbers each user and 
-	randomly assigns the wish list corresponding to the number to other users.
-* inputs:
-* - users[]: list of users
-* - *size: size of users[]
-* outputs:
-* - none
-
-Author: Yat Ho Kwok
+ * This function numbers each user and randomly assigns the wish list 
+ * corresponding to the number to other users.
+ * 
+ * inputs:
+ * - users[]: list of users
+ * - *size: size of users[]
+ * 
+ * outputs:
+ * - none
+ * 
+ * Author: Yat Ho Kwok
 *********************************************************************************/
 void assignMembers(person_t users[], int* size) {
 	printf(ASSIGNING_MEMBERS);
@@ -985,38 +1019,39 @@ void assignMembers(person_t users[], int* size) {
 		/* Initialise flag array */
 		for (i = 0; i < *size; i++) userAssigned[i] = 0;
 
+		/* randomly generate 0 - size by size times */
 		for (i = 0; i < *size; i++) {
 			int randIndex = rand() % *size;
+			/* check if number is taken, else keep generating */
 			while (userAssigned[randIndex] == 1 || randIndex == i) {
 #ifdef DEBUG_MODE
 				printf("//randIndex = %d", randIndex);
 #endif
+
 				randIndex = rand() % *size;
-
 			}
-
-
+			/* if user is not taken: index = num */
 			users[i].index = randIndex;
 			userAssigned[randIndex] = 1;
 #ifdef DEBUG_MODE
 			printf("//users[%d].index = %d\n", i, randIndex);
 #endif
 		}
-		printf(ASSIGN_MEMBERS_SUCCESS);
-		/* randomly generate 0 - size by size times */
-			/* check if number is taken, if not: index = num else keep generating */
+		printf(ASSIGN_MEMBERS_SUCCESS);		
 	}
 }
 
 /*******************************************************************************
-*	This function encrypts a given password.
-* inputs:
-* - struct user currently logged in
-* - password[]
-* outputs:
-* - none
-
-Author: Bilal Ali, Yat Ho Kwok
+ * This function encrypts a given password.
+ * 
+ * inputs:
+ * - user: address of user currently logged in
+ * - password
+ * 
+ * outputs:
+ * - none
+ * 
+ * Author: Bilal Ali, Yat Ho Kwok
 *******************************************************************************/
 void passEncrypt(person_t* user, char password[MAX_PASS_LEN]) {
 #ifdef DEBUG_MODE
@@ -1033,17 +1068,18 @@ void passEncrypt(person_t* user, char password[MAX_PASS_LEN]) {
 }
 
 /*******************************************************************************
-*	This function decrypts a given password.
-* inputs:
-* - users[]: list of users
-* - int index of position the user was found
-* - pass[]
-* outputs:
-* - return 1 if password matches
-
-Author: Bilal Ali, Yat Ho Kwok
+ * This function decrypts a given password.
+ * 
+ * inputs:
+ * - users[]: list of users
+ * - index: position of user found in existing users
+ * - pass[]: inputted password
+ * 
+ * outputs:
+ * - return 1 if password matches, 0 otherwise
+ * 
+ * Author: Bilal Ali, Yat Ho Kwok
 *******************************************************************************/
-
 int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]) {
 	char username[MAX_NAME_LEN];
 	char password[MAX_PASS_LEN];
@@ -1064,23 +1100,25 @@ int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]) {
 }
 
 /*******************************************************************************
-*	This function allows the admin to display a given member's wishlist.
-* inputs:
-* - users[]: list of users
-* - *size: size of users[]
-* outputs:
-* - return 0 if user exists
-* - return 1 if otherwise
-*
-* Authors: Yuekai Sun, Danielle Alota
+ * This function allows the admin to display a given member's wishlist.
+ * 
+ * inputs:
+ * - users[]: list of users
+ * - *size: size of users[]
+ * 
+ * outputs:
+ * - return 0 if user exists, -1 otherwise
+ * 
+ * Authors: Yuekai Sun, Danielle Alota
 *******************************************************************************/
 int viewWishes(person_t users[MAX_NUM], int* size) {
 	int i, j;
 	char username[MAX_NAME_LEN];
 
-	/*enter username then show the wishlist*/
+	/* enter username then show the wishlist */
 	printf(ENTER_VIEW_WISHES_NAME);
 	scanf("%s", username);
+
 	for (i = 0; i < *size; i++) {
 		if (strcmp(username, users[i].name) == 0) {
 			if (users[i].listSize == 0) {
@@ -1089,26 +1127,27 @@ int viewWishes(person_t users[MAX_NUM], int* size) {
 			}
 			else {
 				printf("The following shows the wishlist of %s", username);
-				for (j = 0; j < users[i].listSize; j++) {
+				for (j = 0; j < users[i].listSize; j++)
 					printf("\n%s\n", users[i].list[j].name);
-				}
 			}
 			return 0;
 		}
 	}
-	/*username not exist*/
+	/* username does not exist */
 	return -1;
 }
 
 /*******************************************************************************
-*	This function sorts the member list by their names in alphabetical order.
-* inputs:
-* - users[]: list of users
-* - *size: size of users[]
-* outputs:
-* - none
-
-Authors: Zhongzhuo Wu, Danielle Alota
+ * This function sorts the member list by their names in alphabetical order.
+ * 
+ * inputs:
+ * - users[]: list of users
+ * - *size: size of users[]
+ * 
+ * outputs:
+ * - none
+ * 
+ * Authors: Zhongzhuo Wu, Danielle Alota
 *******************************************************************************/
 void sortByAlphabet(person_t users[MAX_NUM], int* size) {
 	char temp[MAX_NAME_LEN];
@@ -1132,16 +1171,17 @@ void sortByAlphabet(person_t users[MAX_NUM], int* size) {
 	}
 }
 
-
 /*******************************************************************************
-*	This function compresses (RLE) a given string by eliminating the duplicates
-*	with the number of duplicates.
-* inputs:
-* - char myStr[]: String to be compressed
-* outputs:
-* - compressed String
-
-Author: Bilal Ali
+ * This function compresses (RLE) a given string by eliminating the duplicates
+ * with the number of duplicates
+ * 
+ * inputs:
+ * - myStr: string to be compressed
+ * 
+ * outputs:
+ * - myStr: compressed myStr
+ * 
+ * Author: Bilal Ali
 *******************************************************************************/
 char* strCompress(char myStr[]) {
 	char* s, * in;
@@ -1164,14 +1204,16 @@ char* strCompress(char myStr[]) {
 }
 
 /*******************************************************************************
-*	This function writes the users[] array into a file
-* inputs:
-* - users[]: list of users
-* - *size: size of users[]
-* outputs:
-* - none
-
-Author: Yat Ho Kwok
+ * This function writes the users[] array into a file.
+ * 
+ * inputs:
+ * - users[]: list of users
+ * - *size: size of users[]
+ * 
+ * outputs:
+ * - none
+ * 
+ * Author: Yat Ho Kwok
 *******************************************************************************/
 void saveUsers(person_t users[], int size) {
 	FILE* saveFile = fopen(DB_NAME, "w");
@@ -1188,13 +1230,15 @@ void saveUsers(person_t users[], int size) {
 }
 
 /*******************************************************************************
-*	This function loads the files into users[] array
-* inputs:
-* - users[]: list of users
-* outputs:
-* - int index
-
-Author: Yat Ho Kwok
+ * This function loads the files into users[] array.
+ * 
+ * inputs:
+ * - users[]: list of users
+ * 
+ * outputs:
+ * - index - 1: number of users loaded from the file
+ * 
+ * Author: Yat Ho Kwok
 *******************************************************************************/
 int loadUsers(person_t users[]) {
 	FILE* loadFile = fopen(DB_NAME, "rb");
@@ -1216,36 +1260,34 @@ int loadUsers(person_t users[]) {
 }
 
 /*******************************************************************************
-*	This function writes the users[] array into a file
-* inputs:
-* - users[]: list of users
-* - *size: size of users[]
-* - struct user currently logged in
-* outputs:
-* - none
-
-Author: Yuekai Sun
+ * This function writes the users[] array into a file.
+ * 
+ * inputs:
+ * - users[]: list of users
+ * - user: user currently logged in
+ * 
+ * outputs:
+ * - none
 *******************************************************************************/
 void printList(person_t users[MAX_NUM], int* size, person_t* user) {
 	int i, j;
 
-	if (user->listSize == 0) {
+	if (user->listSize == 0) 
 		printf(GIFTEE_HAS_NO_ITEMS);
-		return;
+	else {
+		printf("\n(¯`·._.·(¯`·._.· %s's Wishlist ·._.·´¯)·._.·´¯)\n", user->name);
+
+		/*show all wishlist*/
+		for (i = 0; i < *size + 1; i++)
+			if (!strcmp(users[i].name, user->name))
+				for (j = 0; j < user->listSize; j++)
+					printf("%s\n", user->list[j].name);
 	}
-
-	printf("\n(¯`·._.·(¯`·._.· %s's Wishlist ·._.·´¯)·._.·´¯)\n", user->name);
-
-	/*show all wishlist*/
-	for (i = 0; i < *size + 1; i++)
-		if (!strcmp(users[i].name, user->name))
-			for (j = 0; j < user->listSize; j++)
-				printf("%s\n", user->list[j].name);
 }
 
 /*******************************************************************************
-*	This function display the main menu.
-******************************************************************************/
+ * This function displays the main menu.
+******************************************************************************/	
 void printMain() {
 	printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome to ProgChamp's Secret Santa ·._.·´¯)"\
 		"·._.·´¯)\n\n"
@@ -1255,8 +1297,9 @@ void printMain() {
 		"4. Exit the program\n"
 		"Enter choice (number between 1-4)>\n");
 }
+
 /*******************************************************************************
-*	This function display the user menu.
+ * This function displays the user menu.
 ******************************************************************************/
 void printUser() {
 	printf("\n"
@@ -1268,8 +1311,8 @@ void printUser() {
 		"Enter choice (number between 1-4)>\n");
 }
 /******************************************************************************
-*	This function display the admin menu.
-******************************************************************************/
+ * This function displays the admin menu.
+*******************************************************************************/
 void printAdmin() {
 	printf("\n"
 		"1. Display all users' info \n"
@@ -1284,8 +1327,8 @@ void printAdmin() {
 }
 
 /******************************************************************************
-*	This function display the edit menu.
-******************************************************************************/
+ * This function displays the edit menu.
+*******************************************************************************/
 void printEditMenu() {
 	printf("\nEditing wishlist.\n"
 		"1. Add an item.\n"
