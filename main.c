@@ -714,9 +714,10 @@ void displayUser(person_t users[], int* size) {
 	printf("\n");
 }
 
-/*
+/****************************************************************************************************
+This function removes the user's previous password and puts in a new password into the password list.
 Contributor: Danielle Alota
-*/
+****************************************************************************************************/
 void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	char password[MAX_PASS_LEN];
 	char newPass1[MAX_PASS_LEN];
@@ -781,8 +782,7 @@ int checkPass(person_t* user, char password[MAX_PASS_LEN]) {
 
 /*******************************************************************************
 *	This function removes an existing member inputted by the user from the
-*	member list.
-
+        member list.
 Contributors:
 Jack
 Danielle
@@ -811,9 +811,10 @@ int removeMember(person_t users[MAX_NUM], int* size) {
 	return -1;
 }
 
-/*******************************************************************************
-*	This function assigns a random member's wishlist to another member.
-*******************************************************************************/
+/*********************************************************************************
+*	This function numbers each user and 
+	randomly assigns the wish list corresponding to the number to other users.
+*********************************************************************************/
 void assignMembers(person_t users[], int* size) {
 	printf(ASSIGNING_MEMBERS);
 
@@ -890,9 +891,10 @@ int passDecrypt(person_t users[MAX_NUM], int index, char pass[MAX_PASS_LEN]) {
 
 /*******************************************************************************
 *	This function allows the admin to display a given member's wishlist.
+
+contributors: Jack
+	      Danielle 
 *******************************************************************************/
-/*contributors: Jack
-Danielle */
 int viewWishes(person_t users[MAX_NUM], int* size) {
 	int i, j;
 	char username[MAX_NAME_LEN];
@@ -1012,9 +1014,10 @@ int loadUsers(person_t users[]) {
 }
 
 /*******************************************************************************
-*	This function prints the user's wishlist.
+*	This function display the given user's wishlist.
+
+Contributor: Jack
 ******************************************************************************/
-/*author: Jack*/
 void printList(person_t users[MAX_NUM], int* size, person_t* user) {
 	int i, j;
 
@@ -1032,7 +1035,9 @@ void printList(person_t users[MAX_NUM], int* size, person_t* user) {
 				printf("%s\n", user->list[j].name);
 }
 
-
+/*******************************************************************************
+*	This function display the main menu.
+******************************************************************************/
 void printMain() {
 	printf("\n(¯`·._.·(¯`·._.· Ho Ho Ho, Welcome to ProgChamp's Secret Santa ·._.·´¯)"\
 		"·._.·´¯)\n\n"
@@ -1042,7 +1047,9 @@ void printMain() {
 		"4. Exit the program\n"
 		"Enter choice (number between 1-4)>\n");
 }
-
+/*******************************************************************************
+*	This function display the user menu.
+******************************************************************************/
 void printUser() {
 	printf("\n"
 		"1. Edit my wishlist\n"
@@ -1052,7 +1059,9 @@ void printUser() {
 		"5. Exit the program\n"
 		"Enter choice (number between 1-4)>\n");
 }
-
+/******************************************************************************
+*	This function display the admin menu.
+******************************************************************************/
 void printAdmin() {
 	printf("\n"
 		"1. Display all users' info \n"
