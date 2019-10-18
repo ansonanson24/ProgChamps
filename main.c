@@ -652,7 +652,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	char password[MAX_PASS_LEN];
 	char newPass1[MAX_PASS_LEN];
 	char newPass2[MAX_PASS_LEN];
-	int validPass, validNew;
+	int validPass;
 
 	printf(ENTER_YOUR_CURRENT_PASSWORD);
 	scanf("%s", password);
@@ -672,9 +672,7 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 	scanf("%s", newPass1); /* add: check for max length (fgets/sscanf isnt working for me)*/
 	printf(CONFIRM_PASSWORD); /* have not checked if inputted nothing*/
 	scanf("%s", newPass2);
-	validNew = passMatch(newPass1, newPass2);
-
-
+	
 	while (strcmp(newPass1, newPass2)) {
 		printf(ERROR_PASSWORDS_DO_NOT_MATCH);
 		printf(ENTER_NEW_PASSWORD);
@@ -686,8 +684,6 @@ void changePassword(person_t users[MAX_NUM], person_t* user, int* size) {
 
 		scanf("%s", newPass2);
 		if (!strcmp(newPass2, "*")) break;
-
-		validNew = passMatch(newPass1, newPass2);
 	}
 #ifdef DEBUG_MODE
   printf("//newPass1 = %s - newPass2 = %s\n", newPass1, newPass2);
@@ -757,7 +753,7 @@ void assignMembers(person_t users[], int* size) {
 	  int userAssigned[*size];
     int i;
 
-	  //initialise flag array
+	  /* Initialise flag array */
 	  for (i = 0; i < *size; i++) userAssigned[i] = 0;
 
 	  for (i = 0; i < *size; i++) {
@@ -780,8 +776,8 @@ void assignMembers(person_t users[], int* size) {
 
 
 	  printf(ASSIGN_MEMBERS_SUCCESS);
-	  //randomly generate 0 - size by size times
-		  //check if number is taken, if not: index = num else keep generating
+	  /* randomly generate 0 - size by size times */
+		  /* check if number is taken, if not: index = num else keep generating */
   }
 }
 
