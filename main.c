@@ -242,6 +242,10 @@ int passwordIsValid(char* password);
 /******************************************************************************/
 
 /*******************************************************************************
+ *                          Program starts here                                *
+ ******************************************************************************/
+
+/*******************************************************************************
  * Main
 *******************************************************************************/
 int main(int argc, char* argv[]) {
@@ -465,10 +469,16 @@ void selectionAdmin(person_t users[MAX_NUM], int* size) {
 	}
 }
 
-/*
-Contributors: Danielle Alota
-Anson Kwok
-*/
+/*******************************************************************************
+ * This function handles user login feature in the main selection menu.
+ * inputs:
+ * - users[MAX_NUM]: list of users
+ * - size: pointer to number of existing users
+ * outputs:
+ * - none
+ * 
+ * Contributos: Danielle ALota, Yat Ho Kwok
+*******************************************************************************/
 void userLogin(person_t users[MAX_NUM], int* size) {
 	char username[MAX_NAME_LEN];
 	char password[MAX_PASS_LEN];
@@ -505,7 +515,6 @@ person_t* checkUserLogin(char username[], char password[], person_t users[],
 	}
 	return NULL;
 }
-
 
 /*
 Contributor: Danielle Alota
@@ -590,6 +599,7 @@ void editWishlist(person_t users[MAX_NUM], int* size, person_t* user) {
 	}
 
 }
+
 /* Anson */
 void viewGiftee(person_t users[], int* size, person_t user) {
 	if (user.index == -1) printf(YOU_DONT_HAVE_A_GIFTEE_YET);
@@ -832,8 +842,6 @@ void assignMembers(person_t users[], int* size) {
 			printf("//users[%d].index = %d\n", i, randIndex);
 #endif
 		}
-
-
 		printf(ASSIGN_MEMBERS_SUCCESS);
 		/* randomly generate 0 - size by size times */
 			/* check if number is taken, if not: index = num else keep generating */
